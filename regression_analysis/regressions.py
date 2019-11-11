@@ -103,27 +103,27 @@ def testset_creation():
 	x_10 = np.array([])
 
 	# need to split this process in two
-	for _ in range(n_test_pts/2):
+	for _ in range(int(n_test_pts/2)):
 		x_10 = np.append(x_10, random.random()*(x_min - x_min_10) + x_min_10)
-	for _ in range(n_test_pts/2):
+	for _ in range(int(n_test_pts/2)):
 		x_10 = np.append(x_10, random.random()*(x_max_10 - x_max) + x_max)
 
 	# cool, now repeat the process for 50%
 	x_min_50 = x_min - math.abs(x_min*0.5)
 	x_max_50 = x_max + math.abs(x_max*0.5)
 	x_50 = np.array([])
-	for _ in range(n_test_pts/2):
+	for _ in range(int(n_test_pts/2)):
 		x_50 = np.append(x_50, random.random()*(x_min - x_min_50) + x_min_50)
-	for _ in range(n_test_pts/2):
+	for _ in range(int(n_test_pts/2)):
 		x_50 = np.append(x_50, random.random()*(x_max_50 - x_max) + x_max)
 
 	# and 100
 	x_min_100 = 2*x_min
 	x_max_100 = 2*x_max 
 	x_100 = np.array([])
-	for _ in range(n_test_pts/2):
+	for _ in range(int(n_test_pts/2)):
 		x_100 = np.append(x_100, random.random()*(x_min - x_min_100) + x_min_100)
-	for _ in range(n_test_pts/2):
+	for _ in range(int(n_test_pts/2)):
 		x_100 = np.append(x_100, random.random()*(x_max_10 - x_max) + x_max)
 
 	# cool, now that we have all the x sets for testing, we need to create the y sets and dictionize
