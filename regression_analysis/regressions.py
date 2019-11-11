@@ -9,7 +9,7 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.neighbors import RadiusNeighborsRegressor
 from sklearn.svm import SVR
 from sklearn.neural_network import MLPRegressor
-from metrics import mean_squared_error as mse
+from sklearn.metrics import mean_squared_error as mse
 
 ### user definitions
 n_train_pts = 1000
