@@ -66,7 +66,7 @@ model_dict['NN'] = MLPRegressor()
 def trainset_creation():
 
 	# create a numpy x array
-	x = np.array()
+	x = np.array([])
 	for _ in range(n_train_pts):
 		x.append(random.random()*(x_max - x_min) + x_min)
 
@@ -88,7 +88,7 @@ def testset_creation():
 	# get equal numbers on each side
 
 	# first, let's create the in_bounds x set
-	x_in_bounds = np.array()
+	x_in_bounds = np.array([])
 	for _ in range(n_test_pts):
 		x_in_bounds.append(random.random()*(x_max - x_min) + x_min)
 
@@ -100,7 +100,7 @@ def testset_creation():
 	x_max_10 = x_max + math.abs(x_max*0.1)
 
 	# create the set for that
-	x_10 = np.array()
+	x_10 = np.array([])
 
 	# need to split this process in two
 	for _ in range(n_test_pts/2):
@@ -111,7 +111,7 @@ def testset_creation():
 	# cool, now repeat the process for 50%
 	x_min_50 = x_min - math.abs(x_min*0.5)
 	x_max_50 = x_max + math.abs(x_max*0.5)
-	x_50 = np.array()
+	x_50 = np.array([])
 	for _ in range(n_test_pts/2):
 		x_50.append(random.random()*(x_min - x_min_50) + x_min_50)
 	for _ in range(n_test_pts/2):
@@ -120,7 +120,7 @@ def testset_creation():
 	# and 100
 	x_min_100 = 2*x_min
 	x_max_100 = 2*x_max 
-	x_100 = np.array()
+	x_100 = np.array([])
 	for _ in range(n_test_pts/2):
 		x_100.append(random.random()*(x_min - x_min_100) + x_min_100)
 	for _ in range(n_test_pts/2):
