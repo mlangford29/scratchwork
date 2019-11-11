@@ -76,7 +76,7 @@ def trainset_creation():
 	for dataset_name in dataset_list:
 
 		exec('trainset_dict[dataset_name] = [x, {}(x)]'.format(dataset_name))
-
+		print(trainset_dict[dataset_name][1])
 
 	return trainset_dict
 
