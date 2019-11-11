@@ -68,7 +68,7 @@ def trainset_creation():
 	# create a numpy x array
 	x = np.array([])
 	for _ in range(n_train_pts):
-		x.append(random.random()*(x_max - x_min) + x_min)
+		x = np.append(x, random.random()*(x_max - x_min) + x_min)
 
 	# now create the dictionary to store the datasets
 	trainset_dict = {}
@@ -90,7 +90,7 @@ def testset_creation():
 	# first, let's create the in_bounds x set
 	x_in_bounds = np.array([])
 	for _ in range(n_test_pts):
-		x_in_bounds.append(random.random()*(x_max - x_min) + x_min)
+		x_in_bounds = np.append(x_in_bounds, random.random()*(x_max - x_min) + x_min)
 
 	# now one for the 10% out of bounds
 	# we'll need 2 sets of bounds. 
@@ -104,27 +104,27 @@ def testset_creation():
 
 	# need to split this process in two
 	for _ in range(n_test_pts/2):
-		x_10.append(random.random()*(x_min - x_min_10) + x_min_10)
+		x_10 = np.append(x_10, random.random()*(x_min - x_min_10) + x_min_10)
 	for _ in range(n_test_pts/2):
-		x_10.append(random.random()*(x_max_10 - x_max) + x_max)
+		x_10 = np.append(x_10, random.random()*(x_max_10 - x_max) + x_max)
 
 	# cool, now repeat the process for 50%
 	x_min_50 = x_min - math.abs(x_min*0.5)
 	x_max_50 = x_max + math.abs(x_max*0.5)
 	x_50 = np.array([])
 	for _ in range(n_test_pts/2):
-		x_50.append(random.random()*(x_min - x_min_50) + x_min_50)
+		x_50 = np.append(x_50, random.random()*(x_min - x_min_50) + x_min_50)
 	for _ in range(n_test_pts/2):
-		x_50.append(random.random()*(x_max_50 - x_max) + x_max)
+		x_50 = np.append(x_50, random.random()*(x_max_50 - x_max) + x_max)
 
 	# and 100
 	x_min_100 = 2*x_min
 	x_max_100 = 2*x_max 
 	x_100 = np.array([])
 	for _ in range(n_test_pts/2):
-		x_100.append(random.random()*(x_min - x_min_100) + x_min_100)
+		x_100 = np.append(x_100, random.random()*(x_min - x_min_100) + x_min_100)
 	for _ in range(n_test_pts/2):
-		x_100.append(random.random()*(x_max_10 - x_max) + x_max)
+		x_100 = np.append(x_100, random.random()*(x_max_10 - x_max) + x_max)
 
 	# cool, now that we have all the x sets for testing, we need to create the y sets and dictionize
 	testset_dict = {}
