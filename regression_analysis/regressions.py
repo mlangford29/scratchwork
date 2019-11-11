@@ -19,7 +19,7 @@ n_test_pts = 200 # number of test points to gather from each test region
 x_min = -10
 x_max = 10
 
-dataset_list = ['linear', 'quadratic', 'abs', 'sinusoid', 'exponential']
+dataset_list = ['linear', 'quadratic', 'absolute', 'sinusoid', 'exponential']
 
 ### end user definitions
 
@@ -176,8 +176,6 @@ def train_test_models(trainset_dict, testset_dict):
 			# then you get to train on this dataset!
 			
 			x_train, y_train = trainset_dict[dataset_name]
-			print(trainset_dict[dataset_name])
-
 
 			# train the model
 			model = model.fit(x_train, y_train)
