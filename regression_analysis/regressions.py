@@ -75,7 +75,7 @@ def trainset_creation():
 
 	for dataset_name in dataset_list:
 
-		y = exec('{}(x)'.format(dataset_name))
+		exec('y = {}(x)'.format(dataset_name))
 
 		trainset_dict[dataset_name] = [x, y]
 
@@ -177,10 +177,10 @@ def train_test_models(trainset_dict, testset_dict):
 			
 			x_train, y_train = trainset_dict[dataset_name]
 			print(trainset_dict[dataset_name])
-			
+
 
 			# train the model
-			model = model.fit(x_train.reshape(-1, 1), y_train.reshape(-1, 1))
+			model = model.fit(x_train, y_train)
 
 			# create a dictionary for the results
 			dataset_result_dict = {}
