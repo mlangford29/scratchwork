@@ -35,7 +35,7 @@ def linear(x):
 def quadratic(x):
 	return x**2
 
-def abs(x):
+def absolute(x):
 	return np.absolute(x)
 
 def sinusoid(x):
@@ -96,8 +96,8 @@ def testset_creation():
 	# we'll need 2 sets of bounds. 
 	# x_min_10 is 10% lower than x_min. x_min will be the upper bound of the lower range
 	# x_max_10 is 10% higher than x_max. x_max will be the lower bound of the upper range
-	x_min_10 = x_min - math.abs(x_min*0.1)
-	x_max_10 = x_max + math.abs(x_max*0.1)
+	x_min_10 = x_min - abs(x_min*0.1)
+	x_max_10 = x_max + abs(x_max*0.1)
 
 	# create the set for that
 	x_10 = np.array([])
