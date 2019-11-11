@@ -9,6 +9,7 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.neighbors import RadiusNeighborsRegressor
 from sklearn.svm import SVR
 from sklearn.neural_network import MLPRegressor
+from metrics import mean_squared_error as mse
 
 ### user definitions
 n_train_pts = 1000
@@ -151,6 +152,94 @@ def testset_creation():
 		testset_dict[dataset_name] = dataset_temp_dict
 
 	return testset_dict
+
+def train_test_models(trainset_dict, testset_dict):
+
+	# create a dictionary for the results
+	result_dict = {}
+
+	# so we need to loop through all the models
+	for model_name in model_dict.keys():
+
+		# pull out the model
+		model = model_dict[model_name]
+
+		# create a dictionary for the model
+		model_result_dict = {}
+
+		# then loop through each of the training sets
+		for dataset_name in trainset_dict.keys():
+
+			# helpful print
+			print('Training {} on {} dataset'.format(model_name, dataset_name))
+
+			# then you get to train on this dataset!
+			x_train, y_train = trainset_dict[dataset_name]
+
+			# train the model
+			model = model.fit(x_train, y_train)
+
+			# create a dictionary for the results
+			dataset_result_dict = {}
+
+			# then evaluate on the four sets
+			x_test, y_test = testset_dict[dataset_name]['in_bounds']
+			dataset_result_dict['in_bounds'] = mse(model.predict(x_test), y_test)
+
+			x_test, y_test = testset_dict[dataset_name]['10_percent_out']
+			dataset_result_dict['10_percent_out'] = mse(model.predict(x_test), y_test)
+
+			x_test, y_test = testset_dict[dataset_name]['50_percent_out']
+			dataset_result_dict['50_percent_out'] = mse(model.predict(x_test), y_test)
+
+			x_test, y_test = testset_dict[dataset_name]['100_percent_out']
+			dataset_result_dict['100_percent_out'] = mse(model.predict(x_test), y_test)
+
+			# then add this dictionary to model_result_dict
+			model_result_dict[dataset_name] = dataset_result_dict
+
+		# add the model result dict to the overall result dict
+		result_dict[model_name] = model_result_dict
+
+	# then return the result_dict
+	return result_dict
+
+# then we need a function to print out all this stuff
+def print_results(result_dict):
+
+	# loop through the model names
+	for model_name in result_dict.keys():
+
+		print('--- {} ---'.format(model_name))
+
+		model_result_dict = result_dict[model_name]
+
+		# loop through the dataset names
+		for dataset_name in model_result_dict.keys():
+
+			print(' {}:'.format(dataset_name))
+
+			# then pull out the dictionary for that
+			dataset_result_dict = model_result_dict[dataset_name]
+
+			print('  In-bounds: {}'.format(dataset_result_dict['in_bounds']))
+			print('  10 percent outside: {}'.format(dataset_result_dict['10_percent_out']))
+			print('  50 percent outside: {}'.format(dataset_result_dict['50_percent_out']))
+			print('  100 percent outside: {}'.format(dataset_result_dict['100_percent_out']))
+
+def main():
+
+	trainset_dict = trainset_creation()
+	testset_dict = testset_creation()
+	result_dict = train_test_models(trainset_dict, testset_dict)
+	print_results(result_dict)
+
+main()
+
+
+
+
+
 
 
 
