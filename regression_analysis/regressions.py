@@ -109,8 +109,8 @@ def testset_creation():
 		x_10 = np.append(x_10, random.random()*(x_max_10 - x_max) + x_max)
 
 	# cool, now repeat the process for 50%
-	x_min_50 = x_min - math.abs(x_min*0.5)
-	x_max_50 = x_max + math.abs(x_max*0.5)
+	x_min_50 = x_min - abs(x_min*0.5)
+	x_max_50 = x_max + abs(x_max*0.5)
 	x_50 = np.array([])
 	for _ in range(int(n_test_pts/2)):
 		x_50 = np.append(x_50, random.random()*(x_min - x_min_50) + x_min_50)
