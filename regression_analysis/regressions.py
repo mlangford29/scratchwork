@@ -177,7 +177,7 @@ def train_test_models(trainset_dict, testset_dict):
 			x_train, y_train = trainset_dict[dataset_name]
 
 			# train the model
-			model = model.fit(x_train, y_train)
+			model = model.fit(x_train.reshape(-1, 1), y_train.reshape(-1, 1))
 
 			# create a dictionary for the results
 			dataset_result_dict = {}
