@@ -75,11 +75,8 @@ def trainset_creation():
 
 	for dataset_name in dataset_list:
 
-		exec('y = {}(x)'.format(dataset_name))
-		print(dataset_name)
-		print(y)
+		exec('trainset_dict[dataset_name] = [x, {}(x)]'.format(dataset_name))
 
-		trainset_dict[dataset_name] = [x, y]
 
 	return trainset_dict
 
