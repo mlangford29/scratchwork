@@ -11,12 +11,12 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_squared_error as mse
 
 ### user definitions
-n_train_pts = 50000
-n_test_pts = 200 # number of test points to gather from each test region
+n_train_pts = 20000
+n_test_pts = 2000 # number of test points to gather from each test region
 
 # a range of x values to use across all functions for training
-x_min = -100
-x_max = 100
+x_min = -10
+x_max = 10
 
 dataset_list = ['linear', 'quadratic', 'absolute', 'sinusoid', 'exponential']
 
@@ -57,7 +57,8 @@ model_dict['RandomForest'] = RandomForestRegressor()
 model_dict['ExtraTrees'] = ExtraTreesRegressor()
 model_dict['AdaBoost'] = AdaBoostRegressor()
 model_dict['KNN'] = KNeighborsRegressor()
-model_dict['NN'] = MLPRegressor()
+model_dict['NN'] = MLPRegressor(hidden_layer_sizes=(1000,500,250,100,50))
+
 ### end model selection
 
 # function to create the dataset dictionary
