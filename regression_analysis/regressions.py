@@ -12,11 +12,11 @@ from sklearn.metrics import mean_squared_error as mse
 
 ### user definitions
 n_train_pts = 50000
-n_test_pts = 200 # number of test points to gather from each test region
+n_test_pts = 20000 # number of test points to gather from each test region
 
 # a range of x values to use across all functions for training
-x_min = -100
-x_max = 100
+x_min = -10
+x_max = 10
 
 dataset_list = ['linear', 'quadratic', 'absolute', 'sinusoid', 'exponential']
 
