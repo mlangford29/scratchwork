@@ -6,18 +6,17 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.neighbors import RadiusNeighborsRegressor
 from sklearn.svm import SVR
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_squared_error as mse
 
 ### user definitions
-n_train_pts = 1000
+n_train_pts = 50000
 n_test_pts = 200 # number of test points to gather from each test region
 
 # a range of x values to use across all functions for training
-x_min = -10
-x_max = 10
+x_min = -100
+x_max = 100
 
 dataset_list = ['linear', 'quadratic', 'absolute', 'sinusoid', 'exponential']
 
@@ -58,7 +57,6 @@ model_dict['RandomForest'] = RandomForestRegressor()
 model_dict['ExtraTrees'] = ExtraTreesRegressor()
 model_dict['AdaBoost'] = AdaBoostRegressor()
 model_dict['KNN'] = KNeighborsRegressor()
-model_dict['RadiusNeighbors'] = RadiusNeighborsRegressor()
 model_dict['NN'] = MLPRegressor()
 ### end model selection
 
@@ -75,8 +73,9 @@ def trainset_creation():
 
 	for dataset_name in dataset_list:
 
-		exec('trainset_dict[dataset_name] = [x.reshape(-1, 1), {}(x).reshape(-1, 1)]'.format(dataset_name))
-		#print(trainset_dict[dataset_name][1])
+		exec('trainset_dict[dataset_name] = [x, {}(x)]'.format(dataset_name))
+
+		#print(trainset_dict[dataset_name][0].shape, trainset_dict[dataset_name][1].shape)
 
 	return trainset_dict
 
@@ -133,20 +132,16 @@ def testset_creation():
 		# no easy loop for this, sorry
 		#dict_in_bounds = {}
 		dataset_temp_dict = {}
-		y = exec('{}(x_in_bounds)'.format(dataset_name))
-		dataset_temp_dict['in_bounds'] = [x_in_bounds, y]
+		exec('dataset_temp_dict[\'in_bounds\'] = [x_in_bounds, {}(x_in_bounds)]'.format(dataset_name))
 
 		#dict_10 = {}
-		y = exec('{}(x_10)'.format(dataset_name))
-		dataset_temp_dict['10_percent_out'] = [x_10, y]
+		exec('dataset_temp_dict[\'10_percent_out\'] = [x_10, {}(x_10)]'.format(dataset_name))
 
 		#dict_50 = {}
-		y = exec('{}(x_50)'.format(dataset_name))
-		dataset_temp_dict['50_percent_out'] = [x_50, y]
+		exec('dataset_temp_dict[\'50_percent_out\'] = [x_50, {}(x_50)]'.format(dataset_name))
 
 		#dict_100 = {}
-		y = exec('{}(x_100)'.format(dataset_name))
-		dataset_temp_dict['100_percent_out'] = [x_100, y]
+		exec('dataset_temp_dict[\'100_percent_out\'] = [x_100, {}(x_100)]'.format(dataset_name))
 
 		testset_dict[dataset_name] = dataset_temp_dict
 
@@ -177,23 +172,23 @@ def train_test_models(trainset_dict, testset_dict):
 			x_train, y_train = trainset_dict[dataset_name]
 
 			# train the model
-			model = model.fit(x_train, y_train)
+			model = model.fit(x_train.reshape(-1,1), y_train)
 
 			# create a dictionary for the results
 			dataset_result_dict = {}
 
 			# then evaluate on the four sets
 			x_test, y_test = testset_dict[dataset_name]['in_bounds']
-			dataset_result_dict['in_bounds'] = mse(model.predict(x_test), y_test)
+			dataset_result_dict['in_bounds'] = mse(y_test, model.predict(x_test.reshape(-1,1)))
 
 			x_test, y_test = testset_dict[dataset_name]['10_percent_out']
-			dataset_result_dict['10_percent_out'] = mse(model.predict(x_test), y_test)
+			dataset_result_dict['10_percent_out'] = mse(y_test, model.predict(x_test.reshape(-1,1)))
 
 			x_test, y_test = testset_dict[dataset_name]['50_percent_out']
-			dataset_result_dict['50_percent_out'] = mse(model.predict(x_test), y_test)
+			dataset_result_dict['50_percent_out'] = mse(y_test, model.predict(x_test.reshape(-1,1)))
 
 			x_test, y_test = testset_dict[dataset_name]['100_percent_out']
-			dataset_result_dict['100_percent_out'] = mse(model.predict(x_test), y_test)
+			dataset_result_dict['100_percent_out'] = mse(y_test, model.predict(x_test.reshape(-1,1)))
 
 			# then add this dictionary to model_result_dict
 			model_result_dict[dataset_name] = dataset_result_dict
@@ -222,10 +217,10 @@ def print_results(result_dict):
 			# then pull out the dictionary for that
 			dataset_result_dict = model_result_dict[dataset_name]
 
-			print('  In-bounds: {}'.format(dataset_result_dict['in_bounds']))
-			print('  10 percent outside: {}'.format(dataset_result_dict['10_percent_out']))
-			print('  50 percent outside: {}'.format(dataset_result_dict['50_percent_out']))
-			print('  100 percent outside: {}'.format(dataset_result_dict['100_percent_out']))
+			print('    In-bounds: {}'.format(dataset_result_dict['in_bounds']))
+			print('    10 percent outside: {}'.format(dataset_result_dict['10_percent_out']))
+			print('    50 percent outside: {}'.format(dataset_result_dict['50_percent_out']))
+			print('    100 percent outside: {}'.format(dataset_result_dict['100_percent_out']))
 
 def main():
 
