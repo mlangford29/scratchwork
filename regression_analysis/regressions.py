@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 n_train_pts = 1000
 n_test_pts = 100 # number of test points to gather from each test region
 
+
 # a range of x values to use across all functions for training
 x_min = -10
 x_max = 10
