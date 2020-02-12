@@ -22,6 +22,7 @@ import io
 
 from mlens.ensemble import TemporalEnsemble
 from sklearn.ensemble import AdaBoostClassifier
+from keras.wrappers.scikit_learn import KerasClassifier
 
 path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
 with io.open(path, encoding='utf-8') as f:
@@ -56,25 +57,35 @@ for i, sentence in enumerate(sentences):
 print('Building model!')
 model = TemporalEnsemble(verbose=1)
 
-model1 = Sequential()
-model1.add(LSTM(128, input_shape=(maxlen, len(chars))))
-model1.add(Dense(len(chars), activation='softmax'))
-optimizer1 = RMSprop(lr=0.01)
-model1.compile(loss='categorical_crossentropy', optimizer=optimizer1)
+def create_model1():
+    model1 = Sequential()
+    model1.add(LSTM(128, input_shape=(maxlen, len(chars))))
+    model1.add(Dense(len(chars), activation='softmax'))
+    optimizer1 = RMSprop(lr=0.01)
+    model1.compile(loss='categorical_crossentropy', optimizer=optimizer1)
+    return model1
 
-model2 = Sequential()
-model2.add(LSTM(256, input_shape=(maxlen, len(chars)), return_sequences=True))
-model2.add(LSTM(256))
-model2.add(Dense(len(chars), activation='softmax'))
-optimizer2 = RMSprop(lr=0.001)
-model2.compile(loss='categorical_crossentropy', optimizer=optimizer2)
+def create_model2():
+    model2 = Sequential()
+    model2.add(LSTM(256, input_shape=(maxlen, len(chars)), return_sequences=True))
+    model2.add(LSTM(256))
+    model2.add(Dense(len(chars), activation='softmax'))
+    optimizer2 = RMSprop(lr=0.001)
+    model2.compile(loss='categorical_crossentropy', optimizer=optimizer2)
+    return model2
 
-model3 = Sequential()
-model3.add(LSTM(512, input_shape=(maxlen, len(chars)), return_sequences=True))
-model3.add(LSTM(512))
-model3.add(Dense(len(chars), activation='softmax'))
-optimizer3 = RMSprop(lr=0.001)
-model3.compile(loss='categorical_crossentropy', optimizer=optimizer3)
+def create_model3():
+    model3 = Sequential()
+    model3.add(LSTM(512, input_shape=(maxlen, len(chars)), return_sequences=True))
+    model3.add(LSTM(512))
+    model3.add(Dense(len(chars), activation='softmax'))
+    optimizer3 = RMSprop(lr=0.001)
+    model3.compile(loss='categorical_crossentropy', optimizer=optimizer3)
+    return model3
+
+model1 = KerasClassifier(builf_fn=create_model1)
+model2 = KerasClassifier(builf_fn=create_model2)
+model3 = KerasClassifier(builf_fn=create_model3)
 
 model.add([model1, model2, model3])
 model.add_meta(AdaBoostClassifier())
