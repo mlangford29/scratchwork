@@ -7,10 +7,10 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(2, 2),
+	'num_hidden_layers':(5, 5),
 
 	# number of bayesian opt iterations we'll train each model for
-	'meta_learner_its':20,
+	'meta_learner_its':100,
 	'metric':'f1',
 
 }
@@ -32,7 +32,7 @@ model_config = {
 		'metalearner':True,
 
 		# RANGE DOES NOT INCLUDE UPPER BOUND
-		'num_in_base':(0, 5),
+		'num_in_base':(0, 10),
 		'num_in_mid':(0, 3),
 		'hyperparameters_for_base':{
 			'tol':{
@@ -56,7 +56,7 @@ model_config = {
 
 	'KNeighborsClassifier':{
 		'metalearner':False,
-		'num_in_base':(0, 2),
+		'num_in_base':(0, 10),
 		'num_in_mid':(0, 2),
 		'hyperparameters_for_base':{
 			'n_neighbors':{
@@ -86,8 +86,8 @@ model_config = {
 
 	'SVC':{
 		'metalearner':False,
-		'num_in_base':(0, 5),
-		'num_in_mid':(0, 3),
+		'num_in_base':(0, 10),
+		'num_in_mid':(0, 2),
 		'hyperparameters_for_base':{
 			'C':{
 				'range':'base'
@@ -111,7 +111,7 @@ model_config = {
 
 	'ExtraTreesClassifier':{
 		'metalearner':True,
-		'num_in_base':(0, 5),
+		'num_in_base':(0, 10),
 		'num_in_mid':(0, 3),
 		'hyperparameters_for_base':{
 			'n_estimators':{
@@ -133,7 +133,7 @@ model_config = {
 
 	'RandomForestClassifier':{
 		'metalearner':True,
-		'num_in_base':(0, 5),
+		'num_in_base':(0, 10),
 		'num_in_mid':(0, 3),
 		'hyperparameters_for_base':{
 			'n_estimators':{
@@ -155,7 +155,7 @@ model_config = {
 
 	'AdaBoostClassifier':{
 		'metalearner':True,
-		'num_in_base':(0, 5),
+		'num_in_base':(0, 10),
 		'num_in_mid':(0, 3),
 		'hyperparameters_for_base':{
 			'n_estimators':{
@@ -176,8 +176,8 @@ model_config = {
 	},
 
 	'Lasso':{
-		'metalearner':True,
-		'num_in_base':(0, 5),
+		'metalearner':False,
+		'num_in_base':(0, 10),
 		'num_in_mid':(0, 3),
 		'hyperparameters_for_base':{
 			'alpha':{
@@ -198,8 +198,8 @@ model_config = {
 	},
 
 	'Ridge':{
-		'metalearner':True,
-		'num_in_base':(0, 5),
+		'metalearner':False,
+		'num_in_base':(0, 10),
 		'num_in_mid':(0, 3),
 		'hyperparameters_for_base':{
 			'alpha':{
@@ -220,8 +220,8 @@ model_config = {
 	},
 
 	'ElasticNet':{
-		'metalearner':True,
-		'num_in_base':(0, 5),
+		'metalearner':False,
+		'num_in_base':(0, 10),
 		'num_in_mid':(0, 3),
 		'hyperparameters_for_base':{
 			'alpha':{
@@ -269,8 +269,8 @@ model_config = {
 #	},
 
 	'DecisionTreeClassifier':{
-		'metalearner':True,
-		'num_in_base':(0, 5),
+		'metalearner':False,
+		'num_in_base':(0, 10),
 		'num_in_mid':(0, 3),
 		'hyperparameters_for_base':{
 			'max_depth':{
