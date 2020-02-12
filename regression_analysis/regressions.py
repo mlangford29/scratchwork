@@ -9,14 +9,20 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.svm import SVR
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_squared_error as mse
+import matplotlib.pyplot as plt
+
 
 ### user definitions
-n_train_pts = 20000
-n_test_pts = 2000 # number of test points to gather from each test region
+n_train_pts = 1000
+n_test_pts = 100 # number of test points to gather from each test region
 
 # a range of x values to use across all functions for training
 x_min = -10
 x_max = 10
+
+# how many iterations we're going to go through this process
+# to average the results over the number of iterations
+num_its = 1 
 
 dataset_list = ['linear', 'quadratic', 'absolute', 'sinusoid', 'exponential']
 
@@ -51,13 +57,21 @@ def exponential(x):
 model_dict = {}
 
 # list of models, with parameters
-model_dict['XGB'] = GradientBoostingRegressor()
-model_dict['SupportVector'] = SVR()
-model_dict['RandomForest'] = RandomForestRegressor()
-model_dict['ExtraTrees'] = ExtraTreesRegressor()
-model_dict['AdaBoost'] = AdaBoostRegressor()
-model_dict['KNN'] = KNeighborsRegressor()
-model_dict['NN'] = MLPRegressor(hidden_layer_sizes=(1000,500,250,100,50))
+#model_dict['XGB'] = GradientBoostingRegressor()
+#model_dict['SupportVector'] = SVR()
+#model_dict['SupportVector_2'] = SVR(kernel='linear', C=100, epsilon=.001)
+#model_dict['RandomForest'] = RandomForestRegressor()
+#model_dict['ExtraTrees'] = ExtraTreesRegressor()
+#model_dict['AdaBoost'] = AdaBoostRegressor()
+#model_dict['KNN'] = KNeighborsRegressor()
+model_dict['NN'] = MLPRegressor()
+#model_dict['NN_its'] = MLPRegressor(max_iter = 2000)
+#model_dict['NN_big'] = MLPRegressor(hidden_layer_sizes=(200, 100))
+model_dict['NN_big_tanh'] = MLPRegressor(hidden_layer_sizes=(200, 100), activation='tanh')
+model_dict['NN_big_tanh_its'] = MLPRegressor(hidden_layer_sizes=(200, 100), activation='tanh', max_iter = 2000)
+#model_dict['NN_bigger'] = MLPRegressor(hidden_layer_sizes=(1000, 500, 200, 100))
+#model_dict['NN_bigger_sig'] = MLPRegressor(hidden_layer_sizes=(1000, 500, 200, 100), activation='logistic')
+#model_dict['NN_bigger_tanh'] = MLPRegressor(hidden_layer_sizes=(1000, 500, 200, 100), activation='tanh')
 
 ### end model selection
 
@@ -156,6 +170,8 @@ def train_test_models(trainset_dict, testset_dict):
 	# so we need to loop through all the models
 	for model_name in model_dict.keys():
 
+		print(' Training model {}'.format(model_name))
+
 		# pull out the model
 		model = model_dict[model_name]
 
@@ -166,7 +182,7 @@ def train_test_models(trainset_dict, testset_dict):
 		for dataset_name in trainset_dict.keys():
 
 			# helpful print
-			print('Training {} on {} dataset'.format(model_name, dataset_name))
+			#print('Training {} on {} dataset'.format(model_name, dataset_name))
 
 			# then you get to train on this dataset!
 			
@@ -223,12 +239,76 @@ def print_results(result_dict):
 			print('    50 percent outside: {}'.format(dataset_result_dict['50_percent_out']))
 			print('    100 percent outside: {}'.format(dataset_result_dict['100_percent_out']))
 
+def plot_model(model_name, dataset_name):
+
+	# so first we need to create the x dataset
+	x_train = np.arange(x_min, x_max, .001).reshape(-1,1)
+	x_test = np.arange(2*x_min, 2*x_max, .001).reshape(-1,1)
+
+	temp_array = []
+	exec('temp_array.append({}(x_train))'.format(dataset_name))
+	exec('temp_array.append({}(x_test))'.format(dataset_name))
+	y_train = temp_array[0]
+	y_test = temp_array[1]
+	
+
+	# now train the model and get the predictions
+	model = model_dict[model_name].fit(x_train, y_train)
+
+	# predict
+	y_pred = model.predict(x_test)
+
+	# so we want to plot x_test vs. y_test
+	# as well as x_test vs. y_pred
+	fig = plt.figure()
+	ax1 = fig.add_subplot(111)
+	ax1.scatter(x_test, y_test, s=10, c='b', marker="s", label=dataset_name)
+	ax1.scatter(x_test, y_pred, s=10, c='r', marker="o", label=model_name)
+
+	plt.legend(loc='upper left')
+	plt.show()
+
+
+
+
 def main():
 
-	trainset_dict = trainset_creation()
-	testset_dict = testset_creation()
-	result_dict = train_test_models(trainset_dict, testset_dict)
+	'''
+	result_dict = {}
+
+	for i in range(num_its):
+
+		print('Iteration {}'.format(i + 1))
+
+		trainset_dict = trainset_creation()
+		testset_dict = testset_creation()
+		temp_result_dict = train_test_models(trainset_dict, testset_dict)
+
+		if i == 0:
+
+			result_dict = temp_result_dict
+
+		else:
+
+			for model_name in result_dict.keys():
+				for dataset_name in result_dict[model_name].keys():
+					for tier in result_dict[model_name][dataset_name].keys():
+						result_dict[model_name][dataset_name][tier] += temp_result_dict[model_name][dataset_name][tier]
+
+	# then divide the results out
+	for model_name in result_dict.keys():
+		for dataset_name in result_dict[model_name].keys():
+			for tier in result_dict[model_name][dataset_name].keys():
+				result_dict[model_name][dataset_name][tier] /= num_its
+
+
 	print_results(result_dict)
+	'''
+
+	for dataset_name in dataset_list:
+		for model_name in model_dict.keys():
+
+			plot_model(model_name, dataset_name)
 
 main()
 
