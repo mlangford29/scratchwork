@@ -20,7 +20,7 @@ import random
 import sys
 import io
 
-from mlens.ensemble import SuperLearner
+from mlens.ensemble import TemporalEnsemble
 from sklearn.ensemble import AdaBoostClassifier
 
 path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
@@ -54,7 +54,7 @@ for i, sentence in enumerate(sentences):
 
 # build the model: a single LSTM
 print('Building model!')
-model = SuperLearner(verbose=1)
+model = TemporalEnsemble(verbose=1)
 
 model1 = Sequential()
 model1.add(LSTM(128, input_shape=(maxlen, len(chars))))
