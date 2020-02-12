@@ -95,7 +95,6 @@ model1.add(LSTM(128, input_shape=(maxlen, len(chars))))
 model1.add(Dense(len(chars), activation='softmax'))
 optimizer1 = RMSprop(lr=0.01)
 model1.compile(loss='categorical_crossentropy', optimizer=optimizer1)
-return model1
 
 
 model2 = Sequential()
@@ -104,7 +103,6 @@ model2.add(LSTM(256))
 model2.add(Dense(len(chars), activation='softmax'))
 optimizer2 = RMSprop(lr=0.001)
 model2.compile(loss='categorical_crossentropy', optimizer=optimizer2)
-return model2
 
 
 model3 = Sequential()
@@ -113,7 +111,6 @@ model3.add(LSTM(512))
 model3.add(Dense(len(chars), activation='softmax'))
 optimizer3 = RMSprop(lr=0.001)
 model3.compile(loss='categorical_crossentropy', optimizer=optimizer3)
-return model3
 
 model1 = KerasClassifier(model1)
 model2 = KerasClassifier(model2)
