@@ -113,12 +113,13 @@ optimizer3 = RMSprop(lr=0.001)
 model3.compile(loss='categorical_crossentropy', optimizer=optimizer3)
 
 print('pre-training')
-model1 = KerasClassifier(model1, verbose=0)
 model1.fit(x, y, batch_size=2, epochs=1)
-model2 = KerasClassifier(model2, verbose=0)
+model1 = KerasClassifier(model1, verbose=0)
 model2.fit(x, y, batch_size=2, epochs=1)
-model3 = KerasClassifier(model3, verbose=0)
+model2 = KerasClassifier(model2, verbose=0)
 model3.fit(x, y, batch_size=2, epochs=1)
+model3 = KerasClassifier(model3, verbose=0)
+
 
 model.add([model1, model2, model3])
 model.add_meta(AdaBoostClassifier())
