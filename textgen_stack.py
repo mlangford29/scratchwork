@@ -112,9 +112,9 @@ model3.add(Dense(len(chars), activation='softmax'))
 optimizer3 = RMSprop(lr=0.001)
 model3.compile(loss='categorical_crossentropy', optimizer=optimizer3)
 
-model1 = KerasClassifier(model1)
-model2 = KerasClassifier(model2)
-model3 = KerasClassifier(model3)
+model1 = KerasClassifier(model1, verbose=0)
+model2 = KerasClassifier(model2, verbose=0)
+model3 = KerasClassifier(model3, verbose=0)
 
 model.add([model1, model2, model3])
 model.add_meta(AdaBoostClassifier())
