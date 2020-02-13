@@ -395,6 +395,7 @@ def run():
     run_meta_optimization(hparam_max_dict)
 
 from config import *
+from tpot import TPOTClassifier
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -402,7 +403,20 @@ base_model_list = create_base_model_set()
 hidden_list = create_hidden_model_layers()
 ens = build_ensemble(base_model_list, hidden_list)
 ens_preds = train_layers(ens, X_train, y_train, X_test)
-print(ens_preds.shape)
 meta_x_train, meta_x_test, meta_y_train, meta_y_test = train_test_split(ens_preds, y_test, train_size=0.75, test_size=0.25)
-print(meta_x_train.shape)
-run_meta_optimization(ens)
+
+tpot = TPOTClassifier(verbosity=2, 
+                      scoring="f1",  
+                      n_jobs=-1, 
+                      generations=100, 
+                      population_size=100)
+
+
+tpot = tpot.fit(X_train, y_train)
+s = tpot.score(X_test, y_test)
+
+print('')
+print('Validation score is: {}'.format(s))
+#run_meta_optimization(ens)
+
+
