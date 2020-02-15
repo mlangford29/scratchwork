@@ -7,7 +7,7 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(2, 2),
+	'num_hidden_layers':(1, 1),
 
 	# number of bayesian opt iterations we'll train each model for
 	'meta_learner_its':100,
@@ -175,71 +175,71 @@ model_config = {
 		}
 	},
 
-	'Lasso':{
-		'metalearner':False,
-		'num_in_base':(0, 10),
-		'num_in_mid':(0, 5),
-		'hyperparameters_for_base':{
-			'alpha':{
-				'range':'base'
-			},
-			'tol':{
-				'range':'base'
-			}
-		},
-		'hyperparameters':{
-			'alpha':{
-				'range':'base'
-			},
-			'tol':{
-				'range':'base'
-			}
-		}
-	},
+	# 'Lasso':{
+	# 	'metalearner':False,
+	# 	'num_in_base':(0, 10),
+	# 	'num_in_mid':(0, 5),
+	# 	'hyperparameters_for_base':{
+	# 		'alpha':{
+	# 			'range':'base'
+	# 		},
+	# 		'tol':{
+	# 			'range':'base'
+	# 		}
+	# 	},
+	# 	'hyperparameters':{
+	# 		'alpha':{
+	# 			'range':'base'
+	# 		},
+	# 		'tol':{
+	# 			'range':'base'
+	# 		}
+	# 	}
+	# },
 
-	'Ridge':{
-		'metalearner':False,
-		'num_in_base':(0, 10),
-		'num_in_mid':(0, 5),
-		'hyperparameters_for_base':{
-			'alpha':{
-				'range':'base'
-			},
-			'tol':{
-				'range':'base'
-			}
-		},
-		'hyperparameters':{
-			'alpha':{
-				'range':'base'
-			},
-			'tol':{
-				'range':'base'
-			}
-		}
-	},
+	# 'Ridge':{
+	# 	'metalearner':False,
+	# 	'num_in_base':(0, 10),
+	# 	'num_in_mid':(0, 5),
+	# 	'hyperparameters_for_base':{
+	# 		'alpha':{
+	# 			'range':'base'
+	# 		},
+	# 		'tol':{
+	# 			'range':'base'
+	# 		}
+	# 	},
+	# 	'hyperparameters':{
+	# 		'alpha':{
+	# 			'range':'base'
+	# 		},
+	# 		'tol':{
+	# 			'range':'base'
+	# 		}
+	# 	}
+	# },
 
-	'ElasticNet':{
-		'metalearner':False,
-		'num_in_base':(0, 10),
-		'num_in_mid':(0, 5),
-		'hyperparameters_for_base':{
-			'alpha':{
-				'range':'base'
-			},
-			'l1_ratio':{
-				'range':'base'
-			}
-		},
-		'hyperparameters':{
-			'alpha':{
-				'range':'base'
-			},
-			'l1_ratio':{
-				'range':'base'
-			}
-		}
-	},
+	# 'ElasticNet':{
+	# 	'metalearner':False,
+	# 	'num_in_base':(0, 10),
+	# 	'num_in_mid':(0, 5),
+	# 	'hyperparameters_for_base':{
+	# 		'alpha':{
+	# 			'range':'base'
+	# 		},
+	# 		'l1_ratio':{
+	# 			'range':'base'
+	# 		}
+	# 	},
+	# 	'hyperparameters':{
+	# 		'alpha':{
+	# 			'range':'base'
+	# 		},
+	# 		'l1_ratio':{
+	# 			'range':'base'
+	# 		}
+	# 	}
+	# },
 
 #	'GaussianProcessClassifier':{
 #		'metalearner':True,
@@ -270,7 +270,7 @@ model_config = {
 
 	'DecisionTreeClassifier':{
 		'metalearner':False,
-		'num_in_base':(0, 10),
+		'num_in_base':(0, 50),
 		'num_in_mid':(0, 5),
 		'hyperparameters_for_base':{
 			'max_depth':{
@@ -463,7 +463,7 @@ classification_models = {
 			'learning_rate':{
 				'type':'float',
 				# changing this one because there's a trade-off between learning rate and n_est
-				'default_range':(0.01, 10)
+				'default_range':(0.001, 2)
 			},
 			'n_estimators':{
 				'type':'int',

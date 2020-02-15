@@ -271,7 +271,7 @@ def build_ensemble(base_model_list, hidden_list):
     # then loop through all the other layers
     for layer in hidden_list:
         
-        ens.add(layer)#, proba=True)
+        ens.add(layer, proba=True)
     
     return ens
     
@@ -404,6 +404,19 @@ hidden_list = create_hidden_model_layers()
 ens = build_ensemble(base_model_list, hidden_list)
 ens_preds = train_layers(ens, X_train, y_train, X_test)
 meta_x_train, meta_x_test, meta_y_train, meta_y_test = train_test_split(ens_preds, y_test, train_size=0.75, test_size=0.25)
-run_meta_optimization(ens)
+
+tpot = TPOTClassifier(verbosity=2, 
+                      scoring="f1",  
+                      n_jobs=-1, 
+                      generations=100, 
+                      population_size=100)
+
+
+tpot = tpot.fit(X_train, y_train)
+s = tpot.score(X_test, y_test)
+
+print('')
+print('Validation score is: {}'.format())
+#run_meta_optimization(ens)
 
 
