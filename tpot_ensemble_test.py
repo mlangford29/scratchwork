@@ -60,7 +60,7 @@ num_base = 50
 for i in range(num_base):
     
     print('base model {}'.format(i))
-    base_list.append(TPOTClassifier(generations=2, population_size=2, scoring="f1", cv=2, verbosity=1).fit(X_train[0:100,:], y_train[0:100]).fitted_pipeline_)
+    base_list.append(TPOTClassifier(generations=2, population_size=2, scoring="f1", cv=2, verbosity=1).fit(X_train[0:10000,:], y_train[0:10000]).fitted_pipeline_)
 
 print()
 print('we fit all the base models! putting into super learner')
