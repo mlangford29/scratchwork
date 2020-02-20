@@ -59,13 +59,13 @@ num_base = 10
 
 for i in range(num_base):
     
-    base_list.append(TPOTClassifier(generations=2, population_size=2, scoring="f1", cv=2, verbosity=1).fit(X_train[0:10000,:], y_train[0:10000]).fitted_pipeline_)
+    base_list.append(TPOTClassifier(generations=2, population_size=2, scoring="f1", cv=2, n_jobs=-1, verbosity=1).fit(X_train[0:10000,:], y_train[0:10000]).fitted_pipeline_)
 
 
 hidden_list = []
 for i in range(5):
     
-    hidden_list.append(TPOTClassifier(generations=2, population_size=2, scoring="f1", cv=2, verbosity=1).fit(X_train[10000:20000,:], y_train[10000:20000]).fitted_pipeline_)
+    hidden_list.append(TPOTClassifier(generations=2, population_size=2, scoring="f1", cv=2, n_jobs=-1, verbosity=1).fit(X_train[10000:20000,:], y_train[10000:20000]).fitted_pipeline_)
 
 model = SuperLearner(verbose=2, folds=2)
 
@@ -74,7 +74,7 @@ model.add(base_list)
 model.add(hidden_list)
 
 print('adding meta learner')
-model.add_meta(TPOTClassifier(generations=20, population_size=20, cv=5, scoring="f1", verbosity=2))
+model.add_meta(TPOTClassifier(generations=20, population_size=20, cv=5, scoring="f1", n_jobs=-1, verbosity=2))
 
 print('fitting super learner!')
 model.fit(X_train, y_train)
