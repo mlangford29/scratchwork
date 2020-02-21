@@ -49,7 +49,7 @@ X_test = test_df.to_numpy()
 
 # now let's make a bunch of lists of tpots
 base_list = []
-num_base = 5
+num_base = 2
 
 
 ##### Train each of the models before you get to the super learner
@@ -63,7 +63,7 @@ for i in range(num_base):
 
 
 hidden_list = []
-for i in range(3):
+for i in range(10):
     
     hidden_list.append(TPOTClassifier(generations=2, population_size=2, scoring="f1", cv=2, n_jobs=-1, verbosity=1).fit(X_train[10000:20000,:], y_train[10000:20000]).fitted_pipeline_)
 
@@ -74,7 +74,7 @@ model.add(base_list)
 model.add(hidden_list)
 
 print('adding meta learner')
-model.add_meta(TPOTClassifier(generations=10, population_size=40, cv=5, scoring="f1", n_jobs=-1, verbosity=2))
+model.add_meta(TPOTClassifier(generations=2, population_size=5, cv=5, scoring="f1", n_jobs=-1, verbosity=2))
 
 print('fitting super learner!')
 model.fit(X_train, y_train)
