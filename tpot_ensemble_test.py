@@ -167,6 +167,7 @@ if config.config['correlation_feature_elimination']:
 df_ = feature_matrix # make a copy of this
 y = df.pop('Class')
 
+X = df_ # and another copy. Might not need this
 
 # now let's do some boruta!!
 rfc = RandomForestClassifier(n_jobs = -1)
