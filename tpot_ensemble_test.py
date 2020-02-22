@@ -72,7 +72,7 @@ sss = make_trans_primitive(function=sqrt_square_sum, input_types=[Numeric, Numer
 es = ft.EntitySet(id = 'card') # no clue what this means but whatever
 
 # make an entity from the observations data
-es = es.entity_from_database(dataframe = df.drop('Class', axis=1),
+es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 								entity_id = 'obs',
 								index = 'index')
 
