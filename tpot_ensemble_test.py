@@ -1,7 +1,6 @@
 import numpy as np 
 import pandas as pd 
-import os
-from random import random
+import random
 import config
 
 from sklearn.metrics import accuracy_score
@@ -174,7 +173,7 @@ print('Starting Boruta')
 
 # now let's do some boruta!!
 rfc = RandomForestClassifier(n_jobs = -1)
-boruta_selector = BorutaPy(rfc, n_estimators='auto', verbose=2, max_iter=config.config['max_iter_boruta'])
+boruta_selector = BorutaPy(rfc, n_estimators=1, verbose=2, max_iter=config.config['max_iter_boruta'])
 boruta_selector.fit(X.to_numpy(), y.to_numpy())
 
 print()
