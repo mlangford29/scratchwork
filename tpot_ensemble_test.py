@@ -77,7 +77,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 								index = 'index')
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
-										agg_primitixes = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
+										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
 										trans_primitives = ['percentile', sss], #['percentile', lpo, al, sq, adc, aac, sss],
 										max_depth=1,
 										n_jobs=-1,
