@@ -194,7 +194,7 @@ print(' {}'.format(chosen_features))
 
 # split these out
 # this isn't going to be shuffled because that's a mess.
-X_train, X_test, y_train, y_test = train_test_split(X[chosen_features], y, test_size=0.25)
+X_train, X_test, y_train, y_test = train_test_split(X[chosen_features].to_numpy(), y.to_numpy(), test_size=0.25)
 
 
 # now let's make a bunch of lists of tpots
