@@ -84,7 +84,7 @@ feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										verbose=1)
 
 # eliminate features if they're too correlated before we get into boruta
-if config.config.correlation_feature_elimination:
+if config.config['correlation_feature_elimination']:
 	feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.95)
 	print()
 	print('Columns after feature engineering and correlation elimination:')
@@ -96,7 +96,7 @@ y = df.pop('Class')
 
 # now let's do some boruta!!
 rfc = RandomForestClassifier(n_jobs = -1)
-boruta_selector = BorutaPy(rfc, n_estimators='auto', verbose=2, max_iter=config.config.max_iter_boruta)
+boruta_selector = BorutaPy(rfc, n_estimators='auto', verbose=2, max_iter=config.config['max_iter_boruta'])
 boruta_selector.fit(X.to_numpy(), y.to_numpy())
 
 print()
@@ -129,18 +129,18 @@ base_list = []
 hidden_lol = []
 
 # let's choose some of these numbers that are going to be assigned randomly
-num_hidden_layers = random.randint(config.config.num_hidden_layers[0], config.config.num_hidden_layers[1])
-num_base = random.randint(config.config.num_base[0], config.config.num_base[1])
+num_hidden_layers = random.randint(config.config['num_hidden_layers'][0], config.config['num_hidden_layers'][1])
+num_base = random.randint(config.config['num_base'][0], config.config['num_base'][1])
 
 print()
 print('Training {} base TPOT pipelines'.format(num_base))
 
 for _ in range(num_base):
     
-    base_list.append(TPOTClassifier(generations=config.config.base_num_gens, 
-    								population_size=config.config.base_pop_size, 
-    								scoring=config.config.metric, 
-    								cv=config.config.base_cv, 
+    base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
+    								population_size=config.config['base_pop_size'], 
+    								scoring=config.config['metric'], 
+    								cv=config.config['base_cv'], 
     								n_jobs=-1, 
     								verbosity=1).fit(X_train[0:10000,:], y_train[0:10000]).fitted_pipeline_)
 
@@ -151,23 +151,23 @@ for _ in range(num_hidden_layers):
 	hidden_list = []
 
 	# and we need to choose the number we're going to have for this layer
-	num_hidden = random.randint(config.config.num_hidden[0], config.config.num_hidden[1])
+	num_hidden = random.randint(config.config['num_hidden'][0], config.config['num_hidden'][1])
 
 	print()
 	print('Training {} hidden TPOT pipelines'.format(num_hidden))
 	for i in range(num_hidden):
 	    
-	    hidden_list.append(TPOTClassifier(generations=config.config.hidden_num_gens, 
-	    									population_size=config.config.hidden_pop_size, 
-	    									scoring=config.config.metric, 
-	    									cv=config.config.hidden_cv, 
+	    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
+	    									population_size=config.config['hidden_pop_size'], 
+	    									scoring=config.config['metric'], 
+	    									cv=config.config['hidden_cv'], 
 	    									n_jobs=-1, 
 	    									verbosity=1).fit(X_train[10000:20000,:], y_train[10000:20000]).fitted_pipeline_)
 
 	# then when we're all done we'll append this whole layer to the hidden_lol
 	hidden_lol.append(hidden_list)
 
-ens = SuperLearner(verbose=2, folds=config.config.num_folds)
+ens = SuperLearner(verbose=2, folds=config.config['num_folds'])
 
 ens.add(base_list)
 
@@ -182,12 +182,12 @@ hidden_preds = ens.predict(X_test)
 
 voting_list = []
 
-for _ in range(config.config.num_voters):
+for _ in range(config.config['num_voters']):
 
-	voting_list.append(TPOTClassifier(generations=config.config.voting_num_gens, 
-										population_size=config.config.voting_pop_size, 
-										cv=config.config.voting_cv, 
-										scoring=config.config.metric, 
+	voting_list.append(TPOTClassifier(generations=config.config['voting_num_gens'], 
+										population_size=config.config['voting_pop_size'], 
+										cv=config.config['voting_cv'], 
+										scoring=config.config['metric'], 
 										n_jobs=-1, 
 										verbosity=2).train(hidden_preds, y_train).fitted_pipeline_)
 
@@ -200,7 +200,7 @@ print('Overall score = {}'.format(error(ens.predict(X_test), y_test)))
 
 def error(preds, y_test):
     
-    error_name = config.config.metric
+    error_name = config.config['metric']
     
     if error_name == 'roc_auc':
         return roc_auc_score(preds, y_test)
