@@ -9,7 +9,7 @@ config = {
 	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
-	'num_base':(10, 50),
+	'num_base':(5, 10),
 
 	# number of models in hidden layers. This is a range
 	'num_hidden':(5, 10),
@@ -40,8 +40,8 @@ config = {
 	'hidden_cv':2,
 
 	# voting TPOT parameters
-	'voting_num_gens':20,
-	'voting_pop_size':20,
+	'voting_num_gens':3,
+	'voting_pop_size':5,
 	'voting_cv':5,
 
 	# number of cv folds we use while training the whole ensemble
