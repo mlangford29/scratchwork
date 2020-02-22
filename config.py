@@ -18,7 +18,7 @@ config = {
 	'num_voters':1,
 
 	# are we going to do feature elimination based on correlation?
-	'correlation_feature_elimination':False,
+	'correlation_feature_elimination':True,
 
 	# how many iterations for Boruta to run
 	'max_iter_boruta':1000,
