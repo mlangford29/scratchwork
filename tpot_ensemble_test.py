@@ -14,6 +14,7 @@ from sklearn.ensemble import VotingClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
 
+
 #from sklearn.utils import shuffle
 #from sklearn.metrics import confusion_matrix
 #from sklearn.preprocessing import StandardScaler
@@ -34,7 +35,9 @@ from boruta import BorutaPy
 def warn(*args, **kwargs):
 	pass
 import warnings
+from sklearn.utils.testing import ignore_warnings
 warnings.warn = warn
+warnings.filterwarnings('ignore')
 
 # generic error function
 def error(preds, y_test):
@@ -239,7 +242,7 @@ for _ in range(num_hidden_layers):
 	    									scoring=config.config['metric'], 
 	    									cv=config.config['hidden_cv'], 
 	    									n_jobs=-1, 
-	    									verbosity=1).fit(X_train[10000:20000,:], y_train[10000:20000]).fitted_pipeline_)
+	    									verbosity=1).fit(X_train[5000:10000,:], y_train[5000:10000]).fitted_pipeline_)
 
 	# then when we're all done we'll append this whole layer to the hidden_lol
 	hidden_lol.append(hidden_list)
@@ -266,7 +269,7 @@ for _ in range(config.config['num_voters']):
 										cv=config.config['voting_cv'], 
 										scoring=config.config['metric'], 
 										n_jobs=-1, 
-										verbosity=2).train(hidden_preds, y_train).fitted_pipeline_)
+										verbosity=2).fit(hidden_preds, y_train).fitted_pipeline_)
 
 ens.add_meta(VotingClassifier(voting_list))
 
