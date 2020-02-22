@@ -169,6 +169,9 @@ y = df.pop('Class')
 
 X = df_ # and another copy. Might not need this
 
+print()
+print('Starting Boruta')
+
 # now let's do some boruta!!
 rfc = RandomForestClassifier(n_jobs = -1)
 boruta_selector = BorutaPy(rfc, n_estimators='auto', verbose=2, max_iter=config.config['max_iter_boruta'])
