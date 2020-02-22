@@ -15,7 +15,7 @@ config = {
 	'num_hidden':(5, 10),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':1,
+	'num_voters':5,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':True,
