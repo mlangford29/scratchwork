@@ -9,19 +9,19 @@ config = {
 	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
-	'num_base':(10, 200),
+	'num_base':(10, 20),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(5, 10),
+	'num_hidden':(2, 5),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':5,
+	'num_voters':3,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':True,
 
 	# how many iterations for Boruta to run
-	'max_iter_boruta':1000,
+	'max_iter_boruta':50,
 
 	# number of bayesian opt iterations we'll optimize voting weights for
 	'meta_learner_its':100,
@@ -40,9 +40,9 @@ config = {
 	'hidden_cv':2,
 
 	# voting TPOT parameters
-	'voting_num_gens':20,
-	'voting_pop_size':20,
-	'voting_cv':5,
+	'voting_num_gens':2,
+	'voting_pop_size':2,
+	'voting_cv':2,
 
 	# number of cv folds we use while training the whole ensemble
 	'num_folds':5
