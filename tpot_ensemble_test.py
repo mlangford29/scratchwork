@@ -273,7 +273,12 @@ for _ in range(config.config['num_voters']):
 										n_jobs=-1, 
 										verbosity=2).fit(hidden_preds, y_test).fitted_pipeline_)
 
-ens.add_meta(VotingClassifier(voting_list))
+# let's try zipping the voting list with a string
+str_index_list = [str(i) for i in range(len(voting_list))]
+
+voters_zipped = list(zip(str_index_list, voting_list))
+
+ens.add_meta(VotingClassifier(voters_zipped))
 
 ens.fit(X_train, y_train)
 print()
