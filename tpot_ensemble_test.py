@@ -159,7 +159,7 @@ feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										n_jobs=1,
 										verbose=1)
 
-feature_matrix = feature_matrix.dropna()
+#feature_matrix = feature_matrix.dropna()
 
 # eliminate features if they're too correlated before we get into boruta
 if config.config['correlation_feature_elimination']:
