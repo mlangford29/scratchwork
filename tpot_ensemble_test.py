@@ -269,7 +269,7 @@ for _ in range(config.config['num_voters']):
 										cv=config.config['voting_cv'], 
 										scoring=config.config['metric'], 
 										n_jobs=-1, 
-										verbosity=2).fit(hidden_preds, y_train).fitted_pipeline_)
+										verbosity=2).fit(hidden_preds, y_test).fitted_pipeline_)
 
 ens.add_meta(VotingClassifier(voting_list))
 
