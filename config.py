@@ -6,16 +6,16 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(1, 1),
+	'num_hidden_layers':(0, 0),
 
 	# number of models in the base. This is a range
-	'num_base':(10, 20),
+	'num_base':(50, 50),
 
 	# number of models in hidden layers. This is a range
 	'num_hidden':(2, 5),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':3,
+	'num_voters':5,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':True,
@@ -40,9 +40,9 @@ config = {
 	'hidden_cv':2,
 
 	# voting TPOT parameters
-	'voting_num_gens':2,
-	'voting_pop_size':2,
-	'voting_cv':2,
+	'voting_num_gens':20,
+	'voting_pop_size':20,
+	'voting_cv':5,
 
 	# number of cv folds we use while training the whole ensemble
 	'num_folds':5
