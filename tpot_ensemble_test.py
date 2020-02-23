@@ -224,7 +224,7 @@ for _ in range(num_base):
     								scoring=config.config['metric'], 
     								cv=config.config['base_cv'], 
     								n_jobs=-1,
-    								config_dict=config['base_models'],
+    								config_dict=config.base_models,
     								verbosity=1).fit(X_train[0:5000,:], y_train[0:5000]).fitted_pipeline_)
 
 # go into a loop for this one!
