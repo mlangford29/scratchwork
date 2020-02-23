@@ -1,5 +1,5 @@
 # this is where you're going to put all of the config everythings!
-
+import numpy as np
 
 # a config for the run itself
 config = {
