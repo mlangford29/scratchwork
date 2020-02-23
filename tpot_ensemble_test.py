@@ -244,7 +244,8 @@ for _ in range(num_hidden_layers):
 	    									population_size=config.config['hidden_pop_size'], 
 	    									scoring=config.config['metric'], 
 	    									cv=config.config['hidden_cv'], 
-	    									n_jobs=-1, 
+	    									n_jobs=-1,
+	    									config_dict=config.hidden_models,
 	    									verbosity=1).fit(X_train[5000:10000,:], y_train[5000:10000]).fitted_pipeline_)
 
 	# then when we're all done we'll append this whole layer to the hidden_lol
@@ -260,6 +261,8 @@ for hidden_list in hidden_lol:
 
 # fit this and grab the predictions!
 ##### CONCERN THAT WE NEED TO DO THIS OVER MULTIPLE FOLDS. I'M NOT SURE IF THIS HAPPENS AUTOMATICALLY
+print()
+print('Training the base and hidden models to gather predictions!')
 ens.fit(X_train, y_train)
 hidden_preds = ens.predict(X_test)
 
@@ -271,7 +274,8 @@ for _ in range(config.config['num_voters']):
 										population_size=config.config['voting_pop_size'], 
 										cv=config.config['voting_cv'], 
 										scoring=config.config['metric'], 
-										n_jobs=-1, 
+										n_jobs=-1,
+										config_dict=config.voting_models,
 										verbosity=2).fit(hidden_preds, y_test).fitted_pipeline_)
 
 # let's try zipping the voting list with a string
@@ -281,6 +285,8 @@ voters_zipped = list(zip(str_index_list, voting_list))
 
 ens.add_meta(VotingClassifier(voters_zipped))
 
+print()
+print('Refitting the whole model with the new meta layer!')
 ens.fit(X_train, y_train)
 print()
 print('Overall score = {}'.format(error(ens.predict(X_test), y_test)))
