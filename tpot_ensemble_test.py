@@ -178,7 +178,7 @@ print('Starting Boruta')
 
 # now let's do some boruta!!
 rfc = RandomForestClassifier(n_jobs = -1)
-boruta_selector = BorutaPy(rfc, n_estimators=1, verbose=2, max_iter=config.config['max_iter_boruta'])
+boruta_selector = BorutaPy(rfc, n_estimators=6, verbose=2, max_iter=config.config['max_iter_boruta'])
 boruta_selector.fit(X.to_numpy(), y.to_numpy())
 
 print()
