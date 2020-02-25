@@ -18,10 +18,10 @@ config = {
 	'num_voters':5,
 
 	# are we going to do feature elimination based on correlation?
-	'correlation_feature_elimination':False,
+	'correlation_feature_elimination':True,
 
 	# how many iterations for Boruta to run
-	'max_iter_boruta':1000,
+	'max_iter_boruta':200,
 
 	# number of bayesian opt iterations we'll optimize voting weights for
 	'meta_learner_its':100,
