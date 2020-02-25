@@ -154,7 +154,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', aac],#, lpo, al, sq, adc, aac, sss],
+										trans_primitives = ['percentile'],#, lpo, al, sq, adc, aac, sss],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -199,8 +199,8 @@ print(' {}'.format(chosen_features))
 
 # split these out
 # this isn't going to be shuffled because that's a mess.
-X_train, X_test, y_train, y_test = train_test_split(X[chosen_features].to_numpy(), y.to_numpy(), test_size=0.25)
-
+X_temp, X_holdout, y_temp, y_holdout = train_test_split(X[chosen_features].to_numpy(), y.to_numpy(), test_size=0.10)
+X_train, X_test, y_train, y_test = train_test_split(X_temp, y_temp, test_size=0.25)
 
 # now let's make a bunch of lists of tpots
 
@@ -283,13 +283,64 @@ str_index_list = [str(i) for i in range(len(voting_list))]
 
 voters_zipped = list(zip(str_index_list, voting_list))
 
+# now we need to optimize the weights
+print()
+print('Optimizing weights for voting classifier')
+
+# maybe we can just pull out the preds once?
+# then apply our own weighting
+# like say we already have the preds and just wanna apply the weights
+
+# oh excuse me we need to train the model
+v_model = VotingClassifier(voters_zipped)
+
+##### THIS IS CURRENTLY WRONG I JUST DON'T KNOW WHAT TO DO
+##### WE NEED TO TRAIN ON THE CV-TEST SET FROM THE PREVIOUS LAYERS
+v_model.train(X_train, y_train)
+
+# we need a function to optimize
+def opt_func(**weight_dict):
+
+	# list to store the weights we'll be using for voting
+	weights = []
+
+	for model_idx in weight_dict.keys():
+
+		weights.append(weight_dict[model_idx])
+
+	# now we should have the list of weights we're using
+	# reassign these
+	v_model.weights = weights
+
+	temp_preds = v_model.predict(X_test)
+
+	return error(temp_preds, y_test)
+
+# what are the pbounds going to be?
+# just (0, 1) for each one of the voter weights
+voter_pbounds = {}
+
+for i in range(config.config['num_voters']):
+
+	voter_pbounds['weight{}'.format(i)] = (0, 1)
+
+optimizer = BayesianOptimization(
+            f=opt_func,
+            pbounds=voter_pbounds)
+optimizer.maximize(init_points=2, n_iter=config['meta_learner_its'], xi=0.5)
+
 ens.add_meta(VotingClassifier(voters_zipped))
 
 print()
 print('Refitting the whole model with the new meta layer!')
 ens.fit(X_train, y_train)
 print()
-print('Overall score = {}'.format(error(ens.predict(X_test), y_test)))
+print('Final prediction')
+final_preds = ens.predict(X_holdout)
+print()
+print('Overall score = {}'.format(error(final_preds, y_holdout)))
+
+##### now we should save the model please
 
 
 
