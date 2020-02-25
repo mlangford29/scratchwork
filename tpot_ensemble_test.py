@@ -327,7 +327,7 @@ for i in range(config.config['num_voters']):
 optimizer = BayesianOptimization(
             f=opt_func,
             pbounds=voter_pbounds)
-optimizer.maximize(init_points=2, n_iter=config['meta_learner_its'], xi=0.5)
+optimizer.maximize(init_points=2, n_iter=config.config['meta_learner_its'], xi=0.5)
 
 ens.add_meta(VotingClassifier(voters_zipped))
 
