@@ -169,6 +169,7 @@ if config.config['correlation_feature_elimination']:
 	print(list(feature_matrix.columns))
 
 df_ = feature_matrix # make a copy of this
+df_ = df_.dropna(how='any', axis=1)
 y = df.pop('Class')
 
 X = df_ # and another copy. Might not need this
