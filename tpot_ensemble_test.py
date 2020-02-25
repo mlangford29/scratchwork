@@ -154,7 +154,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', adc],#, lpo, al, sq, adc, aac, sss],
+										trans_primitives = ['percentile', lpo, al, sq, adc, aac, sss],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -178,7 +178,7 @@ print('Starting Boruta')
 
 # now let's do some boruta!!
 rfc = RandomForestClassifier(n_jobs = -1)
-boruta_selector = BorutaPy(rfc, n_estimators=6, verbose=2, max_iter=config.config['max_iter_boruta'])
+boruta_selector = BorutaPy(rfc, n_estimators='auto', verbose=2, max_iter=config.config['max_iter_boruta'])
 boruta_selector.fit(X.to_numpy(), y.to_numpy())
 
 print()

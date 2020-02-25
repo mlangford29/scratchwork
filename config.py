@@ -9,7 +9,7 @@ config = {
 	'num_hidden_layers':(0, 0),
 
 	# number of models in the base. This is a range
-	'num_base':(5, 5),
+	'num_base':(50, 50),
 
 	# number of models in hidden layers. This is a range
 	'num_hidden':(5, 5),
@@ -21,7 +21,7 @@ config = {
 	'correlation_feature_elimination':False,
 
 	# how many iterations for Boruta to run
-	'max_iter_boruta':50,
+	'max_iter_boruta':1000,
 
 	# number of bayesian opt iterations we'll optimize voting weights for
 	'meta_learner_its':100,
