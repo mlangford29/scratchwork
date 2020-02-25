@@ -40,9 +40,9 @@ config = {
 	'hidden_cv':2,
 
 	# voting TPOT parameters
-	'voting_num_gens':3,
-	'voting_pop_size':3,
-	'voting_cv':3,
+	'voting_num_gens':5,
+	'voting_pop_size':5,
+	'voting_cv':5,
 
 	# number of cv folds we use while training the whole ensemble
 	'num_folds':5

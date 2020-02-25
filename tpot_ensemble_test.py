@@ -154,7 +154,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile'],#, lpo, al, sq, adc, aac, sss],
+										trans_primitives = ['percentile', adc],#, lpo, al, sq, adc, aac, sss],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -329,7 +329,15 @@ optimizer = BayesianOptimization(
             pbounds=voter_pbounds)
 optimizer.maximize(init_points=2, n_iter=config.config['meta_learner_its'], xi=0.5)
 
-ens.add_meta(VotingClassifier(voters_zipped))
+max_params = optimizer.max
+weight_dict = max_params['params']
+final_weights = []
+
+for model_idx in weight_dict.keys():
+
+		final_weights.append(weight_dict[model_idx])
+
+ens.add_meta(VotingClassifier(voters_zipped, weights=final_weights))
 
 print()
 print('Refitting the whole model with the new meta layer!')
