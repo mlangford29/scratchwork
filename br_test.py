@@ -7,6 +7,7 @@ import featuretools.variable_types as vtypes
 from featuretools.primitives import make_agg_primitive, make_trans_primitive
 from featuretools.variable_types import Numeric
 from boostaroota import BoostARoota
+from sklearn.metrics import f1_score
 
 # finally let's import the data
 df = pd.read_csv("creditcard.csv")
@@ -64,7 +65,7 @@ y = df.pop('Class')
 
 X = df_ # and another copy. Might not need this
 
-br = BoostARoota(metric='f1_score')
+br = BoostARoota(metric=f1_score)
 br.fit(X, y)
 
 print()
