@@ -65,7 +65,7 @@ y = df.pop('Class')
 
 X = df_ # and another copy. Might not need this
 
-br = BoostARoota(metric=f1_score)
+br = BoostARoota(metric='logloss')
 br.fit(X, y)
 
 print()
