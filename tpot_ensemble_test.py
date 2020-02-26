@@ -178,13 +178,23 @@ print()
 print('Starting Boruta')
 
 # now let's do some boruta!!
+'''
 rfc = RandomForestClassifier(n_jobs = -1)
 boruta_selector = BorutaPy(rfc, n_estimators='auto', verbose=2, max_iter=config.config['max_iter_boruta'])
 boruta_selector.fit(X.to_numpy(), y.to_numpy())
 
 print()
 print(' Number of selected features: {}'.format(boruta_selector.n_features_))
+'''
 
+br = BoostARoota(metric='logloss')
+br.fit(X, y)
+print()
+print('keep vars')
+print(list(br.keep_vars_))
+chosen_features = br.keep_vars_
+
+'''
 # now go through and actually select those features
 total_cols = list(X.columns) # list of all the names
 chosen = list(boruta_selector.support_) # this is array of booleans
@@ -193,6 +203,7 @@ chosen_features = [] # these are the NAMES of the ones we'll be using
 for i in range(len(total_cols)):
 	if chosen[i]:
 		chosen_features.append(total_cols[i])
+'''
 
 print()
 print(' Final chosen features:')
