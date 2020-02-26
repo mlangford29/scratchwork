@@ -30,6 +30,7 @@ from mlens.ensemble import SuperLearner
 from tpot import TPOTClassifier
 
 from boruta import BorutaPy
+from boostaroota import BoostARoota
 
 # can we axe the warnings?
 def warn(*args, **kwargs):
