@@ -111,7 +111,7 @@ feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 
 
 
-feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.95)
+feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.98)
 
 df_ = feature_matrix # make a copy of this
 df_ = df_.dropna(how='any', axis=1)
@@ -124,4 +124,4 @@ br.fit(X, y)
 
 print()
 print('keep vars')
-print(br.keep_vars_)
+print(list(br.keep_vars_))
