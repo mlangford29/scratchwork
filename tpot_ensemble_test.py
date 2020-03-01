@@ -155,7 +155,7 @@ def model_correlation(feature_matrix, correlation_threshold=0.95):
 
     to_keep_ind = list(set(keep_feature_idx_list) - set(to_drop_ind))
 
-    return return to_keep_ind
+    return to_keep_ind
 
 
 # finally let's import the data
