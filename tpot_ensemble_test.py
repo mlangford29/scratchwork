@@ -298,7 +298,7 @@ for i in range(num_base):
     base_pred_df[str(i)] = base_list[i].predict(X_test)
 
 to_keep_ind = model_correlation(base_pred_df, correlation_threshold=.98)
-base_list = base_list[to_keep_ind]
+base_list = [base_list[i] for i in to_keep_ind]
 
 
 # go into a loop for this one!
@@ -326,7 +326,7 @@ for _ in range(num_hidden_layers):
 	    hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
 
 	to_keep_ind = model_correlation(hidden_pred_df, correlation_threshold=.98)
-	hidden_list = hidden_list[to_keep_ind]
+	hidden_list = [hidden_list[i] for i in to_keep_ind]
 
 	# then when we're all done we'll append this whole layer to the hidden_lol
 	hidden_lol.append(hidden_list)
