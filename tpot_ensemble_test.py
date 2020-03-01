@@ -142,7 +142,7 @@ def model_correlation(feature_matrix, correlation_threshold=0.95):
     # Need to use the absolute value
     to_drop_ind = [int(column) for column in upper.columns if any(upper[column].abs() > correlation_threshold)]
 
-    n_collinear = len(to_drop)
+    n_collinear = len(to_drop_ind)
     
     #feature_matrix = feature_matrix[[x for x in feature_matrix if x not in to_drop]]
     print('{} collinear columns removed with threshold: {}.'.format(n_collinear,
