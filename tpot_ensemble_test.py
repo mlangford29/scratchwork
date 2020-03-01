@@ -112,6 +112,51 @@ def feature_selection(feature_matrix, missing_threshold=90, correlation_threshol
     print('Shape after feature selection: {}.'.format(feature_matrix.shape))
     return feature_matrix
 
+# a new function for us to eliminate correlated models
+# just returns a list of the indices of the models we want to *keep*
+def model_correlation(feature_matrix, correlation_threshold=0.95):
+    """Feature selection for a dataframe."""
+    
+    n_features_start = feature_matrix.shape[1]
+    print('Original shape: ', feature_matrix.shape)
+
+    # then make a list of the range for the features
+    keep_feature_idx_list = range(n_features_start)
+    
+    # Zero variance
+    unique_counts = pd.DataFrame(feature_matrix.nunique()).sort_values(0, ascending = True)
+    zero_variance_cols = list(unique_counts[unique_counts[0] == 1].index)
+    n_zero_variance_cols = len(zero_variance_cols)
+
+    # Remove zero variance columns
+    feature_matrix = feature_matrix[[x for x in feature_matrix if x not in zero_variance_cols]]
+    print('{} zero variance columns.'.format(n_zero_variance_cols))
+    
+    # Correlations
+    corr_matrix = feature_matrix.corr()
+
+    # Extract the upper triangle of the correlation matrix
+    upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k = 1).astype(np.bool))
+
+    # Select the features with correlations above the threshold
+    # Need to use the absolute value
+    to_drop_ind = [int(column) for column in upper.columns if any(upper[column].abs() > correlation_threshold)]
+
+    n_collinear = len(to_drop)
+    
+    #feature_matrix = feature_matrix[[x for x in feature_matrix if x not in to_drop]]
+    print('{} collinear columns removed with threshold: {}.'.format(n_collinear,
+                                                                          correlation_threshold))
+    
+    total_removed = n_zero_variance_cols + n_collinear
+    
+    print('Total columns removed: ', total_removed)
+    #print('Shape after feature selection: {}.'.format(feature_matrix.shape))
+
+    to_keep_ind = list(set(keep_feature_idx_list) - set(to_drop_ind))
+
+    return return to_keep_ind
+
 
 # finally let's import the data
 df = pd.read_csv("creditcard.csv")
@@ -186,16 +231,7 @@ boruta_selector.fit(X.to_numpy(), y.to_numpy())
 
 print()
 print(' Number of selected features: {}'.format(boruta_selector.n_features_))
-'''
 
-br = BoostARoota(metric='logloss')
-br.fit(X, y)
-print()
-print('keep vars')
-print(list(br.keep_vars_))
-chosen_features = br.keep_vars_
-
-'''
 # now go through and actually select those features
 total_cols = list(X.columns) # list of all the names
 chosen = list(boruta_selector.support_) # this is array of booleans
@@ -205,6 +241,15 @@ for i in range(len(total_cols)):
 	if chosen[i]:
 		chosen_features.append(total_cols[i])
 '''
+
+br = BoostARoota(metric='logloss')
+br.fit(X, y)
+print()
+print('keep vars')
+print(list(br.keep_vars_))
+chosen_features = br.keep_vars_
+
+
 
 print()
 print(' Final chosen features:')
@@ -230,7 +275,17 @@ num_base = random.randint(config.config['num_base'][0], config.config['num_base'
 print()
 print('Training {} base TPOT pipelines'.format(num_base))
 
-for _ in range(num_base):
+
+
+##### OMG
+##### RIGHT HERE WHILE YOU'RE TRAINING THEM
+##### SAVE THE BEST PIPELINE ON THE SMALLER SET
+##### TRAIN EACH OF THEM ON LARGER SET
+##### AFTER ALL DONE, PREDICT
+##### PUT IN PD DATAFRAME, CORRELATION ELIMINATION
+##### ONLY SELECT THOSE THAT REMAIN
+base_pred_df = pd.DataFrame()
+for i in range(num_base):
     
     base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
     								population_size=config.config['base_pop_size'], 
@@ -239,6 +294,12 @@ for _ in range(num_base):
     								n_jobs=-1,
     								config_dict=config.base_models,
     								verbosity=1).fit(X_train[0:5000,:], y_train[0:5000]).fitted_pipeline_)
+
+    base_pred_df[str(i)] = base_list[i].predict(x_test)
+
+to_keep_ind = model_correlation(base_pred_df, correlation_threshold=.98)
+base_list = base_list[to_keep_ind]
+
 
 # go into a loop for this one!
 for _ in range(num_hidden_layers):
@@ -251,6 +312,7 @@ for _ in range(num_hidden_layers):
 
 	print()
 	print('Training {} hidden TPOT pipelines'.format(num_hidden))
+	hidden_pred_df = pd.DataFrame()
 	for i in range(num_hidden):
 	    
 	    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
@@ -260,6 +322,11 @@ for _ in range(num_hidden_layers):
 	    									n_jobs=-1,
 	    									config_dict=config.hidden_models,
 	    									verbosity=1).fit(X_train[5000:10000,:], y_train[5000:10000]).fitted_pipeline_)
+
+	    hidden_pred_df[str(i)] = hidden_list[i].predict(x_test)
+
+	to_keep_ind = model_correlation(hidden_pred_df, correlation_threshold=.98)
+	hidden_list = hidden_list[to_keep_ind]
 
 	# then when we're all done we'll append this whole layer to the hidden_lol
 	hidden_lol.append(hidden_list)
