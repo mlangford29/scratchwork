@@ -376,7 +376,7 @@ v_model = VotingClassifier(voters_zipped)
 
 ##### THIS IS CURRENTLY WRONG I JUST DON'T KNOW WHAT TO DO
 ##### WE NEED TO TRAIN ON THE CV-TEST SET FROM THE PREVIOUS LAYERS
-v_model.fit(X_train, y_train)
+v_model.fit(hidden_preds, y_test)
 
 # we need a function to optimize
 def opt_func(**weight_dict):
