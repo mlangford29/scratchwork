@@ -350,6 +350,7 @@ print('Training the base and hidden models to gather predictions!')
 ens.fit(X_train, y_train)
 hidden_preds = ens.predict(X_test)
 
+
 voting_list = []
 
 for _ in range(config.config['num_voters']):
@@ -371,16 +372,17 @@ voters_zipped = list(zip(str_index_list, voting_list))
 print()
 print('Optimizing weights for voting classifier')
 
-# maybe we can just pull out the preds once?
-# then apply our own weighting
-# like say we already have the preds and just wanna apply the weights
-
 # oh excuse me we need to train the model
 v_model = VotingClassifier(voters_zipped)
 
+
+#### YES FOR NOW WE'LL JUST SPLIT THE HIDDEN PREDS AND Y_TEST
+hidden_pred_train, hidden_pred_test, y_hp_train, y_hp_test = train_test_split(hidden_preds, y_test, test_size=0.25)
+
+
 ##### THIS IS CURRENTLY WRONG I JUST DON'T KNOW WHAT TO DO
 ##### WE NEED TO TRAIN ON THE CV-TEST SET FROM THE PREVIOUS LAYERS
-v_model.fit(hidden_preds, y_test)
+v_model.fit(hidden_pred_train, y_hp_train)
 
 
 
@@ -398,9 +400,9 @@ def opt_func(**weight_dict):
 	# reassign these
 	v_model.weights = weights
 
-	temp_preds = v_model.predict(reduced_x_test)
+	temp_preds = v_model.predict(hidden_pred_test)
 
-	return error(temp_preds, y_test)
+	return error(temp_preds, y_hp_test)
 
 # what are the pbounds going to be?
 # just (0, 1) for each one of the voter weights
