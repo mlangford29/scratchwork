@@ -200,8 +200,8 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile'],#, lpo, al, sq, adc, aac, sss],
-										max_depth=2,
+										trans_primitives = ['percentile', lpo, al, sq, adc, aac, sss],
+										max_depth=5,
 										n_jobs=1,
 										verbose=1)
 
@@ -297,7 +297,7 @@ for i in range(num_base):
 
     base_pred_df[str(i)] = base_list[i].predict(X_test)
 
-to_keep_ind = model_correlation(base_pred_df, correlation_threshold=.90)
+to_keep_ind = model_correlation(base_pred_df, correlation_threshold=.80)
 base_list = [base_list[i] for i in to_keep_ind]
 
 
@@ -325,7 +325,7 @@ for _ in range(num_hidden_layers):
 
 	    hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
 
-	to_keep_ind = model_correlation(hidden_pred_df, correlation_threshold=.90)
+	to_keep_ind = model_correlation(hidden_pred_df, correlation_threshold=.80)
 	hidden_list = [hidden_list[i] for i in to_keep_ind]
 
 	# then when we're all done we'll append this whole layer to the hidden_lol
