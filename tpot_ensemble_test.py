@@ -200,8 +200,8 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', lpo, al, sq, adc, aac, sss],
-										max_depth=1,
+										trans_primitives = ['percentile'],#, lpo, al, sq, adc, aac, sss],
+										max_depth=2,
 										n_jobs=1,
 										verbose=1)
 
@@ -339,6 +339,10 @@ ens.add(base_list)
 for hidden_list in hidden_lol:
 	ens.add(hidden_list)
 
+# trying to make the reduced set
+reduced_x_test = np.take(X_test, to_keep_ind, axis=1)
+
+
 # fit this and grab the predictions!
 ##### CONCERN THAT WE NEED TO DO THIS OVER MULTIPLE FOLDS. I'M NOT SURE IF THIS HAPPENS AUTOMATICALLY
 print()
@@ -378,6 +382,8 @@ v_model = VotingClassifier(voters_zipped)
 ##### WE NEED TO TRAIN ON THE CV-TEST SET FROM THE PREVIOUS LAYERS
 v_model.fit(hidden_preds, y_test)
 
+
+
 # we need a function to optimize
 def opt_func(**weight_dict):
 
@@ -392,7 +398,7 @@ def opt_func(**weight_dict):
 	# reassign these
 	v_model.weights = weights
 
-	temp_preds = v_model.predict(X_test)
+	temp_preds = v_model.predict(reduced_x_test)
 
 	return error(temp_preds, y_test)
 
