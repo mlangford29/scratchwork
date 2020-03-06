@@ -9,11 +9,11 @@ from sklearn.metrics import recall_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedKFold
 from sklearn.manifold import TSNE
 from sklearn.ensemble import VotingClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
-
 
 #from sklearn.utils import shuffle
 #from sklearn.metrics import confusion_matrix
@@ -157,6 +157,47 @@ def model_correlation(feature_matrix, correlation_threshold=0.95):
 
     return to_keep_ind
 
+### hiii we'll need a function that can take in a list of models/pipelines
+### fit them on the dataset stratified cv folds
+### and then assemble the OOF predictions
+### perform model correlation on those
+### and return the corrected OOF predictions as well as the corrected model list
+def train_pred_model_list(layer_list, X, y):
+
+	skf = StratifiedKFold(n_splits=5, shuffle=True)
+
+	# create a zeroed array for all the preds to go in
+	overall_preds = np.zeros((X.shape[0], len(layer_list)))
+
+	# loop through all the indices we have
+	for train_idxs, test_idxs in skf.split(X, y):
+
+		# make a count
+		c = 0
+
+		# then through all our models
+		for model in layer_list:
+
+			model.fit(X[train_idxs], y[train_idxs])
+
+			preds = model.predict(X[test_idxs])
+
+			##### now we need to add these preds to a np array!
+			overall_preds[train_idxs, c] = preds
+
+			c += 1
+
+	# cool now we should have a populated overall_preds
+	# let's cut this down
+	to_keep_ind = model_correlation(overall_preds, correlation_threshold=0.9)
+
+	layer_list = [layer_list[i] for i in to_keep_ind]
+
+	# and then cut down the preds too
+	final_preds = [overall_preds[i] for i in to_keep_ind]
+
+	return layer_list, final_preds
+
 
 # finally let's import the data
 df = pd.read_csv("creditcard.csv")
@@ -200,7 +241,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', lpo, al, sq, adc, aac, sss],
+										trans_primitives = ['percentile'],#, lpo, al, sq, adc, aac, sss],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -213,6 +254,8 @@ if config.config['correlation_feature_elimination']:
 	print()
 	print('Columns after feature engineering and correlation elimination:')
 	print(list(feature_matrix.columns))
+
+
 
 df_ = feature_matrix # make a copy of this
 df_ = df_.dropna(how='any', axis=1)
@@ -249,8 +292,6 @@ print('keep vars')
 print(list(br.keep_vars_))
 chosen_features = br.keep_vars_
 
-
-
 print()
 print(' Final chosen features:')
 print(' {}'.format(chosen_features))
@@ -259,6 +300,13 @@ print(' {}'.format(chosen_features))
 # this isn't going to be shuffled because that's a mess.
 X_temp, X_holdout, y_temp, y_holdout = train_test_split(X[chosen_features].to_numpy(), y.to_numpy(), test_size=0.10)
 X_train, X_test, y_train, y_test = train_test_split(X_temp, y_temp, test_size=0.25)
+
+'''
+	# trying to make the reduced set
+	# we need to make X_test match what X_train now looks like
+	# after the original reduction from feature correlation
+	reduced_x_test = np.take(X_test, to_keep_ind, axis=1)
+'''
 
 # now let's make a bunch of lists of tpots
 
@@ -295,10 +343,12 @@ for i in range(num_base):
     								config_dict=config.base_models,
     								verbosity=1).fit(X_train[0:5000,:], y_train[0:5000]).fitted_pipeline_)
 
-    base_pred_df[str(i)] = base_list[i].predict(X_test)
+    #base_pred_df[str(i)] = base_list[i].predict(X_test)
 
-to_keep_ind = model_correlation(base_pred_df, correlation_threshold=.80)
-base_list = [base_list[i] for i in to_keep_ind]
+#to_keep_ind = model_correlation(base_pred_df, correlation_threshold=.80)
+#base_list = [base_list[i] for i in to_keep_ind]
+
+base_list, base_preds = train_pred_model_list(base_list, X_train, y_train)
 
 
 # go into a loop for this one!
@@ -312,7 +362,7 @@ for _ in range(num_hidden_layers):
 
 	print()
 	print('Training {} hidden TPOT pipelines'.format(num_hidden))
-	hidden_pred_df = pd.DataFrame()
+	#hidden_pred_df = pd.DataFrame()
 	for i in range(num_hidden):
 	    
 	    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
@@ -323,10 +373,17 @@ for _ in range(num_hidden_layers):
 	    									config_dict=config.hidden_models,
 	    									verbosity=1).fit(X_train[5000:10000,:], y_train[5000:10000]).fitted_pipeline_)
 
-	    hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
+	    #hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
 
-	to_keep_ind = model_correlation(hidden_pred_df, correlation_threshold=.80)
-	hidden_list = [hidden_list[i] for i in to_keep_ind]
+	#to_keep_ind = model_correlation(hidden_pred_df, correlation_threshold=.80)
+	#hidden_list = [hidden_list[i] for i in to_keep_ind]
+
+	#####
+	##### PAY ATTENTION HERE
+	##### IF YOU WANT TO GO ABOVE ONE HIDDEN LAYER,
+	##### YOU'LL NEED TO PLUG IN HIDDEN PREDS INSTEAD OF BASE PREDS
+	#####
+	hidden_list, hidden_preds = train_pred_model_list(hidden_list, base_preds, y_train)
 
 	# then when we're all done we'll append this whole layer to the hidden_lol
 	hidden_lol.append(hidden_list)
@@ -339,16 +396,13 @@ ens.add(base_list)
 for hidden_list in hidden_lol:
 	ens.add(hidden_list)
 
-# trying to make the reduced set
-reduced_x_test = np.take(X_test, to_keep_ind, axis=1)
-
 
 # fit this and grab the predictions!
 ##### CONCERN THAT WE NEED TO DO THIS OVER MULTIPLE FOLDS. I'M NOT SURE IF THIS HAPPENS AUTOMATICALLY
-print()
-print('Training the base and hidden models to gather predictions!')
-ens.fit(X_train, y_train)
-hidden_preds = ens.predict(X_test)
+#print()
+#print('Training the base and hidden models to gather predictions!')
+#ens.fit(X_train, y_train)
+#hidden_preds = ens.predict(X_test)
 
 
 voting_list = []
@@ -361,7 +415,7 @@ for _ in range(config.config['num_voters']):
 										scoring=config.config['metric'], 
 										n_jobs=-1,
 										config_dict=config.voting_models,
-										verbosity=2).fit(hidden_preds, y_test).fitted_pipeline_)
+										verbosity=2).fit(hidden_preds, y_train).fitted_pipeline_)
 
 # let's try zipping the voting list with a string
 str_index_list = [str(i) for i in range(len(voting_list))]
@@ -377,14 +431,10 @@ v_model = VotingClassifier(voters_zipped)
 
 
 #### YES FOR NOW WE'LL JUST SPLIT THE HIDDEN PREDS AND Y_TEST
-hidden_pred_train, hidden_pred_test, y_hp_train, y_hp_test = train_test_split(hidden_preds, y_test, test_size=0.25)
+#hidden_pred_train, hidden_pred_test, y_hp_train, y_hp_test = train_test_split(hidden_preds, y_test, test_size=0.25)
 
-
-##### THIS IS CURRENTLY WRONG I JUST DON'T KNOW WHAT TO DO
-##### WE NEED TO TRAIN ON THE CV-TEST SET FROM THE PREVIOUS LAYERS
-v_model.fit(hidden_pred_train, y_hp_train)
-
-
+# re-train on the same set now that we have the v_model set up
+v_model.fit(hidden_preds, y_train)
 
 # we need a function to optimize
 def opt_func(**weight_dict):
@@ -400,9 +450,9 @@ def opt_func(**weight_dict):
 	# reassign these
 	v_model.weights = weights
 
-	temp_preds = v_model.predict(hidden_pred_test)
+	temp_preds = v_model.predict(X_test)
 
-	return error(temp_preds, y_hp_test)
+	return error(temp_preds, y_test)
 
 # what are the pbounds going to be?
 # just (0, 1) for each one of the voter weights
