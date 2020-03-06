@@ -184,7 +184,7 @@ def train_pred_model_list(layer_list, X, y):
 
 			# add these to the np array
 			# doesn't look like we can slice easily for this
-			for count_i, ii in np.ndenumerate(train_idxs):
+			for count_i, ii in np.ndenumerate(test_idxs):
 
 
 				print('pred shape = {} count_i-1 = {}'.format(preds.shape, count_i[0] - 1))
