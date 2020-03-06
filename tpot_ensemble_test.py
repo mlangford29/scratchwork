@@ -260,7 +260,7 @@ feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 
 # eliminate features if they're too correlated before we get into boruta
 if config.config['correlation_feature_elimination']:
-	feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.5)
+	feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.7)
 	print()
 	print('Columns after feature engineering and correlation elimination:')
 	print(list(feature_matrix.columns))
