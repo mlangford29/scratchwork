@@ -182,8 +182,11 @@ def train_pred_model_list(layer_list, X, y):
 
 			preds = model.predict(X[test_idxs])
 
-			##### now we need to add these preds to a np array!
-			overall_preds[train_idxs, c] = preds
+			# add these to the np array
+			# doesn't look like we can slice easily for this
+			for count_i, ii in np.ndenumerate(train_idx):
+
+				overall_preds[ii, c] = preds[train_idx[count_i]]
 
 			c += 1
 

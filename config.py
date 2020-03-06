@@ -9,7 +9,7 @@ config = {
 	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
-	'num_base':(10, 10),
+	'num_base':(6, 6),
 
 	# number of models in hidden layers. This is a range
 	'num_hidden':(5, 5),
