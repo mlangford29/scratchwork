@@ -172,14 +172,20 @@ def train_pred_model_list(layer_list, X, y):
 	print('Training 5 folds of this list and gathering predictions:')
 	print(layer_list)
 
+	fold_count = 0
+
 	# loop through all the indices we have
 	for train_idxs, test_idxs in skf.split(X, y):
+
+		fold_count += 1
 
 		# make a count
 		c = 0
 
 		# then through all our models
 		for model in layer_list:
+
+			print(' fold = {} | model = {}'.format(fold_count, c + 1))
 
 			model.fit(X[train_idxs], y[train_idxs])
 
