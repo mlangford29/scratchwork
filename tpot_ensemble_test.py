@@ -204,7 +204,7 @@ def train_pred_model_list(layer_list, X, y):
 	layer_list = [layer_list[i] for i in to_keep_ind]
 
 	# and then cut down the preds too
-	final_preds = [overall_preds[i] for i in to_keep_ind]
+	final_preds = np.take(overall_preds, to_keep_ind, axis=1)
 
 	return layer_list, final_preds
 
@@ -251,8 +251,8 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile'],#, lpo, al, sq, adc, aac, sss],
-										max_depth=1,
+										trans_primitives = ['percentile', lpo, al, sq],#, adc, aac, sss],
+										max_depth=2,
 										n_jobs=1,
 										verbose=1)
 
