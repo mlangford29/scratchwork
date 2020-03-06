@@ -186,7 +186,7 @@ def train_pred_model_list(layer_list, X, y):
 			# doesn't look like we can slice easily for this
 			for count_i, ii in np.ndenumerate(train_idxs):
 
-				overall_preds[ii, c] = preds[count_i[0]]
+				overall_preds[ii, c] = preds[count_i[0] - 1]
 
 			c += 1
 
