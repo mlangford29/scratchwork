@@ -184,9 +184,9 @@ def train_pred_model_list(layer_list, X, y):
 
 			# add these to the np array
 			# doesn't look like we can slice easily for this
-			for count_i, ii in np.ndenumerate(train_idx):
+			for count_i, ii in np.ndenumerate(train_idxs):
 
-				overall_preds[ii, c] = preds[train_idx[count_i]]
+				overall_preds[ii, c] = preds[train_idxs[count_i]]
 
 			c += 1
 
