@@ -187,8 +187,8 @@ def train_pred_model_list(layer_list, X, y):
 			for count_i, ii in np.ndenumerate(train_idxs):
 
 
-				print('pred shape = {} count_i = {}'.format(preds.shape, count_i))
-				overall_preds[ii, c] = preds[count_i[0]]
+				print('pred shape = {} count_i-1 = {}'.format(preds.shape, count_i[0] - 1))
+				overall_preds[ii, c] = preds[count_i[0] - 1]
 
 			c += 1
 
