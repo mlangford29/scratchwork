@@ -169,6 +169,9 @@ def train_pred_model_list(layer_list, X, y):
 	# create a zeroed array for all the preds to go in
 	overall_preds = np.zeros((X.shape[0], len(layer_list)))
 
+	print('Training 5 folds of this list and gathering predictions:')
+	print(layer_list)
+
 	# loop through all the indices we have
 	for train_idxs, test_idxs in skf.split(X, y):
 
@@ -187,8 +190,8 @@ def train_pred_model_list(layer_list, X, y):
 			for count_i, ii in np.ndenumerate(test_idxs):
 
 
-				print('pred shape = {} count_i-1 = {}'.format(preds.shape, count_i[0] - 1))
-				overall_preds[ii, c] = preds[count_i[0] - 1]
+				#print('pred shape = {} count_i-1 = {}'.format(preds.shape, count_i[0] - 1))
+				overall_preds[ii, c] = preds[count_i[0]]
 
 			c += 1
 
