@@ -162,12 +162,14 @@ def model_correlation(feature_matrix, correlation_threshold=0.95):
 ### and then assemble the OOF predictions
 ### perform model correlation on those
 ### and return the corrected OOF predictions as well as the corrected model list
-def train_pred_model_list(layer_list, X, y):
+def train_pred_model_list(layer_list, X, y, test_set):
 
 	skf = StratifiedKFold(n_splits=5, shuffle=True)
 
 	# create a zeroed array for all the preds to go in
 	overall_preds = np.zeros((X.shape[0], len(layer_list)))
+
+	overall_preds_test = np.zeros((test_set.shape[0], len(layer_list)))
 
 	print('Training 5 folds of this list and gathering predictions:')
 	print(layer_list)
@@ -190,16 +192,23 @@ def train_pred_model_list(layer_list, X, y):
 			model.fit(X[train_idxs], y[train_idxs])
 
 			preds = model.predict(X[test_idxs])
+			
 
 			# add these to the np array
 			# doesn't look like we can slice easily for this
 			for count_i, ii in np.ndenumerate(test_idxs):
 
-
-				#print('pred shape = {} count_i-1 = {}'.format(preds.shape, count_i[0] - 1))
 				overall_preds[ii, c] = preds[count_i[0]]
 
 			c += 1
+
+	# then go through the models again and just predict on the test set
+	c = 0
+	for model in layer_list:
+
+		preds_test = model.predict(test_set)
+		overall_preds_test[:, c] = preds_test
+		c += 1
 
 	# cool now we should have a populated overall_preds
 	# let's cut this down
@@ -211,8 +220,9 @@ def train_pred_model_list(layer_list, X, y):
 
 	# and then cut down the preds too
 	final_preds = np.take(overall_preds, to_keep_ind, axis=1)
+	final_test = np.take(overall_preds_test, to_keep_ind, axis=1)
 
-	return layer_list, final_preds
+	return layer_list, final_preds, final_test
 
 
 # finally let's import the data
@@ -257,8 +267,8 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', lpo, al, sq],#, adc, aac, sss],
-										max_depth=2,
+										trans_primitives = ['percentile', adc],#lpo, al, sq, adc, aac, sss],
+										max_depth=1,
 										n_jobs=1,
 										verbose=1)
 
@@ -364,7 +374,7 @@ for i in range(num_base):
 #to_keep_ind = model_correlation(base_pred_df, correlation_threshold=.80)
 #base_list = [base_list[i] for i in to_keep_ind]
 
-base_list, base_preds = train_pred_model_list(base_list, X_train, y_train)
+base_list, base_preds, base_test = train_pred_model_list(base_list, X_train, y_train, X_test)
 
 
 # go into a loop for this one!
@@ -399,7 +409,7 @@ for _ in range(num_hidden_layers):
 	##### IF YOU WANT TO GO ABOVE ONE HIDDEN LAYER,
 	##### YOU'LL NEED TO PLUG IN HIDDEN PREDS INSTEAD OF BASE PREDS
 	#####
-	hidden_list, hidden_preds = train_pred_model_list(hidden_list, base_preds, y_train)
+	hidden_list, hidden_preds, hidden_test = train_pred_model_list(hidden_list, base_preds, y_train, base_test)
 
 	# then when we're all done we'll append this whole layer to the hidden_lol
 	hidden_lol.append(hidden_list)
@@ -466,7 +476,11 @@ def opt_func(**weight_dict):
 	# reassign these
 	v_model.weights = weights
 
-	temp_preds = v_model.predict(X_test)
+	##### THIS SHOULD NOT BE X_TEST
+	##### THIS SHOULD BE THE FINAL HIDDEN_PREDS
+	##### BUT WE NEED A TEST SET OFF OF THOSE
+	##### MAYBE YOU NEED TO FILTER X_TEST ALL THE WAY THROUGH THE ENSEMBLE
+	temp_preds = v_model.predict(hidden_test)
 
 	return error(temp_preds, y_test)
 
