@@ -116,9 +116,11 @@ def feature_selection(feature_matrix, missing_threshold=90, correlation_threshol
 # just returns a list of the indices of the models we want to *keep*
 def model_correlation(feature_matrix, correlation_threshold=0.95):
     """Feature selection for a dataframe."""
+
+    print('Removing columns by correlation:')
     
     n_features_start = feature_matrix.shape[1]
-    print('Original shape: ', feature_matrix.shape)
+    print(' Original shape: ', feature_matrix.shape)
 
     # then make a list of the range for the features
     keep_feature_idx_list = range(n_features_start)
@@ -130,7 +132,7 @@ def model_correlation(feature_matrix, correlation_threshold=0.95):
 
     # Remove zero variance columns
     feature_matrix = feature_matrix[[x for x in feature_matrix if x not in zero_variance_cols]]
-    print('{} zero variance columns.'.format(n_zero_variance_cols))
+    print(' {} zero variance columns.'.format(n_zero_variance_cols))
     
     # Correlations
     corr_matrix = feature_matrix.corr()
@@ -145,12 +147,12 @@ def model_correlation(feature_matrix, correlation_threshold=0.95):
     n_collinear = len(to_drop_ind)
     
     #feature_matrix = feature_matrix[[x for x in feature_matrix if x not in to_drop]]
-    print('{} collinear columns removed with threshold: {}.'.format(n_collinear,
+    print(' {} collinear columns removed with threshold: {}.'.format(n_collinear,
                                                                           correlation_threshold))
     
     total_removed = n_zero_variance_cols + n_collinear
     
-    print('Total columns removed: ', total_removed)
+    print(' Total columns removed: ', total_removed)
     #print('Shape after feature selection: {}.'.format(feature_matrix.shape))
 
     to_keep_ind = list(set(keep_feature_idx_list) - set(to_drop_ind))
@@ -171,8 +173,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	overall_preds_test = np.zeros((test_set.shape[0], len(layer_list)))
 
-	print('Training 5 folds of this list and gathering predictions:')
-	print(layer_list)
+	print('Training 5 folds and gathering predictions:')
 
 	fold_count = 0
 
@@ -204,6 +205,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	# then go through the models again and just predict on the test set
 	c = 0
+	print(' Transforming the test set')
 	for model in layer_list:
 
 		preds_test = model.predict(test_set)
@@ -214,6 +216,8 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	# let's cut this down
 	overall_preds_df = pd.DataFrame(overall_preds)
 	#hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
+
+	print(' Calculating the model correlation')
 	to_keep_ind = model_correlation(overall_preds_df, correlation_threshold=0.9)
 
 	layer_list = [layer_list[i] for i in to_keep_ind]
@@ -267,7 +271,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', adc],#lpo, al, sq, adc, aac, sss],
+										trans_primitives = ['percentile', lpo, al, sq],#, adc, aac, sss],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -367,7 +371,7 @@ for i in range(num_base):
     								cv=config.config['base_cv'], 
     								n_jobs=-1,
     								config_dict=config.base_models,
-    								verbosity=1).fit(X_train[0:5000,:], y_train[0:5000]).fitted_pipeline_)
+    								verbosity=0).fit(X_train[0:5000,:], y_train[0:5000]).fitted_pipeline_)
 
     #base_pred_df[str(i)] = base_list[i].predict(X_test)
 
@@ -397,7 +401,7 @@ for _ in range(num_hidden_layers):
 	    									cv=config.config['hidden_cv'], 
 	    									n_jobs=-1,
 	    									config_dict=config.hidden_models,
-	    									verbosity=1).fit(X_train[5000:10000,:], y_train[5000:10000]).fitted_pipeline_)
+	    									verbosity=0).fit(X_train[5000:10000,:], y_train[5000:10000]).fitted_pipeline_)
 
 	    #hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
 
