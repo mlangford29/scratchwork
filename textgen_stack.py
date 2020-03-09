@@ -23,6 +23,7 @@ import io
 from mlens.ensemble import TemporalEnsemble
 from sklearn.ensemble import AdaBoostClassifier
 from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.ensemble import VotingClassifier
 
 path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
 with io.open(path, encoding='utf-8') as f:
@@ -55,7 +56,6 @@ for i, sentence in enumerate(sentences):
 
 # build the model: a single LSTM
 print('Building model!')
-model = TemporalEnsemble(verbose=1)
 
 '''
 def create_model1():
@@ -104,7 +104,6 @@ model2.add(Dense(len(chars), activation='softmax'))
 optimizer2 = RMSprop(lr=0.001)
 model2.compile(loss='categorical_crossentropy', optimizer=optimizer2)
 
-
 model3 = Sequential()
 model3.add(LSTM(512, input_shape=(maxlen, len(chars)), return_sequences=True))
 model3.add(LSTM(512))
@@ -112,17 +111,16 @@ model3.add(Dense(len(chars), activation='softmax'))
 optimizer3 = RMSprop(lr=0.001)
 model3.compile(loss='categorical_crossentropy', optimizer=optimizer3)
 
-print('pre-training')
-model1.fit(x, y, batch_size=512, epochs=1)
-model1 = KerasClassifier(model1, verbose=0)
-model2.fit(x, y, batch_size=512, epochs=1)
-model2 = KerasClassifier(model2, verbose=0)
-model3.fit(x, y, batch_size=512, epochs=1)
-model3 = KerasClassifier(model3, verbose=0)
+#print('pre-training')
+#model1.fit(x, y, batch_size=512, epochs=1)
+#model1 = KerasClassifier(model1, verbose=0)
+#model2.fit(x, y, batch_size=512, epochs=1)
+#model2 = KerasClassifier(model2, verbose=0)
+#model3.fit(x, y, batch_size=512, epochs=1)
+#model3 = KerasClassifier(model3, verbose=0)
 
+model = VotingClassifier([('1', model1), ('2', model2), ('3', model3)])
 
-model.add([model1, model2, model3])
-model.add_meta(AdaBoostClassifier())
 
 def sample(preds, temperature=1.0):
     # helper function to sample an index from a probability array
