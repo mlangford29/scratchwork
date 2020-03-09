@@ -21,7 +21,7 @@ import sys
 import io
 
 from sklearn.ensemble import VotingClassifier
-import urllib2
+from urllib.request import urlopen
 
 
 url_list = ['https://www.gutenberg.org/files/1342/1342-0.txt',
@@ -41,7 +41,7 @@ url_list = ['https://www.gutenberg.org/files/1342/1342-0.txt',
 text = ''
 
 for book_url in url_list:
-    text += urllib2.urlopen(book_url).lower()
+    text += urlopen(book_url).read().lower()
 
 '''
 path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
