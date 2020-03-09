@@ -190,5 +190,8 @@ def on_epoch_end(epoch, _):
 
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 
-model.fit(x, y, batch_size=512, epochs=100, callbacks=[print_callback])
+model.fit(x, y, batch_size=1024, epochs=100, callbacks=[print_callback])
+
+print('Saving model!')
+model.save('lstm_many_books_030820.h5')
 
