@@ -20,14 +20,36 @@ import random
 import sys
 import io
 
-from mlens.ensemble import TemporalEnsemble
-from sklearn.ensemble import AdaBoostClassifier
-from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.ensemble import VotingClassifier
+import urllib2
 
+
+url_list = ['https://www.gutenberg.org/files/1342/1342-0.txt',
+'https://www.gutenberg.org/files/84/84-0.txt',
+'https://www.gutenberg.org/files/1080/1080-0.txt',
+'https://www.gutenberg.org/files/100/100-0.txt',
+'https://www.gutenberg.org/ebooks/25525.txt.utf-8',
+'https://www.gutenberg.org/ebooks/1635.txt.utf-8',
+'https://www.gutenberg.org/files/11/11-0.txt',
+'https://www.gutenberg.org/ebooks/844.txt.utf-8',
+'https://www.gutenberg.org/ebooks/16328.txt.utf-8',
+'https://www.gutenberg.org/files/205/205-0.txt',
+'https://www.gutenberg.org/files/2701/2701-0.txt',
+'https://www.gutenberg.org/files/98/98-0.txt',
+'https://www.gutenberg.org/files/76/76-0.txt',
+'https://www.gutenberg.org/files/219/219-0.txt']
+text = ''
+
+for book_url in url_list:
+    text += urllib2.urlopen(book_url).lower()
+
+'''
 path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
 with io.open(path, encoding='utf-8') as f:
     text = f.read().lower()
+'''
+
+
 print('corpus length:', len(text))
 
 chars = sorted(list(set(text)))
@@ -87,7 +109,7 @@ def create_model3():
 model1 = KerasClassifier(builf_fn=create_model1)
 model2 = KerasClassifier(builf_fn=create_model2)
 model3 = KerasClassifier(builf_fn=create_model3)
-'''
+
 
 
 model1 = Sequential()
@@ -110,9 +132,15 @@ model3.add(LSTM(512))
 model3.add(Dense(len(chars), activation='softmax'))
 optimizer3 = RMSprop(lr=0.001)
 model3.compile(loss='categorical_crossentropy', optimizer=optimizer3)
+'''
 
-
-
+model = Sequential()
+model.add(LSTM(512, input_shape=(maxlen, len(chars)), return_sequences=True))
+model.add(LSTM(512, return_sequences=True))
+model.add(LSTM(512))
+model.add(Dense(len(chars), activation='softmax'))
+optimizer = RMSprop(lr=0.001)
+model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 def sample(preds, temperature=1.0):
     # helper function to sample an index from a probability array
@@ -122,7 +150,6 @@ def sample(preds, temperature=1.0):
     preds = exp_preds / np.sum(exp_preds)
     probas = np.random.multinomial(1, preds, 1)
     return np.argmax(probas)
-
 
 def on_epoch_end(epoch, _):
     # Function invoked at end of each epoch. Prints generated text.
@@ -156,17 +183,5 @@ def on_epoch_end(epoch, _):
 
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 
-
-#print('pre-training')
-model1.fit(x, y, batch_size=512, epochs=1, callbacks=[print_callback])
-#model1 = KerasClassifier(model1, verbose=0)
-model2.fit(x, y, batch_size=512, epochs=1, callbacks=[print_callback])
-#model2 = KerasClassifier(model2, verbose=0)
-model3.fit(x, y, batch_size=512, epochs=1, callbacks=[print_callback])
-#model3 = KerasClassifier(model3, verbose=0)
-
-model = VotingClassifier([('1', model1), ('2', model2), ('3', model3)])
-
-#model.fit(x, y, batch_size=128, epochs=60, callbacks=[print_callback])
-model.fit(x, y)
+model.fit(x, y, batch_size=512, epochs=100, callbacks=[print_callback])
 
