@@ -112,11 +112,11 @@ optimizer3 = RMSprop(lr=0.001)
 model3.compile(loss='categorical_crossentropy', optimizer=optimizer3)
 
 #print('pre-training')
-#model1.fit(x, y, batch_size=512, epochs=1)
+model1.fit(x, y, batch_size=512, epochs=1, callbacks=[print_callback])
 #model1 = KerasClassifier(model1, verbose=0)
-#model2.fit(x, y, batch_size=512, epochs=1)
+model2.fit(x, y, batch_size=512, epochs=1, callbacks=[print_callback])
 #model2 = KerasClassifier(model2, verbose=0)
-#model3.fit(x, y, batch_size=512, epochs=1)
+model3.fit(x, y, batch_size=512, epochs=1, callbacks=[print_callback])
 #model3 = KerasClassifier(model3, verbose=0)
 
 model = VotingClassifier([('1', model1), ('2', model2), ('3', model3)])
@@ -164,6 +164,6 @@ def on_epoch_end(epoch, _):
 
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 
-model.fit(x, y, batch_size=128, epochs=60, callbacks=[print_callback])
-
+#model.fit(x, y, batch_size=128, epochs=60, callbacks=[print_callback])
+model.fit(x, y)
 
