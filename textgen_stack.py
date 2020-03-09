@@ -41,7 +41,7 @@ url_list = ['https://www.gutenberg.org/files/1342/1342-0.txt',
 text = ''
 
 for book_url in url_list:
-    text += urlopen(book_url).read().lower()
+    text += urlopen(book_url).read().decode('utf-8').lower()
 
 '''
 path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
