@@ -37,7 +37,14 @@ url_list = ['https://www.gutenberg.org/files/1342/1342-0.txt',
 'https://www.gutenberg.org/files/2701/2701-0.txt',
 'https://www.gutenberg.org/files/98/98-0.txt',
 'https://www.gutenberg.org/files/76/76-0.txt',
-'https://www.gutenberg.org/files/219/219-0.txt']
+'https://www.gutenberg.org/files/219/219-0.txt',
+'https://www.gutenberg.org/ebooks/5200.txt.utf-8',
+'https://www.gutenberg.org/files/1661/1661-0.txt',
+'https://www.gutenberg.org/ebooks/174.txt.utf-8',
+'https://www.gutenberg.org/files/4300/4300-0.txt',
+'https://www.gutenberg.org/files/25344/25344-0.txt',
+'https://www.gutenberg.org/files/74/74-0.txt',
+'https://www.gutenberg.org/files/2600/2600-0.txt']
 text = ''
 
 for book_url in url_list:
@@ -157,7 +164,7 @@ def on_epoch_end(epoch, _):
     print('----- Generating text after Epoch: %d' % epoch)
 
     start_index = random.randint(0, len(text) - maxlen - 1)
-    for diversity in [0.2, 0.5, 1.0, 1.2]:
+    for diversity in [0.2, 0.5, 1.0]:
         print('----- diversity:', diversity)
 
         generated = ''
