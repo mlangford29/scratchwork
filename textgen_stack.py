@@ -164,7 +164,7 @@ def on_epoch_end(epoch, _):
     print('----- Generating text after Epoch: %d' % epoch)
 
     start_index = random.randint(0, len(text) - maxlen - 1)
-    for diversity in [0.2, 0.5, 1.0]:
+    for diversity in [0.5, 1.0]:
         print('----- diversity:', diversity)
 
         generated = ''
@@ -190,7 +190,7 @@ def on_epoch_end(epoch, _):
 
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 
-model.fit(x, y, batch_size=1024, epochs=100, callbacks=[print_callback])
+model.fit(x, y, batch_size=2048, epochs=20, callbacks=[print_callback])
 
 print('Saving model!')
 model.save('lstm_many_books_030820.h5')
