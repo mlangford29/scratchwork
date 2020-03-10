@@ -71,7 +71,7 @@ char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
 
 # cut the text in semi-redundant sequences of maxlen characters
-maxlen = 200
+maxlen = 150
 step = 50
 sentences = []
 next_chars = []
@@ -196,7 +196,7 @@ def on_epoch_end(epoch, _):
 
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 
-model.fit(x, y, batch_size=2048, epochs=10, callbacks=[print_callback])
+model.fit(x, y, batch_size=1024, epochs=10, callbacks=[print_callback])
 
 print('Saving model!')
 model.save('lstm_wide_step_031020.h5')
