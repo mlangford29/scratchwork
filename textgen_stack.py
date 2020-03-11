@@ -147,10 +147,25 @@ optimizer3 = RMSprop(lr=0.001)
 model3.compile(loss='categorical_crossentropy', optimizer=optimizer3)
 '''
 
+'''
 model = Sequential()
 model.add(LSTM(512, input_shape=(maxlen, len(chars)), return_sequences=True))
 model.add(LSTM(512, return_sequences=True))
 model.add(LSTM(512))
+model.add(Dense(len(chars), activation='softmax'))
+optimizer = RMSprop(lr=0.001)
+model.compile(loss='categorical_crossentropy', optimizer=optimizer)
+'''
+
+model = Sequential()
+model.add(LSTM(32, input_shape=(maxlen, len(chars)), return_sequences=True))
+model.add(LSTM(32, return_sequences=True))
+model.add(LSTM(32, return_sequences=True))
+model.add(LSTM(32, return_sequences=True))
+model.add(LSTM(32, return_sequences=True))
+model.add(LSTM(32, return_sequences=True))
+model.add(LSTM(32, return_sequences=True))
+model.add(LSTM(32))
 model.add(Dense(len(chars), activation='softmax'))
 optimizer = RMSprop(lr=0.001)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
@@ -199,5 +214,5 @@ print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 model.fit(x, y, batch_size=256, epochs=20, callbacks=[print_callback])
 
 print('Saving model!')
-model.save('lstm_wide_step_031120.h5')
+model.save('deep_thin_wide_step_031120.h5')
 
