@@ -166,6 +166,8 @@ def model_correlation(feature_matrix, correlation_threshold=0.95):
 ### and return the corrected OOF predictions as well as the corrected model list
 def train_pred_model_list(layer_list, X, y, test_set):
 
+	from joblib import Parallel, delayed
+
 	skf = StratifiedKFold(n_splits=2, shuffle=True)
 
 	# create a zeroed array for all the preds to go in
@@ -178,7 +180,8 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	fold_count = 0
 
 	# loop through all the indices we have
-	for train_idxs, test_idxs in skf.split(X, y):
+	#for train_idxs, test_idxs in skf.split(X, y):
+	def do_the_training(train_idxs, test_idxs):
 
 		fold_count += 1
 
@@ -202,6 +205,8 @@ def train_pred_model_list(layer_list, X, y, test_set):
 				overall_preds[ii, c] = preds[count_i[0]]
 
 			c += 1
+
+	Parallel(n_jobs = -1)(delayed(do_the_training)(trn, tst) for trn,test in skf.split(X, y):)
 
 	# then go through the models again and just predict on the test set
 	c = 0
