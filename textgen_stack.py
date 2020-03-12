@@ -72,7 +72,7 @@ indices_char = dict((i, c) for i, c in enumerate(chars))
 
 # cut the text in semi-redundant sequences of maxlen characters
 maxlen = 2
-step = 10
+step = 5
 sentences = []
 next_chars = []
 for i in range(0, len(text) - maxlen, step):
@@ -209,8 +209,8 @@ def on_epoch_end(epoch, _):
 
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 
-model.fit(x, y, batch_size=256, epochs=20, callbacks=[print_callback])
+model.fit(x, y, batch_size=2048, epochs=50, callbacks=[print_callback])
 
 print('Saving model!')
-model.save('deep_thin_wide_step_031120.h5')
+model.save('deep_thin_maxlen2_031120.h5')
 
