@@ -181,7 +181,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	# loop through all the indices we have
 	#for train_idxs, test_idxs in skf.split(X, y):
-	def do_the_training(train_idxs, test_idxs):
+	def do_the_training(train_idxs, test_idxs, fold_count):
 
 		fold_count += 1
 
@@ -206,7 +206,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 			c += 1
 
-	Parallel(n_jobs = -1)(delayed(do_the_training)(trn, tst) for trn,tst in skf.split(X, y))
+	Parallel(n_jobs = -1)(delayed(do_the_training)(trn, tst, fold_count) for trn,tst in skf.split(X, y))
 
 	# then go through the models again and just predict on the test set
 	c = 0
