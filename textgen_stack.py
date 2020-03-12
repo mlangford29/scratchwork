@@ -71,7 +71,7 @@ char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
 
 # cut the text in semi-redundant sequences of maxlen characters
-maxlen = 2
+maxlen = 3
 step = 1
 sentences = []
 next_chars = []
