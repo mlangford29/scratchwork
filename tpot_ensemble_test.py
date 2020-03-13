@@ -210,7 +210,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 			for count_i, ii in np.ndenumerate(test_idxs):
 
 				#overall_preds[ii, c] = preds[count_i[0]]
-				preds_copy[ii, c] = preds[count_i[0]]
+				pred_copy[ii, c] = preds[count_i[0]]
 
 			c += 1
 
