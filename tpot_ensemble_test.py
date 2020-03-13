@@ -183,7 +183,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	#for train_idxs, test_idxs in skf.split(X, y):
 	def do_the_training(train_idxs, test_idxs, fold_count):
 
-		overall_preds.setflags(write=1)
+		#overall_preds.setflags(write=1)
 
 		fold_count += 1
 
