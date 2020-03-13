@@ -183,7 +183,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	# loop through all the indices we have
 	#for train_idxs, test_idxs in skf.split(X, y):
-	def do_the_training(train_idxs, test_idxs, fold_count):
+	def do_the_training(train_idxs, test_idxs, fold_count, overall_preds):
 
 
 
@@ -193,7 +193,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		c = 0
 
 		# trying to make a copy
-		pred_copy = np.copy(overall_preds)
+		#pred_copy = np.copy(overall_preds)
 
 		# then through all our models
 		for model in layer_list:
@@ -209,14 +209,14 @@ def train_pred_model_list(layer_list, X, y, test_set):
 			# doesn't look like we can slice easily for this
 			for count_i, ii in np.ndenumerate(test_idxs):
 
-				pred_copy[ii, c] = preds[count_i[0]]
+				overall_preds[ii, c] = preds[count_i[0]]
 
 			c += 1
 
 		# reassign
-		overall_preds = pred_copy
+		#overall_preds = pred_copy
 
-	Parallel(n_jobs = -1)(delayed(do_the_training)(trn, tst, fold_count) for trn,tst in skf.split(X, y))
+	Parallel(n_jobs = -1)(delayed(do_the_training)(trn, tst, fold_count, overall_preds) for trn,tst in skf.split(X, y))
 
 	# then go through the models again and just predict on the test set
 	c = 0
