@@ -175,6 +175,8 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	overall_preds_test = np.zeros((test_set.shape[0], len(layer_list)))
 
+	overall_preds.flags.writeable = True
+
 	print('Training 2 folds and gathering predictions:')
 
 	fold_count = 0
@@ -183,7 +185,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	#for train_idxs, test_idxs in skf.split(X, y):
 	def do_the_training(train_idxs, test_idxs, fold_count):
 
-		overall_preds.flags.writeable = True
+
 
 		fold_count += 1
 
