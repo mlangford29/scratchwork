@@ -193,7 +193,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		c = 0
 
 		# trying to make a copy
-		#pred_copy = np.copy(overall_preds)
+		pred_copy = np.copy(overall_preds)
 
 		# then through all our models
 		for model in layer_list:
@@ -214,7 +214,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 			c += 1
 
 		# reassign
-		#overall_preds = pred_copy
+		overall_preds = pred_copy
 
 	Parallel(n_jobs = -1)(delayed(do_the_training)(trn, tst, fold_count, overall_preds) for trn,tst in skf.split(X, y))
 
