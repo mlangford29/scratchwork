@@ -192,6 +192,9 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		# make a count
 		c = 0
 
+		# trying to make a copy
+		pred_copy = np.copy(overall_preds)
+
 		# then through all our models
 		for model in layer_list:
 
@@ -206,9 +209,12 @@ def train_pred_model_list(layer_list, X, y, test_set):
 			# doesn't look like we can slice easily for this
 			for count_i, ii in np.ndenumerate(test_idxs):
 
-				overall_preds[ii, c] = preds[count_i[0]]
+				pred_copy[ii, c] = preds[count_i[0]]
 
 			c += 1
+
+		# reassign
+		overall_preds = pred_copy
 
 	Parallel(n_jobs = -1)(delayed(do_the_training)(trn, tst, fold_count) for trn,tst in skf.split(X, y))
 
