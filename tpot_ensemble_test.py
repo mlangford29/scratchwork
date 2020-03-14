@@ -182,10 +182,32 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	fold_count = 0
 
 	# loop through all the indices we have
-	#for train_idxs, test_idxs in skf.split(X, y):
+	for train_idxs, test_idxs in skf.split(X, y):
+
+		fold_count += 1
+
+		# make a count
+		c = 0
+
+		# then through all our models
+		for model in layer_list:
+
+			print(' fold = {} | model = {}'.format(fold_count, c + 1))
+
+			model.fit(X[train_idxs], y[train_idxs])
+
+			preds = model.predict(X[test_idxs])
+
+			# add these to the np array
+			# doesn't look like we can slice easily for this
+			for count_i, ii in np.ndenumerate(test_idxs):
+
+				overall_preds[ii, c] = preds[count_i[0]]
+
+			c += 1
+
+	'''
 	def do_the_training(train_idxs, test_idxs, fold_count, overall_preds):
-
-
 
 		fold_count += 1
 
@@ -218,7 +240,8 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		overall_preds = pred_copy
 
 	Parallel(n_jobs = -1)(delayed(do_the_training)(trn, tst, fold_count, overall_preds) for trn,tst in skf.split(X, y))
-
+	'''
+	
 	# then go through the models again and just predict on the test set
 	c = 0
 	print(' Transforming the test set')
