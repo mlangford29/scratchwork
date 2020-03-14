@@ -6,10 +6,10 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(1, 1),
+	'num_hidden_layers':(0, 0),
 
 	# number of models in the base. This is a range
-	'num_base':(10, 10),
+	'num_base':(50, 50),
 
 	# number of models in hidden layers. This is a range
 	'num_hidden':(10, 10),
