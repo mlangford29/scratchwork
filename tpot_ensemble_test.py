@@ -392,15 +392,6 @@ num_base = random.randint(config.config['num_base'][0], config.config['num_base'
 print()
 print('Training {} base TPOT pipelines'.format(num_base))
 
-
-
-##### OMG
-##### RIGHT HERE WHILE YOU'RE TRAINING THEM
-##### SAVE THE BEST PIPELINE ON THE SMALLER SET
-##### TRAIN EACH OF THEM ON LARGER SET
-##### AFTER ALL DONE, PREDICT
-##### PUT IN PD DATAFRAME, CORRELATION ELIMINATION
-##### ONLY SELECT THOSE THAT REMAIN
 base_pred_df = pd.DataFrame()
 for i in range(num_base):
     
@@ -421,7 +412,7 @@ base_list, base_preds, base_test = train_pred_model_list(base_list, X_train, y_t
 
 
 # go into a loop for this one!
-for _ in range(num_hidden_layers):
+for layer_num in range(num_hidden_layers):
 
 	# just the list of pipelines for this layer
 	hidden_list = []
@@ -447,12 +438,10 @@ for _ in range(num_hidden_layers):
 	#to_keep_ind = model_correlation(hidden_pred_df, correlation_threshold=.80)
 	#hidden_list = [hidden_list[i] for i in to_keep_ind]
 
-	#####
-	##### PAY ATTENTION HERE
-	##### IF YOU WANT TO GO ABOVE ONE HIDDEN LAYER,
-	##### YOU'LL NEED TO PLUG IN HIDDEN PREDS INSTEAD OF BASE PREDS
-	#####
-	hidden_list, hidden_preds, hidden_test = train_pred_model_list(hidden_list, base_preds, y_train, base_test)
+	if layer_num == 0:
+		hidden_list, hidden_preds, hidden_test = train_pred_model_list(hidden_list, base_preds, y_train, base_test)
+	else:
+		hidden_list, hidden_preds, hidden_test = train_pred_model_list(hidden_list, hidden_preds, y_train, hidden_test)
 
 	# then when we're all done we'll append this whole layer to the hidden_lol
 	hidden_lol.append(hidden_list)
@@ -476,6 +465,8 @@ for hidden_list in hidden_lol:
 
 voting_list = []
 
+##### YOU NEED TO CHANGE THIS SO THAT HIDDEN PREDS ISN'T ALWAYS USED TO FIT
+##### CAN'T USE HIDDEN PREDS IF THERE'S NO HIDDEN LAYER
 for _ in range(config.config['num_voters']):
 
 	voting_list.append(TPOTClassifier(generations=config.config['voting_num_gens'], 
@@ -485,6 +476,7 @@ for _ in range(config.config['num_voters']):
 										n_jobs=-1,
 										config_dict=config.voting_models,
 										verbosity=2).fit(hidden_preds, y_train).fitted_pipeline_)
+
 
 # let's try zipping the voting list with a string
 str_index_list = [str(i) for i in range(len(voting_list))]
@@ -519,10 +511,6 @@ def opt_func(**weight_dict):
 	# reassign these
 	v_model.weights = weights
 
-	##### THIS SHOULD NOT BE X_TEST
-	##### THIS SHOULD BE THE FINAL HIDDEN_PREDS
-	##### BUT WE NEED A TEST SET OFF OF THOSE
-	##### MAYBE YOU NEED TO FILTER X_TEST ALL THE WAY THROUGH THE ENSEMBLE
 	temp_preds = v_model.predict(hidden_test)
 
 	return error(temp_preds, y_test)

@@ -6,13 +6,13 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(0, 0),
+	'num_hidden_layers':(5, 5),
 
 	# number of models in the base. This is a range
-	'num_base':(50, 50),
+	'num_base':(10, 10),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(10, 10),
+	'num_hidden':(5, 10),
 
 	# number of voters. For now we'll have this as just an int
 	'num_voters':5,
@@ -117,13 +117,14 @@ base_models = {
         'loss': ["hinge", "squared_hinge"],
         'dual': [True, False],
         'tol': np.arange(1e-5, 1e-1, 1e-4),
-        'C': np.arange(1e-3, 1.001, 1e-3)
+        'C': np.arange(1e-3, 1.001, 1e-3),
+        'max_iter': [100]
     },
 
     'sklearn.svm.SVC': {
         'tol': np.arange(1e-5, 1e-1, 1e-4),
         'C': np.arange(1e-3, 1.001, 1e-3),
-        'max_iter': [1000]
+        'max_iter': [100]
     },
 
     'sklearn.linear_model.LogisticRegression': {
@@ -330,13 +331,14 @@ hidden_models = {
         'loss': ["hinge", "squared_hinge"],
         'dual': [True, False],
         'tol': np.arange(1e-5, 1e-1, 1e-4),
-        'C': np.arange(1e-3, 1.001, 1e-3)
+        'C': np.arange(1e-3, 1.001, 1e-3),
+        'max_iter': [500]
     },
 
     'sklearn.svm.SVC': {
         'tol': np.arange(1e-5, 1e-1, 1e-4),
         'C': np.arange(1e-3, 1.001, 1e-3),
-        'max_iter': [1000]
+        'max_iter': [500]
     },
 
     'sklearn.linear_model.LogisticRegression': {
