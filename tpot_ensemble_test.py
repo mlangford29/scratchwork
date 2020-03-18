@@ -405,7 +405,7 @@ for i in range(num_base):
     								cv=config.config['base_cv'], 
     								n_jobs=-1,
     								config_dict=config.base_models,
-    								verbosity=0).fit(X_train[0:5000,:], y_train[0:5000]).fitted_pipeline_)
+    								verbosity=0).fit(X_train[0:10000,:], y_train[0:10000]).fitted_pipeline_)
 
     #base_pred_df[str(i)] = base_list[i].predict(X_test)
 
@@ -435,7 +435,7 @@ for layer_num in range(num_hidden_layers):
 	    									cv=config.config['hidden_cv'], 
 	    									n_jobs=-1,
 	    									config_dict=config.hidden_models,
-	    									verbosity=0).fit(X_train[5000:10000,:], y_train[5000:10000]).fitted_pipeline_)
+	    									verbosity=0).fit(X_train[10000:20000,:], y_train[10000:20000]).fitted_pipeline_)
 
 	    #hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
 
