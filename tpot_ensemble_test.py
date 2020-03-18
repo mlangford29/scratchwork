@@ -288,7 +288,7 @@ sq = make_trans_primitive(function=squared, input_types=[Numeric], return_type=N
 
 def pow_cols(numeric1, numeric2):
 	return np.power(numeric1, numeric2)
-pwc = make_trans_primitive(function=pow_cols, input_types=[Numeric], return_type=Numeric)
+pwc = make_trans_primitive(function=pow_cols, input_types=[Numeric, Numeric], return_type=Numeric)
 
 def add_cols(numeric1, numeric2):
 	return numeric1+numeric2
