@@ -286,6 +286,10 @@ def squared(column):
 	return np.square(column)
 sq = make_trans_primitive(function=squared, input_types=[Numeric], return_type=Numeric)
 
+def pow_cols(numeric1, numeric2):
+	return np.power(numeric1, numeric2)
+pwc = make_trans_primitive(function=pow_cols, input_types=[Numeric], return_type=Numeric)
+
 def add_cols(numeric1, numeric2):
 	return numeric1+numeric2
 adc = make_trans_primitive(function=add_cols, input_types=[Numeric, Numeric], return_type=Numeric)
@@ -310,7 +314,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', lpo, al, sq, adc],#, aac, sss],
+										trans_primitives = ['percentile', lpo, pwc],#, aac, sss],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -552,6 +556,33 @@ print('Overall score = {}'.format(error(final_preds, y_holdout)))
 
 
 
-
-
+'''
+Training 2 folds and gathering predictions:
+ fold = 1 | model = 1
+ fold = 1 | model = 2
+ fold = 1 | model = 3
+ fold = 1 | model = 4
+ fold = 1 | model = 5
+ fold = 1 | model = 6
+Traceback (most recent call last):
+  File "tpot_ensemble_test.py", line 444, in <module>
+    hidden_list, hidden_preds, hidden_test = train_pred_model_list(hidden_list, hidden_preds, y_train, hidden_test)
+  File "tpot_ensemble_test.py", line 197, in train_pred_model_list
+    model.fit(X[train_idxs], y[train_idxs])
+  File "/home/michael/anaconda3/lib/python3.6/site-packages/sklearn/pipeline.py", line 352, in fit
+    Xt, fit_params = self._fit(X, y, **fit_params)
+  File "/home/michael/anaconda3/lib/python3.6/site-packages/sklearn/pipeline.py", line 317, in _fit
+    **fit_params_steps[name])
+  File "/home/michael/anaconda3/lib/python3.6/site-packages/joblib/memory.py", line 342, in __call__
+    return self.func(*args, **kwargs)
+  File "/home/michael/anaconda3/lib/python3.6/site-packages/sklearn/pipeline.py", line 716, in _fit_transform_one
+    res = transformer.fit_transform(X, y, **fit_params)
+  File "/home/michael/anaconda3/lib/python3.6/site-packages/tpot/builtins/one_hot_encoder.py", line 396, in fit_transform
+    copy=True
+  File "/home/michael/anaconda3/lib/python3.6/site-packages/tpot/builtins/one_hot_encoder.py", line 119, in _transform_selected
+    X_sel, X_not_sel, n_selected, n_features = _X_selected(X, selected)
+  File "/home/michael/anaconda3/lib/python3.6/site-packages/tpot/builtins/one_hot_encoder.py", line 83, in _X_selected
+    sel[np.asarray(selected)] = True
+IndexError: boolean index did not match indexed array along dimension 0; dimension is 3 but corresponding boolean dimension is 133
+'''
 
