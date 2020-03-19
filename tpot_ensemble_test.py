@@ -8,6 +8,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import f1_score
+from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import StratifiedKFold
 from sklearn.manifold import TSNE
@@ -314,7 +315,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', lpo, lpc],#, aac, sss],
+										trans_primitives = ['percentile', lpo],#, aac, sss],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -323,12 +324,10 @@ feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 
 # eliminate features if they're too correlated before we get into boruta
 if config.config['correlation_feature_elimination']:
-	feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.9)
+	feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.8)
 	print()
 	print('Columns after feature engineering and correlation elimination:')
 	print(list(feature_matrix.columns))
-
-
 
 df_ = feature_matrix # make a copy of this
 df_ = df_.dropna(how='any', axis=1)
@@ -396,30 +395,19 @@ num_base = random.randint(config.config['num_base'][0], config.config['num_base'
 print()
 print('Training {} base TPOT pipelines'.format(num_base))
 
+# we need to make a dummy dataset
+x_dummy, y_dummy = make_classification(n_features = num_base)
+
 base_pred_df = pd.DataFrame()
 for i in range(num_base):
     
-    try:
-	    base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
-	    								population_size=config.config['base_pop_size'], 
-	    								scoring=config.config['metric'], 
-	    								cv=config.config['base_cv'], 
-	    								n_jobs=-1,
-	    								config_dict=config.base_models,
-	    								verbosity=0).fit(X_train[0:5000,:], y_train[0:5000]).fitted_pipeline_)
-    except:
-	    base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
-	    								population_size=config.config['base_pop_size'], 
-	    								scoring=config.config['metric'], 
-	    								cv=config.config['base_cv'], 
-	    								n_jobs=-1,
-	    								config_dict=config.base_models,
-	    								verbosity=0).fit(X_train[5000:10000,:], y_train[5000:10000]).fitted_pipeline_)
-
-    #base_pred_df[str(i)] = base_list[i].predict(X_test)
-
-#to_keep_ind = model_correlation(base_pred_df, correlation_threshold=.80)
-#base_list = [base_list[i] for i in to_keep_ind]
+    base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
+    								population_size=config.config['base_pop_size'], 
+    								scoring=config.config['metric'], 
+    								cv=config.config['base_cv'], 
+    								n_jobs=-1,
+    								config_dict=config.base_models,
+    								verbosity=0).fit(x_dummy, y_dummy).fitted_pipeline_)
 
 base_list, base_preds, base_test = train_pred_model_list(base_list, X_train, y_train, X_test)
 
@@ -433,32 +421,21 @@ for layer_num in range(num_hidden_layers):
 	# and we need to choose the number we're going to have for this layer
 	num_hidden = random.randint(config.config['num_hidden'][0], config.config['num_hidden'][1])
 
+
+	x_dummy, y_dummy = make_classification(n_features = num_hidden)
+
 	print()
 	print('Training {} hidden TPOT pipelines'.format(num_hidden))
 	#hidden_pred_df = pd.DataFrame()
 	for i in range(num_hidden):
 	    
-	    try:
-		    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
-		    									population_size=config.config['hidden_pop_size'], 
-		    									scoring=config.config['metric'], 
-		    									cv=config.config['hidden_cv'], 
-		    									n_jobs=-1,
-		    									config_dict=config.hidden_models,
-		    									verbosity=0).fit(X_train[10000:15000,:], y_train[10000:15000]).fitted_pipeline_)
-	    except:
-		    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
-		    									population_size=config.config['hidden_pop_size'], 
-		    									scoring=config.config['metric'], 
-		    									cv=config.config['hidden_cv'], 
-		    									n_jobs=-1,
-		    									config_dict=config.hidden_models,
-		    									verbosity=0).fit(X_train[15000:20000,:], y_train[15000:20000]).fitted_pipeline_)
-
-	    #hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
-
-	#to_keep_ind = model_correlation(hidden_pred_df, correlation_threshold=.80)
-	#hidden_list = [hidden_list[i] for i in to_keep_ind]
+	    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
+	    									population_size=config.config['hidden_pop_size'], 
+	    									scoring=config.config['metric'], 
+	    									cv=config.config['hidden_cv'], 
+	    									n_jobs=-1,
+	    									config_dict=config.hidden_models,
+	    									verbosity=0).fit(x_dummy, y_dummy).fitted_pipeline_)
 
 	if layer_num == 0:
 		hidden_list, hidden_preds, hidden_test = train_pred_model_list(hidden_list, base_preds, y_train, base_test)
@@ -475,15 +452,6 @@ ens.add(base_list)
 # for the hidden lists we'll need a loop
 for hidden_list in hidden_lol:
 	ens.add(hidden_list)
-
-
-# fit this and grab the predictions!
-##### CONCERN THAT WE NEED TO DO THIS OVER MULTIPLE FOLDS. I'M NOT SURE IF THIS HAPPENS AUTOMATICALLY
-#print()
-#print('Training the base and hidden models to gather predictions!')
-#ens.fit(X_train, y_train)
-#hidden_preds = ens.predict(X_test)
-
 
 voting_list = []
 
