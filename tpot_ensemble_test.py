@@ -323,7 +323,7 @@ feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 
 # eliminate features if they're too correlated before we get into boruta
 if config.config['correlation_feature_elimination']:
-	feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.8)
+	feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.9)
 	print()
 	print('Columns after feature engineering and correlation elimination:')
 	print(list(feature_matrix.columns))
@@ -399,13 +399,22 @@ print('Training {} base TPOT pipelines'.format(num_base))
 base_pred_df = pd.DataFrame()
 for i in range(num_base):
     
-    base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
-    								population_size=config.config['base_pop_size'], 
-    								scoring=config.config['metric'], 
-    								cv=config.config['base_cv'], 
-    								n_jobs=-1,
-    								config_dict=config.base_models,
-    								verbosity=0).fit(X_train[0:10000,:], y_train[0:10000]).fitted_pipeline_)
+    try:
+	    base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
+	    								population_size=config.config['base_pop_size'], 
+	    								scoring=config.config['metric'], 
+	    								cv=config.config['base_cv'], 
+	    								n_jobs=-1,
+	    								config_dict=config.base_models,
+	    								verbosity=0).fit(X_train[0:5000,:], y_train[0:5000]).fitted_pipeline_)
+	except:
+		base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
+	    								population_size=config.config['base_pop_size'], 
+	    								scoring=config.config['metric'], 
+	    								cv=config.config['base_cv'], 
+	    								n_jobs=-1,
+	    								config_dict=config.base_models,
+	    								verbosity=0).fit(X_train[5000:10000,:], y_train[5000:10000]).fitted_pipeline_)
 
     #base_pred_df[str(i)] = base_list[i].predict(X_test)
 
@@ -429,13 +438,22 @@ for layer_num in range(num_hidden_layers):
 	#hidden_pred_df = pd.DataFrame()
 	for i in range(num_hidden):
 	    
-	    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
-	    									population_size=config.config['hidden_pop_size'], 
-	    									scoring=config.config['metric'], 
-	    									cv=config.config['hidden_cv'], 
-	    									n_jobs=-1,
-	    									config_dict=config.hidden_models,
-	    									verbosity=0).fit(X_train[10000:20000,:], y_train[10000:20000]).fitted_pipeline_)
+	    try:
+		    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
+		    									population_size=config.config['hidden_pop_size'], 
+		    									scoring=config.config['metric'], 
+		    									cv=config.config['hidden_cv'], 
+		    									n_jobs=-1,
+		    									config_dict=config.hidden_models,
+		    									verbosity=0).fit(X_train[10000:15000,:], y_train[10000:15000]).fitted_pipeline_)
+		except:
+			hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
+		    									population_size=config.config['hidden_pop_size'], 
+		    									scoring=config.config['metric'], 
+		    									cv=config.config['hidden_cv'], 
+		    									n_jobs=-1,
+		    									config_dict=config.hidden_models,
+		    									verbosity=0).fit(X_train[15000:20000,:], y_train[15000:20000]).fitted_pipeline_)
 
 	    #hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
 
