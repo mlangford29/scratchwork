@@ -407,8 +407,8 @@ for i in range(num_base):
 	    								n_jobs=-1,
 	    								config_dict=config.base_models,
 	    								verbosity=0).fit(X_train[0:5000,:], y_train[0:5000]).fitted_pipeline_)
-	except:
-		base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
+    except:
+	    base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
 	    								population_size=config.config['base_pop_size'], 
 	    								scoring=config.config['metric'], 
 	    								cv=config.config['base_cv'], 
@@ -446,8 +446,8 @@ for layer_num in range(num_hidden_layers):
 		    									n_jobs=-1,
 		    									config_dict=config.hidden_models,
 		    									verbosity=0).fit(X_train[10000:15000,:], y_train[10000:15000]).fitted_pipeline_)
-		except:
-			hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
+	    except:
+		    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
 		    									population_size=config.config['hidden_pop_size'], 
 		    									scoring=config.config['metric'], 
 		    									cv=config.config['hidden_cv'], 
