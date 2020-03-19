@@ -395,11 +395,12 @@ num_base = random.randint(config.config['num_base'][0], config.config['num_base'
 print()
 print('Training {} base TPOT pipelines'.format(num_base))
 
-# we need to make a dummy dataset
-x_dummy, y_dummy = make_classification(n_features = num_base)
 
 base_pred_df = pd.DataFrame()
 for i in range(num_base):
+
+	# we need to make a dummy dataset
+	x_dummy, y_dummy = make_classification(n_features = num_base)
     
     base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
     								population_size=config.config['base_pop_size'], 
@@ -421,13 +422,11 @@ for layer_num in range(num_hidden_layers):
 	# and we need to choose the number we're going to have for this layer
 	num_hidden = random.randint(config.config['num_hidden'][0], config.config['num_hidden'][1])
 
-
-	x_dummy, y_dummy = make_classification(n_features = num_hidden)
-
 	print()
 	print('Training {} hidden TPOT pipelines'.format(num_hidden))
-	#hidden_pred_df = pd.DataFrame()
 	for i in range(num_hidden):
+
+		x_dummy, y_dummy = make_classification(n_features = num_hidden)
 	    
 	    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
 	    									population_size=config.config['hidden_pop_size'], 
@@ -466,6 +465,7 @@ for _ in range(config.config['num_voters']):
 										n_jobs=-1,
 										config_dict=config.voting_models,
 										verbosity=2).fit(hidden_preds, y_train).fitted_pipeline_)
+	print()
 
 
 # let's try zipping the voting list with a string
