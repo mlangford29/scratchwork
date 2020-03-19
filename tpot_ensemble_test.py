@@ -399,8 +399,8 @@ print('Training {} base TPOT pipelines'.format(num_base))
 base_pred_df = pd.DataFrame()
 for i in range(num_base):
 
-	# we need to make a dummy dataset
-	x_dummy, y_dummy = make_classification(n_features = num_base)
+    # we need to make a dummy dataset
+    x_dummy, y_dummy = make_classification(n_features = num_base)
     
     base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
     								population_size=config.config['base_pop_size'], 
@@ -426,7 +426,7 @@ for layer_num in range(num_hidden_layers):
 	print('Training {} hidden TPOT pipelines'.format(num_hidden))
 	for i in range(num_hidden):
 
-		x_dummy, y_dummy = make_classification(n_features = num_hidden)
+	    x_dummy, y_dummy = make_classification(n_features = num_hidden)
 	    
 	    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
 	    									population_size=config.config['hidden_pop_size'], 
