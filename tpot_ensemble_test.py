@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd 
 import random
 import config
+import time
 
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import roc_auc_score
@@ -193,11 +194,14 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		# then through all our models
 		for model in layer_list:
 
-			print(' fold = {} | model = {}'.format(fold_count, c + 1))
+			print(' fold {} | model {} | {}'.format(fold_count, c + 1, model))
 
+
+			start = time.time()
 			model.fit(X[train_idxs], y[train_idxs])
 
 			preds = model.predict(X[test_idxs])
+			print('  Training and predicting took {} seconds'.format(time.time() - start))
 
 			# add these to the np array
 			# doesn't look like we can slice easily for this
