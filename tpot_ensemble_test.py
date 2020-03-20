@@ -194,14 +194,14 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		# then through all our models
 		for model in layer_list:
 
-			print(' fold {} | model {} | {}'.format(fold_count, c + 1, model))
+			print(' fold {} | model {}'.format(fold_count, c + 1))
 
 
-			start = time.time()
+			#start = time.time()
 			model.fit(X[train_idxs], y[train_idxs])
 
 			preds = model.predict(X[test_idxs])
-			print('  Training and predicting took {} seconds'.format(time.time() - start))
+			#print('  Training and predicting took {} seconds'.format(time.time() - start))
 
 			# add these to the np array
 			# doesn't look like we can slice easily for this
