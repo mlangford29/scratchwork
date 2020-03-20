@@ -224,45 +224,45 @@ base_models = {
     }
 
     # Selectors
-    # 'sklearn.feature_selection.SelectFwe': {
-    #     'alpha': np.arange(0, 0.05, 0.001),
-    #     'score_func': {
-    #         'sklearn.feature_selection.f_classif': None
-    #     }
-    # },
+    'sklearn.feature_selection.SelectFwe': {
+        'alpha': np.arange(0, 0.05, 0.001),
+        'score_func': {
+            'sklearn.feature_selection.f_classif': None
+        }
+    },
 
-    # 'sklearn.feature_selection.SelectPercentile': {
-    #     'percentile': range(1, 100),
-    #     'score_func': {
-    #         'sklearn.feature_selection.f_classif': None
-    #     }
-    # },
+    'sklearn.feature_selection.SelectPercentile': {
+        'percentile': range(1, 100),
+        'score_func': {
+            'sklearn.feature_selection.f_classif': None
+        }
+    },
 
-    # 'sklearn.feature_selection.VarianceThreshold': {
-    #     'threshold': np.arange(1e-3, .1, 1e-3)
-    # },
+    'sklearn.feature_selection.VarianceThreshold': {
+        'threshold': np.arange(1e-3, .1, 1e-3)
+    },
 
-    # 'sklearn.feature_selection.RFE': {
-    #     'step': np.arange(0.05, .5, 0.05),
-    #     'estimator': {
-    #         'sklearn.ensemble.ExtraTreesClassifier': {
-    #             'n_estimators': range(2,100),
-    #             'criterion': ['gini', 'entropy'],
-    #             'max_features': np.arange(0.05, 1.01, 0.05)
-    #         }
-    #     }
-    # },
+    'sklearn.feature_selection.RFE': {
+        'step': np.arange(0.05, .5, 0.05),
+        'estimator': {
+            'sklearn.ensemble.ExtraTreesClassifier': {
+                'n_estimators': range(2,100),
+                'criterion': ['gini', 'entropy'],
+                'max_features': np.arange(0.05, 1.01, 0.05)
+            }
+        }
+    },
 
-    # 'sklearn.feature_selection.SelectFromModel': {
-    #     'threshold': np.arange(0, 1.01, 0.05),
-    #     'estimator': {
-    #         'sklearn.ensemble.ExtraTreesClassifier': {
-    #             'n_estimators': range(2,100),
-    #             'criterion': ['gini', 'entropy'],
-    #             'max_features': np.arange(0.05, 1.01, 0.05)
-    #         }
-    #     }
-    # }
+    'sklearn.feature_selection.SelectFromModel': {
+        'threshold': np.arange(0, 1.01, 0.05),
+        'estimator': {
+            'sklearn.ensemble.ExtraTreesClassifier': {
+                'n_estimators': range(2,100),
+                'criterion': ['gini', 'entropy'],
+                'max_features': np.arange(0.05, 1.01, 0.05)
+            }
+        }
+    }
 }
 
 hidden_models = {
@@ -438,45 +438,45 @@ hidden_models = {
     }
 
     # Selectors
-    # 'sklearn.feature_selection.SelectFwe': {
-    #     'alpha': np.arange(0, 0.05, 0.001),
-    #     'score_func': {
-    #         'sklearn.feature_selection.f_classif': None
-    #     }
-    # },
+    'sklearn.feature_selection.SelectFwe': {
+        'alpha': np.arange(0, 0.05, 0.001),
+        'score_func': {
+            'sklearn.feature_selection.f_classif': None
+        }
+    },
 
-    # 'sklearn.feature_selection.SelectPercentile': {
-    #     'percentile': range(1, 100),
-    #     'score_func': {
-    #         'sklearn.feature_selection.f_classif': None
-    #     }
-    # },
+    'sklearn.feature_selection.SelectPercentile': {
+        'percentile': range(1, 100),
+        'score_func': {
+            'sklearn.feature_selection.f_classif': None
+        }
+    },
 
-    # 'sklearn.feature_selection.VarianceThreshold': {
-    #     'threshold': np.arange(1e-3, .1, 1e-3)
-    # },
+    'sklearn.feature_selection.VarianceThreshold': {
+        'threshold': np.arange(1e-3, .1, 1e-3)
+    },
 
-    # 'sklearn.feature_selection.RFE': {
-    #     'step': np.arange(0.05, 1.01, 0.05),
-    #     'estimator': {
-    #         'sklearn.ensemble.ExtraTreesClassifier': {
-    #             'n_estimators': range(2,100),
-    #             'criterion': ['gini', 'entropy'],
-    #             'max_features': np.arange(0.05, 1.01, 0.05)
-    #         }
-    #     }
-    # },
+    'sklearn.feature_selection.RFE': {
+        'step': np.arange(0.05, 1.01, 0.05),
+        'estimator': {
+            'sklearn.ensemble.ExtraTreesClassifier': {
+                'n_estimators': range(2,100),
+                'criterion': ['gini', 'entropy'],
+                'max_features': np.arange(0.05, 1.01, 0.05)
+            }
+        }
+    },
 
-    # 'sklearn.feature_selection.SelectFromModel': {
-    #     'threshold': np.arange(0, 1.01, 0.05),
-    #     'estimator': {
-    #         'sklearn.ensemble.ExtraTreesClassifier': {
-    #             'n_estimators': range(2,100),
-    #             'criterion': ['gini', 'entropy'],
-    #             'max_features': np.arange(0.05, 1.01, 0.05)
-    #         }
-    #     }
-    # }
+    'sklearn.feature_selection.SelectFromModel': {
+        'threshold': np.arange(0, 1.01, 0.05),
+        'estimator': {
+            'sklearn.ensemble.ExtraTreesClassifier': {
+                'n_estimators': range(2,100),
+                'criterion': ['gini', 'entropy'],
+                'max_features': np.arange(0.05, 1.01, 0.05)
+            }
+        }
+    }
 }
 
 voting_models = {
