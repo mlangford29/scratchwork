@@ -9,10 +9,10 @@ config = {
 	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
-	'num_base':(50, 50),
+	'num_base':(25, 25),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(30, 30),
+	'num_hidden':(20, 20),
 
 	# number of voters. For now we'll have this as just an int
 	'num_voters':5,

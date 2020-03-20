@@ -417,6 +417,9 @@ for i in range(num_base):
 
 base_list, base_preds, base_test = train_pred_model_list(base_list, X_train, y_train, X_test)
 
+# keep track of this
+# need the length of the base list since it's been updated
+prev_num_hidden = len(base_list)
 
 # go into a loop for this one!
 for layer_num in range(num_hidden_layers):
@@ -431,7 +434,8 @@ for layer_num in range(num_hidden_layers):
 	print('Training {} hidden TPOT pipelines'.format(num_hidden))
 	for i in range(num_hidden):
 
-	    x_dummy, y_dummy = make_classification(n_features = num_hidden)
+		# need to use the number of models from the previous layer
+	    x_dummy, y_dummy = make_classification(n_features = prev_num_hidden)
 	    
 	    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
 	    									population_size=config.config['hidden_pop_size'], 
@@ -448,6 +452,9 @@ for layer_num in range(num_hidden_layers):
 
 	# then when we're all done we'll append this whole layer to the hidden_lol
 	hidden_lol.append(hidden_list)
+
+	# update
+	prev_num_hidden = len(hidden_list)
 
 ens = SuperLearner(verbose=2, folds=config.config['num_folds'])
 
