@@ -16,6 +16,7 @@ from sklearn.manifold import TSNE
 from sklearn.ensemble import VotingClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn import preprocessing
 
 #from sklearn.utils import shuffle
 #from sklearn.metrics import confusion_matrix
@@ -168,8 +169,6 @@ def model_correlation(feature_matrix, correlation_threshold=0.95):
 ### and return the corrected OOF predictions as well as the corrected model list
 def train_pred_model_list(layer_list, X, y, test_set):
 
-	from joblib import Parallel, delayed
-
 	skf = StratifiedKFold(n_splits=config.config['num_folds'], shuffle=True)
 
 	# create a zeroed array for all the preds to go in
@@ -179,7 +178,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	overall_preds.flags.writeable = True
 
-	print('Training 2 folds and gathering predictions:')
+	print('Training {} folds and gathering predictions:'.format(config.config['num_folds']))
 
 	fold_count = 0
 
@@ -278,10 +277,6 @@ df = df.drop(['Time'], axis=1) #,'V28','V27','V26','V25','V24','V23','V22','V20'
 df = df.dropna()
 
 # before we get into things, let's do all the featuretools definitions
-def log_plus_one(column):
-	return np.log(column - min(column) + 2)
-lpo = make_trans_primitive(function=log_plus_one, input_types=[Numeric], return_type=Numeric)
-
 def abs_log(column):
 	return np.log(np.abs(column) + 1)
 al = make_trans_primitive(function=abs_log, input_types=[Numeric], return_type=Numeric)
@@ -290,13 +285,13 @@ def squared(column):
 	return np.square(column)
 sq = make_trans_primitive(function=squared, input_types=[Numeric], return_type=Numeric)
 
-def log_pow_cols(numeric1, numeric2):
-	return np.log(np.power(numeric1 - min(numeric1) + 2, numeric2 - min(numeric2) + 2))
-lpc = make_trans_primitive(function=log_pow_cols, input_types=[Numeric, Numeric], return_type=Numeric)
+def bins_5(column):
+	return preprocessing.KBinsDiscretizer(n_bins=5, encode='ordinal', strategy='uniform').fit(column).transform(column)
+b5 = make_trans_primitive(function=bins_5, input_types=[Numeric], return_type=Numeric)
 
-def add_cols(numeric1, numeric2):
-	return numeric1+numeric2
-adc = make_trans_primitive(function=add_cols, input_types=[Numeric, Numeric], return_type=Numeric)
+def binarize(column):
+	return preprocessing.Binarizer().fit(column).transform(column)
+bnz = make_trans_primitive(function=binarize, input_types=[Numeric], return_type=Numeric)
 
 def add_abs_cols(numeric1, numeric2):
 	return np.abs(numeric1) + np.abs(numeric2)
@@ -318,7 +313,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', lpo, lpc],
+										trans_primitives = ['percentile', b5, bnz],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
