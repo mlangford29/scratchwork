@@ -170,7 +170,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	from joblib import Parallel, delayed
 
-	skf = StratifiedKFold(n_splits=2, shuffle=True)
+	skf = StratifiedKFold(n_splits=config.config['num_folds'], shuffle=True)
 
 	# create a zeroed array for all the preds to go in
 	overall_preds = np.zeros((X.shape[0], len(layer_list)))
