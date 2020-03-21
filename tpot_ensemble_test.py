@@ -403,7 +403,7 @@ base_pred_df = pd.DataFrame()
 for i in range(num_base):
 
     # we need to make a dummy dataset
-    x_dummy, y_dummy = make_classification(n_features = num_base)
+    x_dummy, y_dummy = make_classification(n_features = len(list(br.keep_vars_)))
     
     base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
     								population_size=config.config['base_pop_size'], 
