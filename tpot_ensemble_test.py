@@ -279,7 +279,7 @@ df = df.dropna()
 
 # before we get into things, let's do all the featuretools definitions
 def log_plus_one(column):
-	return np.log(column - min(column) + 1)
+	return np.log(column - min(column) + 2)
 lpo = make_trans_primitive(function=log_plus_one, input_types=[Numeric], return_type=Numeric)
 
 def abs_log(column):
@@ -291,7 +291,7 @@ def squared(column):
 sq = make_trans_primitive(function=squared, input_types=[Numeric], return_type=Numeric)
 
 def log_pow_cols(numeric1, numeric2):
-	return np.power(numeric1 - min(numeric1) + 1, numeric2 - min(numeric2) + 1)
+	return np.log(np.power(numeric1 - min(numeric1) + 2, numeric2 - min(numeric2) + 2))
 lpc = make_trans_primitive(function=log_pow_cols, input_types=[Numeric, Numeric], return_type=Numeric)
 
 def add_cols(numeric1, numeric2):
