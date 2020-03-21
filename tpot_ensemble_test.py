@@ -286,7 +286,8 @@ def squared(column):
 sq = make_trans_primitive(function=squared, input_types=[Numeric], return_type=Numeric)
 
 def bins_5(column):
-	return preprocessing.KBinsDiscretizer(n_bins=5, encode='ordinal', strategy='uniform').fit(column).transform(column)
+	temp = preprocessing.KBinsDiscretizer(n_bins=5, encode='ordinal', strategy='uniform').fit(column)
+	return temp.transform(column)
 b5 = make_trans_primitive(function=bins_5, input_types=[Numeric], return_type=Numeric)
 
 def binarize(column):
