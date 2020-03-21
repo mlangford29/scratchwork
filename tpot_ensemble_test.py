@@ -291,7 +291,7 @@ def bins_5(column):
 b5 = make_trans_primitive(function=bins_5, input_types=[Numeric], return_type=Numeric)
 
 def binarize(column):
-	temp = preprocessing.Binarizer().fit(column)
+	temp = preprocessing.KBinsDiscretizer(n_bins=2, encode='ordinal', strategy='uniform').fit(column)
 	return temp.transform(column)
 bnz = make_trans_primitive(function=binarize, input_types=[Numeric], return_type=Numeric)
 
