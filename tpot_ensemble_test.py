@@ -329,9 +329,8 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['add_numeric', 'cum_mean', 'haversine', 'cum_sum', 'less_than_equal_to', 
-															'multiply_boolean', 'multiply_numeric', 'diff', 'divide_by_feature', 'cum_min', 
-															'divide_numeric','multiply_numeric_scalar', 'greater_than_equal_to', 'modulo_by_feature', 
+										trans_primitives = ['haversine', 'multiply_numeric', 'diff', 'divide_by_feature', 
+															'divide_numeric','multiply_numeric_scalar', 'modulo_by_feature', 
 															'isin', 'absolute'],
 										max_depth=1,
 										n_jobs=1,
@@ -341,7 +340,7 @@ feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 
 # eliminate features if they're too correlated before we get into boruta
 if config.config['correlation_feature_elimination']:
-	feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.8)
+	feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.9)
 	print()
 	print('Columns after feature engineering and correlation elimination:')
 	print(list(feature_matrix.columns))
