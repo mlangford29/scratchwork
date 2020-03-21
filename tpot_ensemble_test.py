@@ -313,9 +313,8 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 								entity_id = 'obs',
 								index = 'index')
 
-feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
-										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['add_numeric', 'cum_mean', 'not_equal', 'haversine', 
+'''
+['add_numeric', 'cum_mean', 'not_equal', 'haversine', 
 															'cum_sum', 'equal', 'less_than_scalar', 'less_than_equal_to', 
 															'multiply_boolean', 'greater_than_equal_to_scalar', 
 															'multiply_numeric', 'diff', 'greater_than_scalar', 
@@ -326,6 +325,14 @@ feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 															'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 
 															'greater_than_equal_to', 'modulo_by_feature', 'scalar_subtract_numeric_feature', 
 															'isin', 'absolute', 'modulo_numeric'],
+'''
+
+feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
+										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
+										trans_primitives = ['add_numeric', 'cum_mean', 'haversine', 'cum_sum', 'less_than_equal_to', 
+															'multiply_boolean', 'multiply_numeric', 'diff', 'divide_by_feature', 'cum_min', 
+															'divide_numeric','multiply_numeric_scalar', 'greater_than_equal_to', 'modulo_by_feature', 
+															'isin', 'absolute'],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
