@@ -195,8 +195,6 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		for model in layer_list:
 
 			print(' fold {} | model {}'.format(fold_count, c + 1))
-			print('  {}'.format(model))
-
 
 			#start = time.time()
 			model.fit(X[train_idxs], y[train_idxs])
@@ -263,7 +261,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	#hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
 
 	print(' Calculating the model correlation')
-	to_keep_ind = model_correlation(overall_preds_df, correlation_threshold=0.9)
+	to_keep_ind = model_correlation(overall_preds_df, correlation_threshold=0.8)
 
 	layer_list = [layer_list[i] for i in to_keep_ind]
 
