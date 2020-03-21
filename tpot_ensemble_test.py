@@ -293,7 +293,7 @@ def squared(column):
 sq = make_trans_primitive(function=squared, input_types=[Numeric], return_type=Numeric)
 
 def log_pow_cols(numeric1, numeric2):
-	return np.log(np.power(np.abs(numeric1), np.abs(numeric2)) + 1)
+	return np.log(np.power(numeric1 + min(numeric1) + 1, numeric2 + min(numeric2) + 1))
 lpc = make_trans_primitive(function=log_pow_cols, input_types=[Numeric, Numeric], return_type=Numeric)
 
 def add_cols(numeric1, numeric2):
@@ -320,7 +320,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', lpo, sss],
+										trans_primitives = ['percentile', lpo, lpc],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)

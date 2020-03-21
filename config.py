@@ -9,10 +9,10 @@ config = {
 	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
-	'num_base':(25, 25),
+	'num_base':(50, 50),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(20, 20),
+	'num_hidden':(50, 50),
 
 	# number of voters. For now we'll have this as just an int
 	'num_voters':5,
@@ -74,7 +74,7 @@ base_models = {
     },
 
     'sklearn.ensemble.ExtraTreesClassifier': {
-        'n_estimators': range(2, 50),
+        'n_estimators': range(2, 25),
         'criterion': ["gini", "entropy"],
         'max_features': np.arange(0.05, 1.01, 0.05),
         'min_samples_split': range(2, 21),
@@ -83,7 +83,7 @@ base_models = {
     },
 
     'sklearn.ensemble.RandomForestClassifier': {
-        'n_estimators': range(2, 50),
+        'n_estimators': range(2, 25),
         'criterion': ["gini", "entropy"],
         'max_features': np.arange(0.05, 1.01, 0.05),
         'min_samples_split': range(2, 21),
