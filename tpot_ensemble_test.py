@@ -260,7 +260,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	#hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
 
 	print(' Calculating the model correlation')
-	to_keep_ind = model_correlation(overall_preds_df, correlation_threshold=0.8)
+	to_keep_ind = model_correlation(overall_preds_df, correlation_threshold=0.95)
 
 	layer_list = [layer_list[i] for i in to_keep_ind]
 
