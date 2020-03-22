@@ -76,7 +76,7 @@ base_models = {
     'sklearn.ensemble.ExtraTreesClassifier': {
         'n_estimators': range(2, 25),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.05, 1.01, 0.05),
+        'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'bootstrap': [True, False]
@@ -85,7 +85,7 @@ base_models = {
     'sklearn.ensemble.RandomForestClassifier': {
         'n_estimators': range(2, 25),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.05, 1.01, 0.05),
+        'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf':  range(1, 21),
         'bootstrap': [True, False]
@@ -98,7 +98,7 @@ base_models = {
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'subsample': np.arange(0.05, 1.01, 0.05),
-        'max_features': np.arange(0.05, 1.01, 0.05)
+        'max_features': np.arange(0.2, 1.01, 0.05)
     },
 
 	'sklearn.ensemble.AdaBoostClassifier': {
@@ -232,7 +232,7 @@ base_models = {
     },
 
     'sklearn.feature_selection.SelectPercentile': {
-        'percentile': range(1, 100),
+        'percentile': range(20, 100),
         'score_func': {
             'sklearn.feature_selection.f_classif': None
         }
@@ -248,18 +248,18 @@ base_models = {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.05, 1.01, 0.05)
+                'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     },
 
     'sklearn.feature_selection.SelectFromModel': {
-        'threshold': np.arange(0, 1.01, 0.05),
+        #'threshold': np.arange(0, 1.01, 0.05),
         'estimator': {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.05, 1.01, 0.05)
+                'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     }
@@ -290,7 +290,7 @@ hidden_models = {
     'sklearn.ensemble.ExtraTreesClassifier': {
         'n_estimators': range(10, 50),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.05, 1.01, 0.05),
+        'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'bootstrap': [True, False]
@@ -299,7 +299,7 @@ hidden_models = {
     'sklearn.ensemble.RandomForestClassifier': {
         'n_estimators': range(10, 50),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.05, 1.01, 0.05),
+        'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf':  range(1, 21),
         'bootstrap': [True, False]
@@ -312,7 +312,7 @@ hidden_models = {
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'subsample': np.arange(0.05, 1.01, 0.05),
-        'max_features': np.arange(0.05, 1.01, 0.05)
+        'max_features': np.arange(0.2, 1.01, 0.05)
     },
 
 	'sklearn.ensemble.AdaBoostClassifier': {
@@ -446,7 +446,7 @@ hidden_models = {
     },
 
     'sklearn.feature_selection.SelectPercentile': {
-        'percentile': range(1, 100),
+        'percentile': range(20, 100),
         'score_func': {
             'sklearn.feature_selection.f_classif': None
         }
@@ -462,18 +462,18 @@ hidden_models = {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.05, 1.01, 0.05)
+                'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     },
 
     'sklearn.feature_selection.SelectFromModel': {
-        'threshold': np.arange(0, 1.01, 0.05),
+        #'threshold': np.arange(0, 1.01, 0.05),
         'estimator': {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.05, 1.01, 0.05)
+                'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     }
@@ -486,7 +486,7 @@ voting_models = {
     'sklearn.ensemble.ExtraTreesClassifier': {
         'n_estimators': range(100, 500),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.05, 1.01, 0.05),
+        'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'bootstrap': [True, False]
@@ -495,7 +495,7 @@ voting_models = {
     'sklearn.ensemble.RandomForestClassifier': {
         'n_estimators': range(100, 500),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.05, 1.01, 0.05),
+        'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf':  range(1, 21),
         'bootstrap': [True, False]
@@ -508,7 +508,7 @@ voting_models = {
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'subsample': np.arange(0.05, 1.01, 0.05),
-        'max_features': np.arange(0.05, 1.01, 0.05)
+        'max_features': np.arange(0.2, 1.01, 0.05)
     },
 
 	'sklearn.ensemble.AdaBoostClassifier': {
@@ -605,7 +605,7 @@ voting_models = {
     },
 
     'sklearn.feature_selection.SelectPercentile': {
-        'percentile': range(1, 100),
+        'percentile': range(20, 100),
         'score_func': {
             'sklearn.feature_selection.f_classif': None
         }
@@ -621,18 +621,18 @@ voting_models = {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.05, 1.01, 0.05)
+                'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     },
 
     'sklearn.feature_selection.SelectFromModel': {
-        'threshold': np.arange(0, 1.01, 0.05),
+        #'threshold': np.arange(0, 1.01, 0.05),
         'estimator': {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.05, 1.01, 0.05)
+                'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     }
