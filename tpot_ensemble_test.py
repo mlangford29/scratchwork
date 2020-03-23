@@ -198,7 +198,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 			#start = time.time()
 			model.fit(X[train_idxs], y[train_idxs])
 
-			preds = model.predict(X[test_idxs])
+			preds = model.predict_proba(X[test_idxs])
 			#print('  Training and predicting took {} seconds'.format(time.time() - start))
 
 			# add these to the np array
@@ -250,7 +250,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	print(' Transforming the test set')
 	for model in layer_list:
 
-		preds_test = model.predict(test_set)
+		preds_test = model.predict_proba(test_set)
 		overall_preds_test[:, c] = preds_test
 		c += 1
 
@@ -329,8 +329,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['haversine', 'multiply_numeric', 'diff', 'multiply_numeric_scalar',
-															'absolute'],
+										trans_primitives = [sq],#, 'multiply_numeric', 'diff', 'multiply_numeric_scalar', 'absolute'],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -523,7 +522,7 @@ def opt_func(**weight_dict):
 	# reassign these
 	v_model.weights = weights
 
-	temp_preds = v_model.predict(hidden_test)
+	temp_preds = v_model.predict_proba(hidden_test)
 
 	return error(temp_preds, y_test)
 
@@ -555,7 +554,7 @@ print('Refitting the whole model with the new meta layer!')
 ens.fit(X_train, y_train)
 print()
 print('Final prediction')
-final_preds = ens.predict(X_holdout)
+final_preds = ens.predict_proba(X_holdout)
 print()
 print('Overall score = {}'.format(error(final_preds, y_holdout)))
 
