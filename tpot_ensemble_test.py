@@ -199,9 +199,11 @@ def train_pred_model_list(layer_list, X, y, test_set):
 			model.fit(X[train_idxs], y[train_idxs])
 
 			# adding onto this because I think predict_proba gives a 2D array?
-			preds = model.predict_proba(X[test_idxs])[:, 1]
-			#print(preds)
-			#print('  Training and predicting took {} seconds'.format(time.time() - start))
+			try:
+				preds = model.predict_proba(X[test_idxs])[:, 1]
+			except AttributeError:
+				preds = model.predict(X[test_idxs])
+			
 
 			# add these to the np array
 			# doesn't look like we can slice easily for this
@@ -252,7 +254,11 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	print(' Transforming the test set')
 	for model in layer_list:
 
-		preds_test = model.predict_proba(test_set)[:, 1]
+		try:
+			preds_test = model.predict_proba(test_set)[:, 1]
+		except AttributeError:
+			preds_test = model.predict(test_set)
+
 		overall_preds_test[:, c] = preds_test
 		c += 1
 
@@ -524,7 +530,7 @@ def opt_func(**weight_dict):
 	# reassign these
 	v_model.weights = weights
 
-	temp_preds = v_model.predict_proba(hidden_test)[:, 1]
+	temp_preds = v_model.predict(hidden_test)
 
 	return error(temp_preds, y_test)
 
