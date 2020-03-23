@@ -198,7 +198,8 @@ def train_pred_model_list(layer_list, X, y, test_set):
 			#start = time.time()
 			model.fit(X[train_idxs], y[train_idxs])
 
-			preds = model.predict_proba(X[test_idxs])
+			# adding onto this because I think predict_proba gives a 2D array?
+			preds = model.predict_proba(X[test_idxs])[:, 1]
 			print(preds)
 			#print('  Training and predicting took {} seconds'.format(time.time() - start))
 
