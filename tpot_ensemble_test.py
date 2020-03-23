@@ -200,7 +200,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 			# adding onto this because I think predict_proba gives a 2D array?
 			preds = model.predict_proba(X[test_idxs])[:, 1]
-			print(preds)
+			#print(preds)
 			#print('  Training and predicting took {} seconds'.format(time.time() - start))
 
 			# add these to the np array
@@ -252,7 +252,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	print(' Transforming the test set')
 	for model in layer_list:
 
-		preds_test = model.predict_proba(test_set)
+		preds_test = model.predict_proba(test_set)[:, 1]
 		overall_preds_test[:, c] = preds_test
 		c += 1
 
@@ -524,7 +524,7 @@ def opt_func(**weight_dict):
 	# reassign these
 	v_model.weights = weights
 
-	temp_preds = v_model.predict_proba(hidden_test)
+	temp_preds = v_model.predict_proba(hidden_test)[:, 1]
 
 	return error(temp_preds, y_test)
 
@@ -556,7 +556,7 @@ print('Refitting the whole model with the new meta layer!')
 ens.fit(X_train, y_train)
 print()
 print('Final prediction')
-final_preds = ens.predict_proba(X_holdout)
+final_preds = ens.predict(X_holdout)
 print()
 print('Overall score = {}'.format(error(final_preds, y_holdout)))
 
