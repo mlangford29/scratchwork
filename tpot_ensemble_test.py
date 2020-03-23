@@ -199,6 +199,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 			model.fit(X[train_idxs], y[train_idxs])
 
 			preds = model.predict_proba(X[test_idxs])
+			print(preds)
 			#print('  Training and predicting took {} seconds'.format(time.time() - start))
 
 			# add these to the np array
