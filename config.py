@@ -9,10 +9,10 @@ config = {
 	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
-	'num_base':(50, 50),
+	'num_base':(25, 25),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(50, 50),
+	'num_hidden':(25, 25),
 
 	# number of voters. For now we'll have this as just an int
 	'num_voters':5,
@@ -112,19 +112,20 @@ base_models = {
     #     'p': np.arange(2, 10, .1)
     # },
 
-    'sklearn.svm.LinearSVC': {
-        'penalty': ["l1", "l2"],
-        'loss': ["hinge", "squared_hinge"],
-        'dual': [True, False],
-        'tol': np.arange(1e-5, 1e-1, 1e-4),
-        'C': np.arange(1e-3, 1.001, 1e-3),
-        'max_iter': [100]
-    },
+    # 'sklearn.svm.LinearSVC': {
+    #     'penalty': ["l1", "l2"],
+    #     'loss': ["hinge", "squared_hinge"],
+    #     'dual': [True, False],
+    #     'tol': np.arange(1e-5, 1e-1, 1e-4),
+    #     'C': np.arange(1e-3, 1.001, 1e-3),
+    #     'max_iter': [100]
+    # },
 
     'sklearn.svm.SVC': {
         'tol': np.arange(1e-5, 1e-1, 1e-4),
         'C': np.arange(1e-3, 1.001, 1e-3),
-        'max_iter': [100]
+        'max_iter': [1000],
+        'probability': [True]
     },
 
     'sklearn.linear_model.LogisticRegression': {
@@ -326,19 +327,20 @@ hidden_models = {
     #     'p': np.arange(2, 10, .1)
     # },
 
-    'sklearn.svm.LinearSVC': {
-        'penalty': ["l1", "l2"],
-        'loss': ["hinge", "squared_hinge"],
-        'dual': [True, False],
-        'tol': np.arange(1e-5, 1e-1, 1e-4),
-        'C': np.arange(1e-3, 1.001, 1e-3),
-        'max_iter': [500]
-    },
+    # 'sklearn.svm.LinearSVC': {
+    #     'penalty': ["l1", "l2"],
+    #     'loss': ["hinge", "squared_hinge"],
+    #     'dual': [True, False],
+    #     'tol': np.arange(1e-5, 1e-1, 1e-4),
+    #     'C': np.arange(1e-3, 1.001, 1e-3),
+    #     'max_iter': [500]
+    # },
 
     'sklearn.svm.SVC': {
         'tol': np.arange(1e-5, 1e-1, 1e-4),
         'C': np.arange(1e-3, 1.001, 1e-3),
-        'max_iter': [500]
+        'max_iter': [5000],
+        'probability': [True]
     },
 
     'sklearn.linear_model.LogisticRegression': {
