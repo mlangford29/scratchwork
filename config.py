@@ -15,7 +15,7 @@ config = {
 	'num_hidden':(25, 25),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':5,
+	'num_voters':3,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':True,
@@ -143,16 +143,16 @@ base_models = {
         'nthread': [1]
     },
 
-    'sklearn.linear_model.SGDClassifier': {
-        'loss': ['log', 'hinge', 'modified_huber', 'squared_hinge', 'perceptron'],
-        'penalty': ['elasticnet'],
-        'alpha': [0.0, 0.001, 0.01, 0.1],
-        'learning_rate': ['invscaling', 'constant'],
-        'fit_intercept': [True, False],
-        'l1_ratio': [0.25, 0.0, 1.0, 0.75, 0.5],
-        'eta0': [0.1, 1.0, 0.01],
-        'power_t': [0.5, 0.0, 1.0, 0.1, 100.0, 10.0, 50.0]
-    },
+    # 'sklearn.linear_model.SGDClassifier': {
+    #     'loss': ['log', 'hinge', 'modified_huber', 'squared_hinge', 'perceptron'],
+    #     'penalty': ['elasticnet'],
+    #     'alpha': [0.0, 0.001, 0.01, 0.1],
+    #     'learning_rate': ['invscaling', 'constant'],
+    #     'fit_intercept': [True, False],
+    #     'l1_ratio': [0.25, 0.0, 1.0, 0.75, 0.5],
+    #     'eta0': [0.1, 1.0, 0.01],
+    #     'power_t': [0.5, 0.0, 1.0, 0.1, 100.0, 10.0, 50.0]
+    # },
 
     'sklearn.neural_network.MLPClassifier': {
         'hidden_layer_sizes':[(10,), (20,), (30,), (40,), (50,), (60,), (70,), (80,), (90,), (100,), 
@@ -161,7 +161,7 @@ base_models = {
         'solver': ['lbfgs', 'sgd', 'adam'],
         'alpha': [0.0, 0.0001, 0.001, 0.01, 0.1],
         'learning_rate': ['constant', 'invscaling', 'adaptive'],
-        'max_iter': range(1, 10)
+        'max_iter': range(100, 1000)
     },
 
     # Preprocesssors
@@ -358,16 +358,16 @@ hidden_models = {
         'nthread': [1]
     },
 
-    'sklearn.linear_model.SGDClassifier': {
-        'loss': ['log', 'hinge', 'modified_huber', 'squared_hinge', 'perceptron'],
-        'penalty': ['elasticnet'],
-        'alpha': [0.0, 0.001, 0.01, 0.1],
-        'learning_rate': ['invscaling', 'constant'],
-        'fit_intercept': [True, False],
-        'l1_ratio': [0.25, 0.0, 1.0, 0.75, 0.5],
-        'eta0': [0.1, 1.0, 0.01],
-        'power_t': [0.5, 0.0, 1.0, 0.1, 100.0, 10.0, 50.0]
-    },
+    # 'sklearn.linear_model.SGDClassifier': {
+    #     'loss': ['log', 'hinge', 'modified_huber', 'squared_hinge', 'perceptron'],
+    #     'penalty': ['elasticnet'],
+    #     'alpha': [0.0, 0.001, 0.01, 0.1],
+    #     'learning_rate': ['invscaling', 'constant'],
+    #     'fit_intercept': [True, False],
+    #     'l1_ratio': [0.25, 0.0, 1.0, 0.75, 0.5],
+    #     'eta0': [0.1, 1.0, 0.01],
+    #     'power_t': [0.5, 0.0, 1.0, 0.1, 100.0, 10.0, 50.0]
+    # },
 
     'sklearn.neural_network.MLPClassifier': {
         'hidden_layer_sizes':[(10,), (20,), (30,), (40,), (50,), (60,), (70,), (80,), (90,), (100,), 
@@ -376,7 +376,7 @@ hidden_models = {
         'solver': ['lbfgs', 'sgd', 'adam'],
         'alpha': [0.0, 0.0001, 0.001, 0.01, 0.1],
         'learning_rate': ['constant', 'invscaling', 'adaptive'],
-        'max_iter': range(10, 50)
+        'max_iter': range(1000, 5000)
     },
 
     # Preprocesssors
