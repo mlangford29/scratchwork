@@ -6,7 +6,7 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(1, 1),
+	'num_hidden_layers':(2, 2),
 
 	# number of models in the base. This is a range
 	'num_base':(25, 25),
@@ -162,7 +162,7 @@ base_models = {
         'solver': ['lbfgs', 'sgd', 'adam'],
         'alpha': [0.0, 0.0001, 0.001, 0.01, 0.1],
         'learning_rate': ['constant', 'invscaling', 'adaptive'],
-        'max_iter': range(100, 1000)
+        'max_iter': range(10, 100)
     },
 
     # Preprocesssors
@@ -377,7 +377,7 @@ hidden_models = {
         'solver': ['lbfgs', 'sgd', 'adam'],
         'alpha': [0.0, 0.0001, 0.001, 0.01, 0.1],
         'learning_rate': ['constant', 'invscaling', 'adaptive'],
-        'max_iter': range(1000, 5000)
+        'max_iter': range(100, 500)
     },
 
     # Preprocesssors
