@@ -125,7 +125,7 @@ base_models = {
     'sklearn.svm.SVC': {
         'tol': np.arange(1e-5, 1e-1, 1e-4),
         'C': np.arange(1e-3, 1.001, 1e-3),
-        'max_iter': [1000],
+        'max_iter': range(1, 1000),
         'probability': [True]
     },
 
@@ -340,7 +340,7 @@ hidden_models = {
     'sklearn.svm.SVC': {
         'tol': np.arange(1e-5, 1e-1, 1e-4),
         'C': np.arange(1e-3, 1.001, 1e-3),
-        'max_iter': [5000],
+        'max_iter': range(10, 5000),
         'probability': [True]
     },
 
