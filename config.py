@@ -9,10 +9,10 @@ config = {
 	'num_hidden_layers':(2, 2),
 
 	# number of models in the base. This is a range
-	'num_base':(25, 25),
+	'num_base':(20, 20),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(25, 25),
+	'num_hidden':(20, 20),
 
 	# number of voters. For now we'll have this as just an int
 	'num_voters':3,
@@ -46,7 +46,7 @@ config = {
 	'voting_cv':5,
 
 	# number of cv folds we use while training the whole ensemble
-	'num_folds':3
+	'num_folds':2
 
 
 }
@@ -455,9 +455,9 @@ hidden_models = {
         }
     },
 
-    'sklearn.feature_selection.VarianceThreshold': {
-        'threshold': np.arange(1e-4, .05, 1e-4)
-    },
+    # 'sklearn.feature_selection.VarianceThreshold': {
+    #     'threshold': np.arange(1e-4, .05, 1e-4)
+    # },
 
     'sklearn.feature_selection.RFE': {
         'step': np.arange(0.05, 1.01, 0.05),
@@ -614,9 +614,9 @@ voting_models = {
         }
     },
 
-    'sklearn.feature_selection.VarianceThreshold': {
-        'threshold': np.arange(1e-4, .05, 1e-4)
-    },
+    # 'sklearn.feature_selection.VarianceThreshold': {
+    #     'threshold': np.arange(1e-4, .05, 1e-4)
+    # },
 
     'sklearn.feature_selection.RFE': {
         'step': np.arange(0.05, 1.01, 0.05),
