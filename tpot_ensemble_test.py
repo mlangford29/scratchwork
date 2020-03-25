@@ -194,6 +194,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		for model in layer_list:
 
 			print(' fold {} | model {}'.format(fold_count, c + 1))
+			print(' {}'.format(model))
 
 			#start = time.time()
 			model.fit(X[train_idxs], y[train_idxs])
@@ -341,7 +342,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['multiply_numeric', 'absolute'],
+										trans_primitives = ['multiply_numeric'],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
