@@ -19,6 +19,7 @@ config = {
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':True,
+	'correlation_model_elimination':False,
 
 	# how many iterations for Boruta to run
 	'max_iter_boruta':200,

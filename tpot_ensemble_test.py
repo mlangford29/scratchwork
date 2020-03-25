@@ -267,16 +267,20 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	overall_preds_df = pd.DataFrame(overall_preds)
 	#hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
 
-	print(' Calculating the model correlation')
-	to_keep_ind = model_correlation(overall_preds_df, correlation_threshold=0.95)
+	if(config.config['correlation_model_elimination']):
+		print(' Calculating the model correlation')
+		to_keep_ind = model_correlation(overall_preds_df, correlation_threshold=0.95)
 
-	layer_list = [layer_list[i] for i in to_keep_ind]
+		layer_list = [layer_list[i] for i in to_keep_ind]
 
-	# and then cut down the preds too
-	final_preds = np.take(overall_preds, to_keep_ind, axis=1)
-	final_test = np.take(overall_preds_test, to_keep_ind, axis=1)
+		# and then cut down the preds too
+		final_preds = np.take(overall_preds, to_keep_ind, axis=1)
+		final_test = np.take(overall_preds_test, to_keep_ind, axis=1)
 
-	return layer_list, final_preds, final_test
+		return layer_list, final_preds, final_test
+
+	else:
+		return layer_list, overall_preds, overall_preds_test
 
 
 # finally let's import the data
@@ -567,37 +571,4 @@ print()
 print('Overall score = {}'.format(error(final_preds, y_holdout)))
 
 ##### now we should save the model please
-
-
-
-
-'''
-Training 2 folds and gathering predictions:
- fold = 1 | model = 1
- fold = 1 | model = 2
- fold = 1 | model = 3
- fold = 1 | model = 4
- fold = 1 | model = 5
- fold = 1 | model = 6
-Traceback (most recent call last):
-  File "tpot_ensemble_test.py", line 444, in <module>
-    hidden_list, hidden_preds, hidden_test = train_pred_model_list(hidden_list, hidden_preds, y_train, hidden_test)
-  File "tpot_ensemble_test.py", line 197, in train_pred_model_list
-    model.fit(X[train_idxs], y[train_idxs])
-  File "/home/michael/anaconda3/lib/python3.6/site-packages/sklearn/pipeline.py", line 352, in fit
-    Xt, fit_params = self._fit(X, y, **fit_params)
-  File "/home/michael/anaconda3/lib/python3.6/site-packages/sklearn/pipeline.py", line 317, in _fit
-    **fit_params_steps[name])
-  File "/home/michael/anaconda3/lib/python3.6/site-packages/joblib/memory.py", line 342, in __call__
-    return self.func(*args, **kwargs)
-  File "/home/michael/anaconda3/lib/python3.6/site-packages/sklearn/pipeline.py", line 716, in _fit_transform_one
-    res = transformer.fit_transform(X, y, **fit_params)
-  File "/home/michael/anaconda3/lib/python3.6/site-packages/tpot/builtins/one_hot_encoder.py", line 396, in fit_transform
-    copy=True
-  File "/home/michael/anaconda3/lib/python3.6/site-packages/tpot/builtins/one_hot_encoder.py", line 119, in _transform_selected
-    X_sel, X_not_sel, n_selected, n_features = _X_selected(X, selected)
-  File "/home/michael/anaconda3/lib/python3.6/site-packages/tpot/builtins/one_hot_encoder.py", line 83, in _X_selected
-    sel[np.asarray(selected)] = True
-IndexError: boolean index did not match indexed array along dimension 0; dimension is 3 but corresponding boolean dimension is 133
-'''
 
