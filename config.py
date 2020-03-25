@@ -241,7 +241,7 @@ base_models = {
     },
 
     'sklearn.feature_selection.VarianceThreshold': {
-        'threshold': np.arange(1e-3, .1, 1e-3)
+        'threshold': np.arange(1e-4, .05, 1e-4)
     },
 
     'sklearn.feature_selection.RFE': {
@@ -456,7 +456,7 @@ hidden_models = {
     },
 
     'sklearn.feature_selection.VarianceThreshold': {
-        'threshold': np.arange(1e-3, .1, 1e-3)
+        'threshold': np.arange(1e-4, .05, 1e-4)
     },
 
     'sklearn.feature_selection.RFE': {
@@ -615,7 +615,7 @@ voting_models = {
     },
 
     'sklearn.feature_selection.VarianceThreshold': {
-        'threshold': np.arange(1e-3, .1, 1e-3)
+        'threshold': np.arange(1e-4, .05, 1e-4)
     },
 
     'sklearn.feature_selection.RFE': {
