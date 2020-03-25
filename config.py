@@ -6,7 +6,7 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(2, 2),
+	'num_hidden_layers':(5, 5),
 
 	# number of models in the base. This is a range
 	'num_base':(20, 20),
@@ -219,11 +219,11 @@ base_models = {
     'tpot.builtins.ZeroCount': {
     },
 
-    'tpot.builtins.OneHotEncoder': {
-        'minimum_fraction': [0.05, 0.1, 0.15, 0.2, 0.25],
-        'sparse': [False],
-        'threshold': [10]
-    },
+    # 'tpot.builtins.OneHotEncoder': {
+    #     'minimum_fraction': [0.05, 0.1, 0.15, 0.2, 0.25],
+    #     'sparse': [False],
+    #     'threshold': [10]
+    # },
 
     # Selectors
     'sklearn.feature_selection.SelectFwe': {
@@ -434,11 +434,11 @@ hidden_models = {
     'tpot.builtins.ZeroCount': {
     },
 
-    'tpot.builtins.OneHotEncoder': {
-        'minimum_fraction': [0.05, 0.1, 0.15, 0.2, 0.25],
-        'sparse': [False],
-        'threshold': [10]
-    },
+    # 'tpot.builtins.OneHotEncoder': {
+    #     'minimum_fraction': [0.05, 0.1, 0.15, 0.2, 0.25],
+    #     'sparse': [False],
+    #     'threshold': [10]
+    # },
 
     # Selectors
     'sklearn.feature_selection.SelectFwe': {
@@ -593,11 +593,11 @@ voting_models = {
     'tpot.builtins.ZeroCount': {
     },
 
-    'tpot.builtins.OneHotEncoder': {
-        'minimum_fraction': [0.05, 0.1, 0.15, 0.2, 0.25],
-        'sparse': [False],
-        'threshold': [10]
-    },
+    # 'tpot.builtins.OneHotEncoder': {
+    #     'minimum_fraction': [0.05, 0.1, 0.15, 0.2, 0.25],
+    #     'sparse': [False],
+    #     'threshold': [10]
+    # },
 
     # Selectors
     'sklearn.feature_selection.SelectFwe': {
