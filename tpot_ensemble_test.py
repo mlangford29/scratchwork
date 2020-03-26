@@ -194,7 +194,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		for model in layer_list:
 
 			print(' fold {} | model {}'.format(fold_count, c + 1))
-			#print(' {}'.format(model))
+			print(' {}'.format(model))
 
 			#start = time.time()
 			model.fit(X[train_idxs], y[train_idxs])
