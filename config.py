@@ -6,7 +6,7 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(10, 10),
+	'num_hidden_layers':(5, 5),
 
 	# number of models in the base. This is a range
 	'num_base':(20, 20),
@@ -15,7 +15,7 @@ config = {
 	'num_hidden':(20, 20),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':3,
+	'num_voters':10,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':True,
@@ -41,9 +41,9 @@ config = {
 	'hidden_cv':2,
 
 	# voting TPOT parameters
-	'voting_num_gens':5,
+	'voting_num_gens':10,
 	'voting_pop_size':5,
-	'voting_cv':5,
+	'voting_cv':3,
 
 	# number of cv folds we use while training the whole ensemble
 	'num_folds':2
@@ -201,7 +201,7 @@ base_models = {
     },
 
     'sklearn.preprocessing.PolynomialFeatures': {
-        'degree': [2],
+        'degree': [2, 3, 4],
         'include_bias': [False],
         'interaction_only': [False]
     },
@@ -416,7 +416,7 @@ hidden_models = {
     },
 
     'sklearn.preprocessing.PolynomialFeatures': {
-        'degree': [2],
+        'degree': [2, 3, 4],
         'include_bias': [False],
         'interaction_only': [False]
     },
@@ -575,7 +575,7 @@ voting_models = {
     },
 
     'sklearn.preprocessing.PolynomialFeatures': {
-        'degree': [2],
+        'degree': [2, 3, 4],
         'include_bias': [False],
         'interaction_only': [False]
     },
