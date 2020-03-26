@@ -13,7 +13,7 @@ config = {
 
 	# number of models in hidden layers. This is a range
 	'num_hidden':(20, 20),
-	
+
 	# number of voters. For now we'll have this as just an int
 	'num_voters':3,
 
@@ -167,7 +167,7 @@ base_models = {
 
     # Preprocesssors
     'sklearn.preprocessing.Binarizer': {
-        'threshold': np.arange(0.0, 1.01, 0.05)
+        'threshold': np.arange(0.1, 1.01, 0.05)
     },
 
     'sklearn.decomposition.FastICA': {
@@ -382,7 +382,7 @@ hidden_models = {
 
     # Preprocesssors
     'sklearn.preprocessing.Binarizer': {
-        'threshold': np.arange(0.0, 1.01, 0.05)
+        'threshold': np.arange(0.1, 1.01, 0.05)
     },
 
     'sklearn.decomposition.FastICA': {
@@ -541,7 +541,7 @@ voting_models = {
 
     # Preprocesssors
     'sklearn.preprocessing.Binarizer': {
-        'threshold': np.arange(0.0, 1.01, 0.05)
+        'threshold': np.arange(0.1, 1.01, 0.05)
     },
 
     'sklearn.decomposition.FastICA': {
