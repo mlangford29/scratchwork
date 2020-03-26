@@ -566,9 +566,15 @@ print()
 print('Refitting the whole model with the new meta layer!')
 ens.fit(X_train, y_train)
 print()
-print('Final prediction')
+print('Final predictions')
+
+train_preds = ens.predict(X_train)
+optim_preds = ens.predict(X_test)
 final_preds = ens.predict(X_holdout)
+
 print()
+print('Training score = {}'.format(error(train_preds, y_train)))
+print('Optimizing score = {}'.format(error(optim_preds, y_test)))
 print('Overall score = {}'.format(error(final_preds, y_holdout)))
 
 ##### now we should save the model please
