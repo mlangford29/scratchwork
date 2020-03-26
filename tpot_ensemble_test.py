@@ -265,6 +265,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	# cool now we should have a populated overall_preds
 	# let's cut this down
+	overall_preds = np.nan_to_num(overall_preds)
 	overall_preds_df = pd.DataFrame(overall_preds)
 	#hidden_pred_df[str(i)] = hidden_list[i].predict(X_test)
 
