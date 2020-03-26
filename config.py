@@ -425,8 +425,8 @@ hidden_models = {
         'gamma': np.arange(0.0, 1.01, 0.05)
     },
 
-    'sklearn.preprocessing.RobustScaler': {
-    },
+    # 'sklearn.preprocessing.RobustScaler': {
+    # },
 
     'sklearn.preprocessing.StandardScaler': {
     },
@@ -584,8 +584,8 @@ voting_models = {
         'gamma': np.arange(0.0, 1.01, 0.05)
     },
 
-    'sklearn.preprocessing.RobustScaler': {
-    },
+    # 'sklearn.preprocessing.RobustScaler': {
+    # },
 
     'sklearn.preprocessing.StandardScaler': {
     },
