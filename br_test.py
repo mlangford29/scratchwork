@@ -8,6 +8,14 @@ from featuretools.primitives import make_agg_primitive, make_trans_primitive
 from featuretools.variable_types import Numeric
 from boostaroota import BoostARoota
 from sklearn.metrics import f1_score
+from tpot import TPOTClassifier
+import config
+
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import f1_score
 
 # finally let's import the data
 df = pd.read_csv("creditcard.csv")
@@ -104,14 +112,14 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['percentile', lpo, al, sq, adc, aac, sss],
+										trans_primitives = ['divide_numeric_scalar', 'multiply_numeric'],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
 
 
 
-feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.98)
+feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.8)
 
 df_ = feature_matrix # make a copy of this
 df_ = df_.dropna(how='any', axis=1)
@@ -125,3 +133,51 @@ br.fit(X, y)
 print()
 print('keep vars')
 print(list(br.keep_vars_))
+
+print()
+print(' Final chosen features:')
+print(' {}'.format(chosen_features))
+
+# split these out
+# this isn't going to be shuffled because that's a mess.
+X_temp, X_holdout, y_temp, y_holdout = train_test_split(X[chosen_features].to_numpy(), y.to_numpy(), test_size=0.10)
+X_train, X_test, y_train, y_test = train_test_split(X_temp, y_temp, test_size=0.25)
+
+
+best_pipe = TPOTClassifier(generations=50, 
+    								population_size=10, 
+    								scoring='f1', 
+    								cv=3, 
+    								n_jobs=-1,
+    								#config_dict=config.base_models,
+    								verbosity=1).fit(X_train, y_train).fitted_pipeline_
+
+# generic error function
+def error(preds, y_test):
+    
+    error_name = config.config['metric']
+    
+    if error_name == 'roc_auc':
+        return roc_auc_score(preds, y_test)
+    elif error_name == 'accuracy':
+        return accuracy_score(preds, y_test)
+    elif error_name == 'recall':
+        return recall_score(preds, y_test)
+    elif error_name == 'precision':
+        return precision_score(preds, y_test)
+    elif error_name == 'f1':
+        return f1_score(preds, y_test)
+    else:
+        print('unsure what your metric is in the config so using accuracy instead')
+        return accuracy_score(preds, y_test)
+
+
+
+train_preds = best_pipe.predict(X_train)
+optim_preds = best_pipe.predict(X_test)
+final_preds = best_pipe.predict(X_holdout)
+
+print()
+print('Training score = {}'.format(error(train_preds, y_train)))
+print('Optimizing score = {}'.format(error(optim_preds, y_test)))
+print('Overall score = {}'.format(error(final_preds, y_holdout)))
