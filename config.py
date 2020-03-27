@@ -9,10 +9,10 @@ config = {
 	'num_hidden_layers':(5, 5),
 
 	# number of models in the base. This is a range
-	'num_base':(20, 20),
+	'num_base':(50, 50),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(20, 20),
+	'num_hidden':(25, 50),
 
 	# number of voters. For now we'll have this as just an int
 	'num_voters':10,
@@ -200,11 +200,11 @@ base_models = {
         'iterated_power': range(1, 11)
     },
 
-    'sklearn.preprocessing.PolynomialFeatures': {
-        'degree': [2, 3, 4],
-        'include_bias': [False],
-        'interaction_only': [False]
-    },
+    # 'sklearn.preprocessing.PolynomialFeatures': {
+    #     'degree': [2],
+    #     'include_bias': [False],
+    #     'interaction_only': [False]
+    # },
 
     'sklearn.kernel_approximation.RBFSampler': {
         'gamma': np.arange(0.0, 1.01, 0.05)
@@ -416,7 +416,7 @@ hidden_models = {
     },
 
     'sklearn.preprocessing.PolynomialFeatures': {
-        'degree': [2, 3, 4],
+        'degree': [2, 3],
         'include_bias': [False],
         'interaction_only': [False]
     },
@@ -575,7 +575,7 @@ voting_models = {
     },
 
     'sklearn.preprocessing.PolynomialFeatures': {
-        'degree': [2, 3, 4],
+        'degree': [2, 3],
         'include_bias': [False],
         'interaction_only': [False]
     },
