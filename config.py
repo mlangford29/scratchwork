@@ -6,20 +6,20 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(5, 5),
+	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
 	'num_base':(50, 50),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(25, 50),
+	'num_hidden':(50, 50),
 
 	# number of voters. For now we'll have this as just an int
 	'num_voters':10,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':True,
-	'correlation_model_elimination':False,
+	'correlation_model_elimination':True,
 
 	# how many iterations for Boruta to run
 	'max_iter_boruta':200,
