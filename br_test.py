@@ -133,6 +133,7 @@ br.fit(X, y)
 print()
 print('keep vars')
 print(list(br.keep_vars_))
+chosen_features = br.keep_vars_
 
 print()
 print(' Final chosen features:')
