@@ -5,6 +5,7 @@ import pandas as pd
 import featuretools as ft 
 import featuretools.variable_types as vtypes 
 from featuretools.primitives import make_agg_primitive, make_trans_primitive
+from sklearn.model_selection import train_test_split
 from featuretools.variable_types import Numeric
 from boostaroota import BoostARoota
 from sklearn.metrics import f1_score
