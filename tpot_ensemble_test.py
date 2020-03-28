@@ -343,7 +343,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['absolute', 'multiply_numeric', 'divide_numeric_scalar'],
+										trans_primitives = ['absolute', 'multiply_numeric', 'divide_by_feature', 'modulo_by_feature'],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
