@@ -46,7 +46,7 @@ config = {
 	'voting_cv':3,
 
 	# number of cv folds we use while training the whole ensemble
-	'num_folds':2
+	'num_folds':5
 
 
 }
