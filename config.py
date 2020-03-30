@@ -6,16 +6,16 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(1, 1),
+	'num_hidden_layers':(2, 2),
 
 	# number of models in the base. This is a range
-	'num_base':(100, 100),
+	'num_base':(25, 25),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(100, 100),
+	'num_hidden':(25, 25),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':5,
+	'num_voters':3,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':True,
