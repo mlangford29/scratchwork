@@ -62,6 +62,12 @@ base_models = {
         'fit_prior': [True, False]
     },
 
+    'sklearn.naive_bayes.ComplementNB': {
+        'alpha': np.arange(1e-3, 1.001, 1e-3),
+        'fit_prior': [True, False],
+        'norm': [True, False]
+    },
+
     'sklearn.naive_bayes.MultinomialNB': {
         'alpha': np.arange(1e-3, 1.001, 1e-3),
         'fit_prior': [True, False]
@@ -77,7 +83,7 @@ base_models = {
     'sklearn.ensemble.ExtraTreesClassifier': {
         'n_estimators': range(2, 25),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.2, 1.01, 0.05),
+        #'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'bootstrap': [True, False]
@@ -99,7 +105,7 @@ base_models = {
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'subsample': np.arange(0.05, 1.01, 0.05),
-        'max_features': np.arange(0.2, 1.01, 0.05)
+        #'max_features': np.arange(0.2, 1.01, 0.05)
     },
 
 	'sklearn.ensemble.AdaBoostClassifier': {
@@ -112,6 +118,9 @@ base_models = {
     #     'weights': ["uniform", "distance"],
     #     'p': np.arange(2, 10, .1)
     # },
+
+    'sklearn.neighbors.NearestCentroid': {
+    },
 
     # 'sklearn.svm.LinearSVC': {
     #     'penalty': ["l1", "l2"],
@@ -133,6 +142,11 @@ base_models = {
         'penalty': ["l1", "l2"],
         'C': np.arange(1e-5, 1, 1e-4),
         'dual': [True, False]
+    },
+
+    'sklearn.linear_model.LogisticRegressionCV': {
+        'penalty': ["l1", "l2"],
+        'Cs': np.arange(1e-5, 10, 1e-4),
     },
 
     'xgboost.XGBClassifier': {
@@ -250,7 +264,7 @@ base_models = {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.2, 1.01, 0.05)
+                #'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     },
@@ -261,7 +275,7 @@ base_models = {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.2, 1.01, 0.05)
+                #'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     }
@@ -292,7 +306,7 @@ hidden_models = {
     'sklearn.ensemble.ExtraTreesClassifier': {
         'n_estimators': range(10, 50),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.2, 1.01, 0.05),
+        #'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'bootstrap': [True, False]
@@ -314,7 +328,7 @@ hidden_models = {
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'subsample': np.arange(0.05, 1.01, 0.05),
-        'max_features': np.arange(0.2, 1.01, 0.05)
+        #'max_features': np.arange(0.2, 1.01, 0.05)
     },
 
 	'sklearn.ensemble.AdaBoostClassifier': {
@@ -465,7 +479,7 @@ hidden_models = {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.2, 1.01, 0.05)
+                #'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     },
@@ -476,7 +490,7 @@ hidden_models = {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.2, 1.01, 0.05)
+                #'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     }
@@ -498,7 +512,7 @@ voting_models = {
     'sklearn.ensemble.RandomForestClassifier': {
         'n_estimators': range(100, 500),
         'criterion': ["gini", "entropy"],
-        #'max_features': np.arange(0.2, 1.01, 0.05),
+        'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf':  range(1, 21),
         'bootstrap': [True, False]
@@ -624,7 +638,7 @@ voting_models = {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.2, 1.01, 0.05)
+                #'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     },
@@ -635,7 +649,7 @@ voting_models = {
             'sklearn.ensemble.ExtraTreesClassifier': {
                 'n_estimators': range(2,100),
                 'criterion': ['gini', 'entropy'],
-                'max_features': np.arange(0.2, 1.01, 0.05)
+                #'max_features': np.arange(0.2, 1.01, 0.05)
             }
         }
     }

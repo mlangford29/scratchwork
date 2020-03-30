@@ -551,7 +551,7 @@ for i in range(config.config['num_voters']):
 optimizer = BayesianOptimization(
             f=opt_func,
             pbounds=voter_pbounds)
-optimizer.maximize(init_points=2, n_iter=config.config['meta_learner_its'], xi=0.5)
+optimizer.maximize(init_points=5, n_iter=config.config['meta_learner_its'], xi=0.5)
 
 max_params = optimizer.max
 weight_dict = max_params['params']
@@ -579,4 +579,8 @@ print('Optimizing score = {}'.format(error(optim_preds, y_test)))
 print('Overall score = {}'.format(error(final_preds, y_holdout)))
 
 ##### now we should save the model please
+##### add more models
+##### do several runs and save the best one
+##### output actual feature importance from boruta
+##### clustering as a feature???
 
