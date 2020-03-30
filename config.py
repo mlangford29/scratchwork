@@ -86,7 +86,7 @@ base_models = {
     'sklearn.ensemble.RandomForestClassifier': {
         'n_estimators': range(2, 25),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.2, 1.01, 0.05),
+        #'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf':  range(1, 21),
         'bootstrap': [True, False]
@@ -301,7 +301,7 @@ hidden_models = {
     'sklearn.ensemble.RandomForestClassifier': {
         'n_estimators': range(10, 50),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.2, 1.01, 0.05),
+        #'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf':  range(1, 21),
         'bootstrap': [True, False]
@@ -498,7 +498,7 @@ voting_models = {
     'sklearn.ensemble.RandomForestClassifier': {
         'n_estimators': range(100, 500),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.2, 1.01, 0.05),
+        #'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf':  range(1, 21),
         'bootstrap': [True, False]
