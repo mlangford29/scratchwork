@@ -344,7 +344,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
 										trans_primitives = ['absolute', 'multiply_numeric', 'diff', 'percentile', 'less_than_equal_to_scalar', 'greater_than_equal_to_scalar'],
-										max_depth=1,
+										max_depth=2,
 										n_jobs=1,
 										verbose=1)
 
@@ -499,7 +499,6 @@ for _ in range(config.config['num_voters']):
 										scoring=config.config['metric'], 
 										n_jobs=-1,
 										config_dict=config.voting_models,
-										use_dask=True,
 										verbosity=2).fit(hidden_preds, y_train).fitted_pipeline_)
 	print()
 

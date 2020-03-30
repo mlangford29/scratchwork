@@ -9,13 +9,13 @@ config = {
 	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
-	'num_base':(50, 50),
+	'num_base':(100, 100),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(50, 50),
+	'num_hidden':(100, 100),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':10,
+	'num_voters':5,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':True,
