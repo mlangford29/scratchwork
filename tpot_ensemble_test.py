@@ -343,7 +343,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['absolute', 'multiply_numeric', 'diff', 'percentile', 'less_than_equal_to_scalar', 'greater_than_equal_to_scalar'],
+										trans_primitives = ['less_than_equal_to_scalar', 'greater_than_equal_to_scalar'],#'absolute', 'multiply_numeric', 'percentile', ],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -428,7 +428,8 @@ base_pred_df = pd.DataFrame()
 for i in range(num_base):
 
     # we need to make a dummy dataset
-    x_dummy, y_dummy = make_classification(n_features = len(list(br.keep_vars_)))
+    rand_weight_list = [random.rand() for i in range(len(list(br.keep_vars_)))]
+    x_dummy, y_dummy = make_classification(n_features = len(list(br.keep_vars_), n_informative = random.randint(1, len(list(br.keep_vars_))), weights = rand_weight_list))
     
     base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
     								population_size=config.config['base_pop_size'], 
@@ -582,5 +583,8 @@ print('Overall score = {}'.format(error(final_preds, y_holdout)))
 ##### add more models
 ##### do several runs and save the best one
 ##### output actual feature importance from boruta
+##### saving the features!
+##### multiple rounds of boruta and average feature importances?
 ##### clustering as a feature???
+##### randomizing the balance of the generated data for training initial pipelines
 
