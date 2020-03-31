@@ -429,7 +429,7 @@ for i in range(num_base):
 
     # we need to make a dummy dataset
     rand_weight_list = [random.random(), random.random()]
-    x_dummy, y_dummy = make_classification(n_features = len(list(br.keep_vars_)), n_informative = random.randint(3, len(list(br.keep_vars_)) - 2), weights = rand_weight_list)
+    x_dummy, y_dummy = make_classification(n_features = len(list(br.keep_vars_)), n_informative = random.randint(2, 5), weights = rand_weight_list)
     
     base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
     								population_size=config.config['base_pop_size'], 
@@ -461,7 +461,7 @@ for layer_num in range(num_hidden_layers):
 	    rand_weight_list = [random.random(), random.random()]
 
 	    # need to use the number of models from the previous layer
-	    x_dummy, y_dummy = make_classification(n_features = prev_num_hidden, n_informative = random.randint(3, len(list(br.keep_vars_)) - 2), weights = rand_weight_list)
+	    x_dummy, y_dummy = make_classification(n_features = prev_num_hidden, n_informative = random.randint(2, 5), weights = rand_weight_list)
 	    
 	    hidden_list.append(TPOTClassifier(generations=config.config['hidden_num_gens'], 
 	    									population_size=config.config['hidden_pop_size'], 
