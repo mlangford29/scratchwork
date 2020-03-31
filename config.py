@@ -429,11 +429,11 @@ hidden_models = {
         'iterated_power': range(1, 11)
     },
 
-    'sklearn.preprocessing.PolynomialFeatures': {
-        'degree': [2, 3],
-        'include_bias': [False],
-        'interaction_only': [False]
-    },
+    # 'sklearn.preprocessing.PolynomialFeatures': {
+    #     'degree': [2, 3],
+    #     'include_bias': [False],
+    #     'interaction_only': [False]
+    # },
 
     'sklearn.kernel_approximation.RBFSampler': {
         'gamma': np.arange(0.0, 1.01, 0.05)
@@ -588,11 +588,11 @@ voting_models = {
         'iterated_power': range(1, 11)
     },
 
-    'sklearn.preprocessing.PolynomialFeatures': {
-        'degree': [2, 3],
-        'include_bias': [False],
-        'interaction_only': [False]
-    },
+    # 'sklearn.preprocessing.PolynomialFeatures': {
+    #     'degree': [2, 3],
+    #     'include_bias': [False],
+    #     'interaction_only': [False]
+    # },
 
     'sklearn.kernel_approximation.RBFSampler': {
         'gamma': np.arange(0.0, 1.01, 0.05)
