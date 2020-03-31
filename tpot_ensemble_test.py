@@ -431,7 +431,8 @@ for i in range(num_base):
     rand_weight_list = [random.random() for i in range(len(list(br.keep_vars_)))]
     print(len(rand_weight_list))
     print(len(list(br.keep_vars_)))
-    x_dummy, y_dummy = make_classification(n_features = len(list(br.keep_vars_)), n_informative = random.randint(1, len(list(br.keep_vars_))), weights = rand_weight_list)
+    #n_informative = random.randint(1, len(list(br.keep_vars_))),
+    x_dummy, y_dummy = make_classification(n_features = len(list(br.keep_vars_)), weights = rand_weight_list)
     
     base_list.append(TPOTClassifier(generations=config.config['base_num_gens'], 
     								population_size=config.config['base_pop_size'], 
