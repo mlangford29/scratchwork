@@ -554,7 +554,7 @@ for i in range(config.config['num_voters']):
 optimizer = BayesianOptimization(
             f=opt_func,
             pbounds=voter_pbounds)
-optimizer.maximize(init_points=5, n_iter=config.config['meta_learner_its'], xi=0.5)
+optimizer.maximize(init_points=5, n_iter=config.config['meta_learner_its'], xi=0.1)
 
 max_params = optimizer.max
 weight_dict = max_params['params']
@@ -589,4 +589,6 @@ print('Overall score = {}'.format(error(final_preds, y_holdout)))
 ##### multiple rounds of boruta and average feature importances?
 ##### clustering as a feature???
 ##### randomizing the balance of the generated data for training initial pipelines
+##### remove the "max features" from the voters, increase other features
+##### we shouldn't require at least 1 hidden layer
 
