@@ -9,17 +9,17 @@ config = {
 	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
-	'num_base':(25, 25),
+	'num_base':(50, 50),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(25, 25),
+	'num_hidden':(50, 50),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':3,
+	'num_voters':5,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':True,
-	'correlation_model_elimination':True,
+	'correlation_model_elimination':False,
 
 	# how many iterations for Boruta to run
 	'max_iter_boruta':200,
@@ -41,8 +41,8 @@ config = {
 	'hidden_cv':2,
 
 	# voting TPOT parameters
-	'voting_num_gens':10,
-	'voting_pop_size':5,
+	'voting_num_gens':20,
+	'voting_pop_size':10,
 	'voting_cv':3,
 
 	# number of cv folds we use while training the whole ensemble
@@ -501,40 +501,40 @@ voting_models = {
 	# Classifiers
 
     'sklearn.ensemble.ExtraTreesClassifier': {
-        'n_estimators': range(100, 500),
+        'n_estimators': range(100, 1000),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.2, 1.01, 0.05),
+        #'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'bootstrap': [True, False]
     },
 
     'sklearn.ensemble.RandomForestClassifier': {
-        'n_estimators': range(100, 500),
+        'n_estimators': range(100, 1000),
         'criterion': ["gini", "entropy"],
-        'max_features': np.arange(0.2, 1.01, 0.05),
+        #'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
         'min_samples_leaf':  range(1, 21),
         'bootstrap': [True, False]
     },
 
     'sklearn.ensemble.GradientBoostingClassifier': {
-        'n_estimators': range(100, 500),
+        'n_estimators': range(100, 1000),
         'learning_rate': np.arange(1e-3, 1.001, 1e-3),
         'max_depth': range(1, 11),
         'min_samples_split': range(2, 21),
         'min_samples_leaf': range(1, 21),
         'subsample': np.arange(0.05, 1.01, 0.05),
-        'max_features': np.arange(0.2, 1.01, 0.05)
+        #'max_features': np.arange(0.2, 1.01, 0.05)
     },
 
 	'sklearn.ensemble.AdaBoostClassifier': {
-        'n_estimators': range(100, 500),
+        'n_estimators': range(100, 1000),
         'learning_rate': np.arange(1e-3, 1.001, 1e-3),
     },    
 
     'xgboost.XGBClassifier': {
-        'n_estimators': range(100, 500),
+        'n_estimators': range(100, 1000),
         'max_depth': range(1, 11),
         'learning_rate': np.arange(1e-3, 1.001, 1e-3),
         'subsample': np.arange(0.05, 1.01, 0.05),
