@@ -181,8 +181,43 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	print('Training {} folds and gathering predictions:'.format(config.config['num_folds']))
 
-	fold_count = 0
+	
 
+	splits = skf.split(X, y)
+
+	for model in layer_list:
+
+		print(' model {}'.format(fold_count, c + 1))
+		#print(' {}'.format(model))
+
+		fold_count = 0
+
+		# loop through all the indices we have
+		for train_idxs, test_idxs in splits:
+
+			#start = time.time()
+			model.fit(X[train_idxs], y[train_idxs])
+
+			# adding onto this because I think predict_proba gives a 2D array?
+			try:
+				preds = model.predict_proba(X[test_idxs])[:, 1]
+			except AttributeError:
+				preds = model.predict(X[test_idxs])
+			
+
+			# add these to the np array
+			# doesn't look like we can slice easily for this
+			for count_i, ii in np.ndenumerate(test_idxs):
+
+				overall_preds[ii, c] = preds[count_i[0]]
+
+		c += 1
+
+
+
+	#---------------------------------------
+
+	'''
 	# loop through all the indices we have
 	for train_idxs, test_idxs in skf.split(X, y):
 
@@ -214,6 +249,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 				overall_preds[ii, c] = preds[count_i[0]]
 
 			c += 1
+	'''
 
 	'''
 	def do_the_training(train_idxs, test_idxs, fold_count, overall_preds):
