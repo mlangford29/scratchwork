@@ -397,7 +397,7 @@ chosen_features = br.keep_vars_
 ##### It looks like we'll need to train an xgb model again
 ##### and output the feature importances from that
 xgb_for_feat_imp = xgb.train(dtrain = xgb.DMatrix(X[chosen_features], label=y), params={})
-ft_imps = xgb_for_feat_imp.get_score(importance_type='gain') #pd.DataFrame(xgb.get_fscore().items(), columns=['feature','importance']).sort_values('importance', ascending=False)
+ft_imps = pd.DataFrame.from_dict(xgb_for_feat_imp.get_score(importance_type='gain')) #pd.DataFrame(xgb.get_fscore().items(), columns=['feature','importance']).sort_values('importance', ascending=False)
 
 '''
 print()
