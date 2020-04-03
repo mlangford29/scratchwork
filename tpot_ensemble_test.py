@@ -396,7 +396,7 @@ chosen_features = br.keep_vars_
 ##### So if we want to output feature importances
 ##### It looks like we'll need to train an xgb model again
 ##### and output the feature importances from that
-xgb_for_feat_imp = xgb.train(X[chosen_features], y)
+xgb_for_feat_imp = xgb.train(xgb.DMatrix(X[chosen_features], labels=y))
 ft_imps = pd.DataFrame(xgb.get_fscore().items(), columns=['feature','importance']).sort_values('importance', ascending=False)
 
 '''
@@ -592,7 +592,7 @@ final_preds = ens.predict(X_holdout)
 print()
 print('Training score = {}'.format(error(train_preds, y_train)))
 print('Optimizing score = {}'.format(error(optim_preds, y_test)))
-print('Overall score = {}'.format(error(final_preds, y_holdout)))
+print('Holdout score = {}'.format(error(final_preds, y_holdout)))
 
 ##### now we should save the model please
 ##### add more models
@@ -603,4 +603,14 @@ print('Overall score = {}'.format(error(final_preds, y_holdout)))
 ##### clustering as a feature???
 ##### randomizing the balance of the generated data for training initial pipelines
 ##### we shouldn't require at least 1 hidden layer
+##### for training the voting models, what if we cv split the data coming in
+#####  so we may have 5 sets of trained voters
+#####  each set of trained voters has its associated test set
+#####  each of those sets (weighted) predicts on their test set
+#####  ah nuts how do you do TPOT for that?
+#####  you could just use one fold to train the model and use that same model for the other folds
+#####  you just have to retrain. on the other 4 folds
+#####  So one of the models might have an advantage on its fold but the others don't necessarily
+#####  This way you can eliminate one of the sets of data that you're train/test splitting
+#####  and you get generate more robust scores for weight optimization
 
