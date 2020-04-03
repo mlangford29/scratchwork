@@ -185,11 +185,13 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	splits = skf.split(X, y)
 
+	c = 0
+	
 	for model in layer_list:
 
 		fold_count = 0
 
-		print(' model {}'.format(fold_count, c + 1))
+		print(' model {}'.format(c + 1))
 		#print(' {}'.format(model))
 
 		
