@@ -9,13 +9,13 @@ config = {
 	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
-	'num_base':(10, 10),
+	'num_base':(7, 7),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(10, 10),
+	'num_hidden':(7, 7),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':5,
+	'num_voters':3,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':False,
@@ -41,8 +41,8 @@ config = {
 	'hidden_cv':2,
 
 	# voting TPOT parameters
-	'voting_num_gens':20,
-	'voting_pop_size':10,
+	'voting_num_gens':30,
+	'voting_pop_size':5,
 	'voting_cv':3,
 
 	# number of cv folds we use while training the whole ensemble
@@ -501,7 +501,7 @@ voting_models = {
 	# Classifiers
 
     'sklearn.ensemble.ExtraTreesClassifier': {
-        'n_estimators': range(100, 1000),
+        'n_estimators': range(100, 500),
         'criterion': ["gini", "entropy"],
         #'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
@@ -510,7 +510,7 @@ voting_models = {
     },
 
     'sklearn.ensemble.RandomForestClassifier': {
-        'n_estimators': range(100, 1000),
+        'n_estimators': range(100, 500),
         'criterion': ["gini", "entropy"],
         #'max_features': np.arange(0.2, 1.01, 0.05),
         'min_samples_split': range(2, 21),
@@ -519,7 +519,7 @@ voting_models = {
     },
 
     'sklearn.ensemble.GradientBoostingClassifier': {
-        'n_estimators': range(100, 1000),
+        'n_estimators': range(100, 500),
         'learning_rate': np.arange(1e-3, 1.001, 1e-3),
         'max_depth': range(1, 11),
         'min_samples_split': range(2, 21),
@@ -529,12 +529,12 @@ voting_models = {
     },
 
 	'sklearn.ensemble.AdaBoostClassifier': {
-        'n_estimators': range(100, 1000),
+        'n_estimators': range(100, 500),
         'learning_rate': np.arange(1e-3, 1.001, 1e-3),
     },    
 
     'xgboost.XGBClassifier': {
-        'n_estimators': range(100, 1000),
+        'n_estimators': range(100, 500),
         'max_depth': range(1, 11),
         'learning_rate': np.arange(1e-3, 1.001, 1e-3),
         'subsample': np.arange(0.05, 1.01, 0.05),

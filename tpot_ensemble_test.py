@@ -32,6 +32,7 @@ from mlens.ensemble import SuperLearner
 
 from tpot import TPOTClassifier
 
+import xgboost as xgb
 from boruta import BorutaPy
 from boostaroota import BoostARoota
 
@@ -194,7 +195,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		for model in layer_list:
 
 			print(' fold {} | model {}'.format(fold_count, c + 1))
-			print(' {}'.format(model))
+			#print(' {}'.format(model))
 
 			#start = time.time()
 			model.fit(X[train_idxs], y[train_idxs])
@@ -343,7 +344,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['absolute', 'multiply_numeric', 'percentile', 'diff'],
+										trans_primitives = ['absolute'],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -387,14 +388,26 @@ for i in range(len(total_cols)):
 
 br = BoostARoota(metric='logloss')
 br.fit(X, y)
-print()
-print('keep vars')
-print(list(br.keep_vars_))
+# print()
+# print('keep vars')
+# print(list(br.keep_vars_))
 chosen_features = br.keep_vars_
 
+##### So if we want to output feature importances
+##### It looks like we'll need to train an xgb model again
+##### and output the feature importances from that
+xgb_for_feat_imp = xgb.train(X[chosen_features], y)
+ft_imps = pd.DataFrame(xgb.get_fscore().items(), columns=['feature','importance']).sort_values('importance', ascending=False)
+
+'''
 print()
 print(' Final chosen features:')
 print(' {}'.format(chosen_features))
+'''
+
+print()
+print('Chosen features and importances:')
+print(ft_imps)
 
 # split these out
 # this isn't going to be shuffled because that's a mess.
@@ -589,6 +602,5 @@ print('Overall score = {}'.format(error(final_preds, y_holdout)))
 ##### multiple rounds of boruta and average feature importances?
 ##### clustering as a feature???
 ##### randomizing the balance of the generated data for training initial pipelines
-##### remove the "max features" from the voters, increase other features
 ##### we shouldn't require at least 1 hidden layer
 
