@@ -187,10 +187,12 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	for model in layer_list:
 
+		fold_count = 0
+
 		print(' model {}'.format(fold_count, c + 1))
 		#print(' {}'.format(model))
 
-		fold_count = 0
+		
 
 		# loop through all the indices we have
 		for train_idxs, test_idxs in splits:
