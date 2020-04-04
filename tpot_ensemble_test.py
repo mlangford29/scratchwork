@@ -183,7 +183,7 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	
 
-	splits = skf.split(X, y)
+	splits = list(skf.split(X, y))
 
 	c = 0
 
