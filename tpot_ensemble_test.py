@@ -559,7 +559,7 @@ voting_list = []
 # deal?
 skf = StratifiedKFold(n_splits=5, shuffle=True)
 splits = skf.split(hidden_preds, y_train)
-train_idxs, test_idxs = splits[0]
+train_idxs, test_idxs = list(splits)[0]
 
 ##### YOU NEED TO CHANGE THIS SO THAT HIDDEN PREDS ISN'T ALWAYS USED TO FIT
 ##### CAN'T USE HIDDEN PREDS IF THERE'S NO HIDDEN LAYER
@@ -628,7 +628,7 @@ def opt_func(**weight_dict):
 		#v_model.weights = weights
 
 		# pull out the test idxs
-		train_idxs, test_idxs = splits[i]
+		train_idxs, test_idxs = list(splits)[i]
 
 		# generate the predictions
 		temp_preds = voter_list[i].predict(hidden_preds[test_idxs])
