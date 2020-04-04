@@ -186,18 +186,23 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	splits = skf.split(X, y)
 
 	c = 0
-	
+
 	for model in layer_list:
 
 		fold_count = 0
 
-		print(' model {}'.format(c + 1))
+		print(' Training model {}'.format(c + 1))
 		#print(' {}'.format(model))
 
 		
+		split_num = 0
 
 		# loop through all the indices we have
 		for train_idxs, test_idxs in splits:
+
+			split_num += 1
+
+			print('  Split {}'.format(split_num))
 
 			#start = time.time()
 			model.fit(X[train_idxs], y[train_idxs])
@@ -546,17 +551,28 @@ for hidden_list in hidden_lol:
 
 voting_list = []
 
+# so here's what we'll do
+# cv split into 5 parts
+# that's going to be hard-coded for now
+# we're going to make each tpot voting pipeline on one of the folds
+# and then we're going to throw away the rest of the folds.
+# deal?
+skf = StratifiedKFold(n_splits=5, shuffle=True)
+splits = skf.split(hidden_preds, y_train)
+train_idxs, test_idxs = splits[0]
+
 ##### YOU NEED TO CHANGE THIS SO THAT HIDDEN PREDS ISN'T ALWAYS USED TO FIT
 ##### CAN'T USE HIDDEN PREDS IF THERE'S NO HIDDEN LAYER
-for _ in range(config.config['num_voters']):
+for c in range(config.config['num_voters']):
 
+	print('Training Voter {}/{}'.format(c + 1, config.config['num_voters']))
 	voting_list.append(TPOTClassifier(generations=config.config['voting_num_gens'], 
 										population_size=config.config['voting_pop_size'], 
 										cv=config.config['voting_cv'], 
 										scoring=config.config['metric'], 
 										n_jobs=-1,
 										config_dict=config.voting_models,
-										verbosity=2).fit(hidden_preds, y_train).fitted_pipeline_)
+										verbosity=2).fit(hidden_preds[train_idxs], y_train[train_idxs]).fitted_pipeline_)
 	print()
 
 
@@ -565,19 +581,29 @@ str_index_list = [str(i) for i in range(len(voting_list))]
 
 voters_zipped = list(zip(str_index_list, voting_list))
 
-# now we need to optimize the weights
-print()
-print('Optimizing weights for voting classifier')
-
-# oh excuse me we need to train the model
+# we need to train the models on each fold
 v_model = VotingClassifier(voters_zipped)
 
+# a list to store the voting models in
+voter_split_list = []
 
-#### YES FOR NOW WE'LL JUST SPLIT THE HIDDEN PREDS AND Y_TEST
-#hidden_pred_train, hidden_pred_test, y_hp_train, y_hp_test = train_test_split(hidden_preds, y_test, test_size=0.25)
+# redo this with new splits
+skf = StratifiedKFold(n_splits=5, shuffle=True)
+splits = skf.split(hidden_preds, y_train)
+
+print()
+print('Training voting model across 5 splits')
+for train_idxs, test_idxs in splits:
+
+	voter_list.append(v_model.fit(hidden_preds[train_idxs], y_train[train_idxs]))
+
+# so the order of this list matches up with the order of the test_idxs!
 
 # re-train on the same set now that we have the v_model set up
-v_model.fit(hidden_preds, y_train)
+#v_model.fit(hidden_preds, y_train)
+
+print()
+print('Optimizing weights for voting classifier')
 
 # we need a function to optimize
 def opt_func(**weight_dict):
@@ -585,17 +611,33 @@ def opt_func(**weight_dict):
 	# list to store the weights we'll be using for voting
 	weights = []
 
+	# variable to sum the total errors
+	total_error = 0
+
 	for model_idx in weight_dict.keys():
 
 		weights.append(weight_dict[model_idx])
 
 	# now we should have the list of weights we're using
 	# reassign these
-	v_model.weights = weights
+	for i in range(len(voter_list)):
+		
+		# each iteration in here represents a whole list of voting models
 
-	temp_preds = v_model.predict(hidden_test)
+		voter_list[i].weights = weights
+		#v_model.weights = weights
 
-	return error(temp_preds, y_test)
+		# pull out the test idxs
+		train_idxs, test_idxs = splits[i]
+
+		# generate the predictions
+		temp_preds = voter_list[i].predict(hidden_preds[test_idxs])
+
+		# create the error from this
+		# this uses just the hidden preds and y_train right?
+		total_error += error(temp_preds, y_train[test_idxs])
+
+	return total_error/len(voter_list)
 
 # what are the pbounds going to be?
 # just (0, 1) for each one of the voter weights
