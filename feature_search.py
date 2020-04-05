@@ -18,6 +18,7 @@ import featuretools.variable_types as vtypes
 from featuretools.primitives import make_agg_primitive, make_trans_primitive
 from featuretools.variable_types import Numeric
 from boostaroota import BoostARoota
+import pandas as pd
 
 df = pd.read_csv("creditcard.csv")
 df = df.drop(['Time'], axis=1)
