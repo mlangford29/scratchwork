@@ -587,7 +587,7 @@ voters_zipped = list(zip(str_index_list, voting_list))
 v_model = VotingClassifier(voters_zipped)
 
 # a list to store the voting models in
-voter_split_list = []
+voter_list = []
 
 # redo this with new splits
 skf = StratifiedKFold(n_splits=5, shuffle=True)
@@ -630,7 +630,7 @@ def opt_func(**weight_dict):
 		#v_model.weights = weights
 
 		# pull out the test idxs
-		train_idxs, test_idxs = list(splits)[i]
+		train_idxs, test_idxs = splits[i]
 
 		# generate the predictions
 		temp_preds = voter_list[i].predict(hidden_preds[test_idxs])
