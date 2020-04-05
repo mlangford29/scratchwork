@@ -37,7 +37,10 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 y = df.pop('Class')
 
 # these are the trans primitives we're going to test
-trans_primitive_list = ['add_numeric', 'cum_mean', 'not_equal', 
+trans_primitive_list = ['diff', 'absolute', 'percentile']
+
+'''
+['add_numeric', 'cum_mean', 'not_equal', 
 	'cum_sum', 'equal', 'less_than_scalar', 'less_than_equal_to', 
 	'multiply_boolean', 'greater_than_equal_to_scalar', 
 	'multiply_numeric', 'diff', 'greater_than_scalar', 
@@ -48,6 +51,7 @@ trans_primitive_list = ['add_numeric', 'cum_mean', 'not_equal',
 	'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 
 	'greater_than_equal_to', 'modulo_by_feature', 'scalar_subtract_numeric_feature', 
 	'isin', 'absolute', 'modulo_numeric']
+'''
 
 # empty dictionary to store all the features and their importances
 total_feat_imp = {}
