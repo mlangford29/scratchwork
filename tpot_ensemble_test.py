@@ -389,7 +389,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['absolute'],
+										trans_primitives = ['absolute', 'greater_than_equal_to', 'diff'],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -680,11 +680,8 @@ print('Optimizing score = {}'.format(error(optim_preds, y_test)))
 print('Holdout score = {}'.format(error(final_preds, y_holdout)))
 
 ##### now we should save the model please
-##### add more models
 ##### do several runs and save the best one
-##### output actual feature importance from boruta
 ##### saving the features!
-##### multiple rounds of boruta and average feature importances?
 ##### clustering as a feature???
 ##### randomizing the balance of the generated data for training initial pipelines
 ##### we shouldn't require at least 1 hidden layer
