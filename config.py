@@ -15,7 +15,7 @@ config = {
 	'num_hidden':(7, 7),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':5,
+	'num_voters':3,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':False,
@@ -41,7 +41,7 @@ config = {
 	'hidden_cv':2,
 
 	# voting TPOT parameters
-	'voting_num_gens':30,
+	'voting_num_gens':5,
 	'voting_pop_size':5,
 	'voting_cv':3,
 
