@@ -557,9 +557,11 @@ voting_list = []
 # we're going to make each tpot voting pipeline on one of the folds
 # and then we're going to throw away the rest of the folds.
 # deal?
-skf = StratifiedKFold(n_splits=5, shuffle=True)
-splits = skf.split(hidden_preds, y_train)
-train_idxs, test_idxs = list(splits)[0]
+
+##### YOU SHOULD STILL OPTIMIZE TPOTS ON THE WHOLE SET OK
+#skf = StratifiedKFold(n_splits=5, shuffle=True)
+#splits = skf.split(hidden_preds, y_train)
+#train_idxs, test_idxs = list(splits)[0]
 
 ##### YOU NEED TO CHANGE THIS SO THAT HIDDEN PREDS ISN'T ALWAYS USED TO FIT
 ##### CAN'T USE HIDDEN PREDS IF THERE'S NO HIDDEN LAYER
@@ -572,7 +574,7 @@ for c in range(config.config['num_voters']):
 										scoring=config.config['metric'], 
 										n_jobs=-1,
 										config_dict=config.voting_models,
-										verbosity=2).fit(hidden_preds[train_idxs], y_train[train_idxs]).fitted_pipeline_)
+										verbosity=2).fit(hidden_preds, y_train).fitted_pipeline_)
 	print()
 
 
@@ -589,7 +591,7 @@ voter_split_list = []
 
 # redo this with new splits
 skf = StratifiedKFold(n_splits=5, shuffle=True)
-splits = skf.split(hidden_preds, y_train)
+splits = list(skf.split(hidden_preds, y_train))
 
 print()
 print('Training voting model across 5 splits')
