@@ -33,7 +33,7 @@ from mlens.ensemble import SuperLearner
 from tpot import TPOTClassifier
 
 import xgboost as xgb
-from boruta import BorutaPy
+#from boruta import BorutaPy
 from boostaroota import BoostARoota
 
 # can we axe the warnings?
@@ -181,8 +181,6 @@ def train_pred_model_list(layer_list, X, y, test_set):
 
 	print('Training {} folds and gathering predictions:'.format(config.config['num_folds']))
 
-	
-
 	splits = list(skf.split(X, y))
 
 	c = 0
@@ -195,14 +193,14 @@ def train_pred_model_list(layer_list, X, y, test_set):
 		#print(' {}'.format(model))
 
 		
-		split_num = 0
+		#split_num = 0
 
 		# loop through all the indices we have
 		for train_idxs, test_idxs in splits:
 
-			split_num += 1
+			#split_num += 1
 
-			print('  Split {}'.format(split_num))
+			#print('  Split {}'.format(split_num))
 
 			#start = time.time()
 			model.fit(X[train_idxs], y[train_idxs])
@@ -221,80 +219,6 @@ def train_pred_model_list(layer_list, X, y, test_set):
 				overall_preds[ii, c] = preds[count_i[0]]
 
 		c += 1
-
-
-
-	#---------------------------------------
-
-	'''
-	# loop through all the indices we have
-	for train_idxs, test_idxs in skf.split(X, y):
-
-		fold_count += 1
-
-		# make a count
-		c = 0
-
-		# then through all our models
-		for model in layer_list:
-
-			print(' fold {} | model {}'.format(fold_count, c + 1))
-			#print(' {}'.format(model))
-
-			#start = time.time()
-			model.fit(X[train_idxs], y[train_idxs])
-
-			# adding onto this because I think predict_proba gives a 2D array?
-			try:
-				preds = model.predict_proba(X[test_idxs])[:, 1]
-			except AttributeError:
-				preds = model.predict(X[test_idxs])
-			
-
-			# add these to the np array
-			# doesn't look like we can slice easily for this
-			for count_i, ii in np.ndenumerate(test_idxs):
-
-				overall_preds[ii, c] = preds[count_i[0]]
-
-			c += 1
-	'''
-
-	'''
-	def do_the_training(train_idxs, test_idxs, fold_count, overall_preds):
-
-		fold_count += 1
-
-		# make a count
-		c = 0
-
-		# trying to make a copy
-		pred_copy = np.copy(overall_preds)
-
-		# then through all our models
-		for model in layer_list:
-
-			print(' fold = {} | model = {}'.format(fold_count, c + 1))
-
-			model.fit(X[train_idxs], y[train_idxs])
-
-			preds = model.predict(X[test_idxs])
-			
-
-			# add these to the np array
-			# doesn't look like we can slice easily for this
-			for count_i, ii in np.ndenumerate(test_idxs):
-
-				#overall_preds[ii, c] = preds[count_i[0]]
-				pred_copy[ii, c] = preds[count_i[0]]
-
-			c += 1
-
-		# reassign
-		overall_preds = pred_copy
-
-	Parallel(n_jobs = -1)(delayed(do_the_training)(trn, tst, fold_count, overall_preds) for trn,tst in skf.split(X, y))
-	'''
 	
 	# then go through the models again and just predict on the test set
 	c = 0
@@ -373,18 +297,19 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 								entity_id = 'obs',
 								index = 'index')
 
+##### here's a list of all the trans_primitives
 '''
 ['add_numeric', 'cum_mean', 'not_equal', 'haversine', 
-															'cum_sum', 'equal', 'less_than_scalar', 'less_than_equal_to', 
-															'multiply_boolean', 'greater_than_equal_to_scalar', 
-															'multiply_numeric', 'diff', 'greater_than_scalar', 
-															'modulo_numeric_scalar', 'subtract_numeric_scalar', 
-															'divide_numeric_scalar', 'add_numeric_scalar', 'divide_by_feature', 
-															'subtract_numeric', 'cum_min', 'not_equal_scalar', 'cum_count', 
-															'equal_scalar', 'divide_numeric', 'less_than_equal_to_scalar', 
-															'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 
-															'greater_than_equal_to', 'modulo_by_feature', 'scalar_subtract_numeric_feature', 
-															'isin', 'absolute', 'modulo_numeric'],
+	'cum_sum', 'equal', 'less_than_scalar', 'less_than_equal_to', 
+	'multiply_boolean', 'greater_than_equal_to_scalar', 
+	'multiply_numeric', 'diff', 'greater_than_scalar', 
+	'modulo_numeric_scalar', 'subtract_numeric_scalar', 
+	'divide_numeric_scalar', 'add_numeric_scalar', 'divide_by_feature', 
+	'subtract_numeric', 'cum_min', 'not_equal_scalar', 'cum_count', 
+	'equal_scalar', 'divide_numeric', 'less_than_equal_to_scalar', 
+	'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 
+	'greater_than_equal_to', 'modulo_by_feature', 'scalar_subtract_numeric_feature', 
+	'isin', 'absolute', 'modulo_numeric'],
 '''
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
@@ -412,30 +337,8 @@ X = df_ # and another copy. Might not need this
 print()
 print('Starting Boruta')
 
-# now let's do some boruta!!
-'''
-rfc = RandomForestClassifier(n_jobs = -1)
-boruta_selector = BorutaPy(rfc, n_estimators='auto', verbose=2, max_iter=config.config['max_iter_boruta'])
-boruta_selector.fit(X.to_numpy(), y.to_numpy())
-
-print()
-print(' Number of selected features: {}'.format(boruta_selector.n_features_))
-
-# now go through and actually select those features
-total_cols = list(X.columns) # list of all the names
-chosen = list(boruta_selector.support_) # this is array of booleans
-chosen_features = [] # these are the NAMES of the ones we'll be using
-
-for i in range(len(total_cols)):
-	if chosen[i]:
-		chosen_features.append(total_cols[i])
-'''
-
 br = BoostARoota(metric='logloss')
 br.fit(X, y)
-# print()
-# print('keep vars')
-# print(list(br.keep_vars_))
 chosen_features = br.keep_vars_
 
 ##### So if we want to output feature importances
@@ -455,20 +358,16 @@ print()
 print('Chosen features and importances:')
 print(ft_imps)
 
+### here is where we need to put these features and importances into a file
+### you should be able to just output the dataframe to a csv?
+### try that out and see what happens
+ft_imps.to_csv('test_csv.csv')
+
 # split these out
 # this isn't going to be shuffled because that's a mess.
-X_temp, X_holdout, y_temp, y_holdout = train_test_split(X[chosen_features].to_numpy(), y.to_numpy(), test_size=0.10)
-X_train, X_test, y_train, y_test = train_test_split(X_temp, y_temp, test_size=0.25)
-
-'''
-	# trying to make the reduced set
-	# we need to make X_test match what X_train now looks like
-	# after the original reduction from feature correlation
-	reduced_x_test = np.take(X_test, to_keep_ind, axis=1)
-'''
+X_train, X_test, y_train, y_test = train_test_split(X[chosen_features].to_numpy(), y.to_numpy(), test_size=0.2)
 
 # now let's make a bunch of lists of tpots
-
 # hold all the base trained pipelines
 base_list = []
 
@@ -481,7 +380,6 @@ num_base = random.randint(config.config['num_base'][0], config.config['num_base'
 
 print()
 print('Training {} base TPOT pipelines'.format(num_base))
-
 
 base_pred_df = pd.DataFrame()
 for i in range(num_base):
@@ -601,9 +499,6 @@ for train_idxs, test_idxs in splits:
 
 # so the order of this list matches up with the order of the test_idxs!
 
-# re-train on the same set now that we have the v_model set up
-#v_model.fit(hidden_preds, y_train)
-
 print()
 print('Optimizing weights for voting classifier')
 
@@ -672,12 +567,12 @@ print('Final predictions')
 
 train_preds = ens.predict(X_train)
 optim_preds = ens.predict(X_test)
-final_preds = ens.predict(X_holdout)
+#final_preds = ens.predict(X_holdout)
 
 print()
 print('Training score = {}'.format(error(train_preds, y_train)))
-print('Optimizing score = {}'.format(error(optim_preds, y_test)))
-print('Holdout score = {}'.format(error(final_preds, y_holdout)))
+print('Test score = {}'.format(error(optim_preds, y_test)))
+#print('Holdout score = {}'.format(error(final_preds, y_holdout)))
 
 ##### now we should save the model please
 ##### do several runs and save the best one
@@ -695,4 +590,5 @@ print('Holdout score = {}'.format(error(final_preds, y_holdout)))
 #####  So one of the models might have an advantage on its fold but the others don't necessarily
 #####  This way you can eliminate one of the sets of data that you're train/test splitting
 #####  and you get generate more robust scores for weight optimization
+
 

@@ -57,6 +57,10 @@ base_models = {
     'sklearn.naive_bayes.GaussianNB': {
     },
 
+    'sklearn.dummy.DummyClassifier': {
+    	'strategy': ['stratified', 'prior']
+    }
+
     'sklearn.naive_bayes.BernoulliNB': {
         'alpha': np.arange(1e-3, 1.001, 1e-3),
         'fit_prior': [True, False]
