@@ -24,7 +24,7 @@ import xgboost as xgb
 df = pd.read_csv("creditcard.csv")
 df = df.drop(['Time'], axis=1)
 df = df.dropna()
-y = df.pop('Class')
+
 
 # ok and then we'll do all the featuretools things that need to happen
 es = ft.EntitySet(id = 'card') # no clue what this means but whatever
@@ -33,6 +33,8 @@ es = ft.EntitySet(id = 'card') # no clue what this means but whatever
 es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 								entity_id = 'obs',
 								index = 'index')
+
+y = df.pop('Class')
 
 # these are the trans primitives we're going to test
 trans_primitive_list = ['add_numeric', 'cum_mean', 'not_equal', 
