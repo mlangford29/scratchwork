@@ -24,6 +24,7 @@ import xgboost as xgb
 df = pd.read_csv("creditcard.csv")
 df = df.drop(['Time'], axis=1)
 df = df.dropna()
+y = df.pop('Class')
 
 # ok and then we'll do all the featuretools things that need to happen
 es = ft.EntitySet(id = 'card') # no clue what this means but whatever
@@ -64,8 +65,6 @@ for t_prim in trans_primitive_list:
 										verbose=0)
 
 	df_ = df_.dropna(how='any', axis=1)
-	y = df.pop('Class')
-
 	X = df_ # and another copy. Might not need this
 
 	print()
