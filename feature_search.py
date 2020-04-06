@@ -25,7 +25,7 @@ import xgboost as xgb
 threshold = 5
 
 # number of iterations to fit the model that actually calculates feature importance
-num_its = 10
+num_its = 20
 
 df = pd.read_csv("creditcard.csv")
 df = df.drop(['Time'], axis=1)
@@ -164,5 +164,17 @@ print(useful_prim_list)
 
 
 
+'''
+V10 ltes 0,16.957908729723226
+ABSOLUTE(V12),16.48162091751667
+V17 ltes 0,11.13301608010133
+V16 ltes 0,5.2122250440307765
+'''
 
+'''
+V10 ltes 0,22.47867243059
+ABSOLUTE(V12),16.478108277286672
+V17 ltes 0,8.898512383713841
+ABSOLUTE(V2),5.795537273
+'''
 
