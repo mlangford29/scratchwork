@@ -46,12 +46,12 @@ y = df.pop('Class')
 ##### ARE WE ALSO GOING TO TEST SOME OF OUR OWN?
 ##### if we can get manhattan distance or something set up that would be cool
 # these are the trans primitives we're going to test
-trans_primitive_list = ['add_numeric', 'cum_mean', 'not_equal', 
+trans_primitive_list = ['divide_by_feature', 'add_numeric', 'cum_mean', 'not_equal', 
 	'cum_sum', 'equal', 'less_than_equal_to', 
 	'multiply_boolean', 'greater_than_equal_to_scalar', 
 	'multiply_numeric', 'diff',  
 	'modulo_numeric_scalar', 'subtract_numeric_scalar', 
-	'divide_numeric_scalar', 'add_numeric_scalar', 'divide_by_feature', 
+	'divide_numeric_scalar', 'add_numeric_scalar', 
 	'subtract_numeric', 'cum_min', 'not_equal_scalar', 'cum_count', 
 	'equal_scalar', 'divide_numeric',  
 	'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 
