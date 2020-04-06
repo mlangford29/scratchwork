@@ -118,7 +118,7 @@ for t_prim in trans_primitive_list:
 	# if it is, then that means no additional feature was important
 	# if it's not (and there were additional important features)
 	#  then you need to add this to a list of trans primitives that you should use!
-	if len(list(ft_imp_dict.keys())) > 1:
+	if len(list(ft_imp_dict.keys())) > 0:
 		useful_prim_list.append(t_prim)
 
 	# now you have a dictionary of the importances from that single trans primitive
