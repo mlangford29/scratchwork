@@ -37,7 +37,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 y = df.pop('Class')
 
 # these are the trans primitives we're going to test
-trans_primitive_list = ['absolute', 'cum_sum', 'less_than', 'less_than_equal_to_scalar']
+trans_primitive_list = ['absolute', 'cum_sum', 'less_than_equal_to_scalar']
 
 '''
 ['add_numeric', 'cum_mean', 'not_equal', 
@@ -61,6 +61,7 @@ useful_prim_list = []
 
 for t_prim in trans_primitive_list:
 
+	print()
 	print('Testing {}'.format(t_prim))
 
 	df_, feature_names = ft.dfs(entityset=es, target_entity='obs',
@@ -76,7 +77,7 @@ for t_prim in trans_primitive_list:
 	print()
 	print('Starting Boruta')
 
-	br = BoostARoota(metric='logloss', silent=True)
+	br = BoostARoota(metric='logloss', cutoff=8, silent=True)
 	br.fit(X, y)
 	chosen_features = br.keep_vars_
 	ind = range(len(chosen_features))
