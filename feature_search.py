@@ -87,8 +87,9 @@ for t_prim in trans_primitive_list:
 		if (np.inf in df_[feature].to_numpy()) or (np.NINF in df_[feature].to_numpy()):
 			inf_list.append(feature)
 
-	print(' Dropping {} features for containing inf'.format(inf_list))
-	df_.drop(inf_list, axis=1)
+	if len(inf_list) > 0:
+		print(' Dropping {} features for containing inf'.format(inf_list))
+		df_.drop(inf_list, axis=1)
 
 	# would it go faster if we can drop all the original columns?
 	df_ = df_.drop(['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
