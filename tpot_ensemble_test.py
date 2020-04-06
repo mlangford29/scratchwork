@@ -354,6 +354,7 @@ feature_list = fetch_feature_list()
 # now filter out only the feature list
 X = feature_matrix[feature_list]
 del feature_matrix
+X = X.fillna(X.mean())
 y = df.pop('Class')
 del df
 
