@@ -82,9 +82,9 @@ for t_prim in trans_primitive_list:
 	##### ADD TO A LIST
 	##### DROP THAT SHIT
 	inf_list = []
-	for feature in feature_names:
+	for feature in list(df_.columns):
 
-		if np.inf in df_[feature].to_numpy() or np.NINF in df_[feature].to_numpy():
+		if (np.inf in df_[feature].to_numpy()) or (np.NINF in df_[feature].to_numpy()):
 			inf_list.append(feature)
 
 	print(' Dropping {} features for containing inf'.format(inf_list))
