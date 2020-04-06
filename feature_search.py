@@ -79,10 +79,16 @@ for t_prim in trans_primitive_list:
 	print()
 	print('Starting Boruta')
 
-	br = BoostARoota(metric='logloss', silent=True) #cutoff=.5, delta=0.7, silent=True)
+	br = BoostARoota(metric='logloss', cutoff=.5, delta=0.7, silent=True)
 	br.fit(X, y)
 	chosen_features = br.keep_vars_
+
+	if len(chosen_features) == 0:
+		print(' No chosen features!')
+		continue
+
 	ind = range(len(chosen_features))
+
 	xgb_for_feat_imp = xgb.train(dtrain = xgb.DMatrix(X[chosen_features], label=y), params={})
 	ft_imp_dict = xgb_for_feat_imp.get_score(importance_type='gain')
 
