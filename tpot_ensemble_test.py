@@ -356,6 +356,13 @@ X = feature_matrix[feature_list]
 del feature_matrix
 X = X.fillna(X.mean())
 X = X*1.0 # convert all to float hopefully
+
+temp_dict = {}
+for feature in feature_list:
+	temp_dict[feature] = np.max(abs(X[feature]))
+print(temp_dict)
+quit()
+
 print('np.max=', np.max(abs(X)))
 X.to_csv('X.csv')
 y = df.pop('Class')
