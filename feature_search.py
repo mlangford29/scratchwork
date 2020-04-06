@@ -24,6 +24,9 @@ import xgboost as xgb
 # importance threshold to remove a feature. If it's below this then we won't use it
 threshold = 5
 
+# number of iterations to fit the model that actually calculates feature importance
+num_its = 10
+
 df = pd.read_csv("creditcard.csv")
 df = df.drop(['Time'], axis=1)
 df = df.dropna()
@@ -96,8 +99,31 @@ for t_prim in trans_primitive_list:
 
 	ind = range(len(chosen_features))
 
-	xgb_for_feat_imp = xgb.train(dtrain = xgb.DMatrix(X[chosen_features], label=y), params={})
-	ft_imp_dict = xgb_for_feat_imp.get_score(importance_type='gain')
+	# let's do multiple rounds of this fitting and average
+	avg_dict = {}
+
+	for i in range(num_its):
+
+		xgb_for_feat_imp = xgb.train(dtrain = xgb.DMatrix(X[chosen_features], label=y), params={})
+		ft_imp_dict = xgb_for_feat_imp.get_score(importance_type='gain')
+
+		for key in ft_imp_dict.keys():
+
+			if key not in avg_dict.keys():
+
+				avg_dict[key] = ft_imp_dict[key]
+
+			else:
+
+				avg_dict[key] += ft_imp_dict[key]
+
+	# delete feature importance dict, remake in a minute
+	ft_imp_dict = {}
+
+	# then average it out
+	for key in avg_dict.keys():
+
+		ft_imp_dict[key] = avg_dict[key]/num_its
 
 	# we need to check if no chosen feature has importance above a threshold
 	# so maybe we'll remove keys if their value is below the threshold
