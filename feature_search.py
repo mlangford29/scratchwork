@@ -71,6 +71,11 @@ for t_prim in trans_primitive_list:
 										n_jobs=1,
 										verbose=0)
 
+	# would it go faster if we can drop all the original columns?
+	df_ = df_.drop(['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
+					'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
+					'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28'])
+
 	df_ = df_.dropna(how='any', axis=1)
 	X = df_ # and another copy. Might not need this
 
@@ -88,7 +93,7 @@ for t_prim in trans_primitive_list:
 	# if it is, then that means no additional feature was important
 	# if it's not (and there were additional important features)
 	#  then you need to add this to a list of trans primitives that you should use!
-	if len(list(ft_imp_dict.keys())) > 29:
+	if len(list(ft_imp_dict.keys())) > 1:
 		useful_prim_list.append(t_prim)
 
 	# now you have a dictionary of the importances from that single trans primitive
