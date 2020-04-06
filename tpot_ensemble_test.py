@@ -355,6 +355,7 @@ feature_list = fetch_feature_list()
 X = feature_matrix[feature_list]
 del feature_matrix
 X = X.fillna(X.mean())
+X.to_csv('X.csv')
 y = df.pop('Class')
 del df
 
