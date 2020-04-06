@@ -21,6 +21,9 @@ from boostaroota import BoostARoota
 import pandas as pd
 import xgboost as xgb
 
+# importance threshold to remove a feature. If it's below this then we won't use it
+threshold = 5
+
 df = pd.read_csv("creditcard.csv")
 df = df.drop(['Time'], axis=1)
 df = df.dropna()
@@ -37,7 +40,10 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 y = df.pop('Class')
 
 # these are the trans primitives we're going to test
-trans_primitive_list = ['add_numeric', 'cum_mean', 'not_equal', 
+trans_primitive_list = ['absolute', 'cum_mean', 'less_than_equal_to_scalar']
+
+'''
+['add_numeric', 'cum_mean', 'not_equal', 
 	'cum_sum', 'equal', 'less_than_scalar', 'less_than_equal_to', 
 	'multiply_boolean', 'greater_than_equal_to_scalar', 
 	'multiply_numeric', 'diff', 'greater_than_scalar', 
@@ -48,6 +54,7 @@ trans_primitive_list = ['add_numeric', 'cum_mean', 'not_equal',
 	'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 
 	'greater_than_equal_to', 'modulo_by_feature', 'scalar_subtract_numeric_feature', 
 	'isin', 'absolute', 'modulo_numeric']
+'''
 
 
 # empty dictionary to store all the features and their importances
@@ -91,6 +98,21 @@ for t_prim in trans_primitive_list:
 
 	xgb_for_feat_imp = xgb.train(dtrain = xgb.DMatrix(X[chosen_features], label=y), params={})
 	ft_imp_dict = xgb_for_feat_imp.get_score(importance_type='gain')
+
+	# we need to check if no chosen feature has importance above a threshold
+	# so maybe we'll remove keys if their value is below the threshold
+	# add the deleted keys to a list, remove later
+	bad_key_list = []
+
+	for key in ft_imp_dict.keys():
+
+		if ft_imp_dict[key] < threshold:
+			bad_key_list.append(key)
+
+	# now we should have a list of the bad ones
+	# go through them all and delete the bad ones
+	for bad_key in bad_key_list:
+		del ft_imp_dict[bad_key]
 
 	# you should do another check to see if the number of features is equal to what it was originally
 	# if it is, then that means no additional feature was important
