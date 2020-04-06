@@ -59,7 +59,7 @@ base_models = {
 
     'sklearn.dummy.DummyClassifier': {
     	'strategy': ['stratified', 'prior']
-    }
+    },
 
     'sklearn.naive_bayes.BernoulliNB': {
         'alpha': np.arange(1e-3, 1.001, 1e-3),
