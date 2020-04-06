@@ -20,6 +20,7 @@ from featuretools.variable_types import Numeric
 from boostaroota import BoostARoota
 import pandas as pd
 import xgboost as xgb
+import numpy as np
 
 # importance threshold to remove a feature. If it's below this then we won't use it
 threshold = 5
@@ -42,15 +43,17 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 y = df.pop('Class')
 
+##### ARE WE ALSO GOING TO TEST SOME OF OUR OWN?
+##### if we can get manhattan distance or something set up that would be cool
 # these are the trans primitives we're going to test
 trans_primitive_list = ['add_numeric', 'cum_mean', 'not_equal', 
-	'cum_sum', 'equal', 'less_than_scalar', 'less_than_equal_to', 
+	'cum_sum', 'equal', 'less_than_equal_to', 
 	'multiply_boolean', 'greater_than_equal_to_scalar', 
-	'multiply_numeric', 'diff', 'greater_than_scalar', 
+	'multiply_numeric', 'diff',  
 	'modulo_numeric_scalar', 'subtract_numeric_scalar', 
 	'divide_numeric_scalar', 'add_numeric_scalar', 'divide_by_feature', 
 	'subtract_numeric', 'cum_min', 'not_equal_scalar', 'cum_count', 
-	'equal_scalar', 'divide_numeric', 'less_than_equal_to_scalar', 
+	'equal_scalar', 'divide_numeric',  
 	'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 
 	'greater_than_equal_to', 'modulo_by_feature', 'scalar_subtract_numeric_feature', 
 	'isin', 'absolute', 'modulo_numeric']
@@ -75,6 +78,18 @@ for t_prim in trans_primitive_list:
 										n_jobs=1,
 										verbose=0)
 
+	##### CHECK IF ANY OF THE COLUMNS HAVE INF IN THEM
+	##### ADD TO A LIST
+	##### DROP THAT SHIT
+	inf_list = []
+	for feature in feature_names:
+
+		if np.inf in df_[feature].to_numpy() or np.NINF in df_[feature].to_numpy():
+			inf_list.append(feature)
+
+	print(' Dropping {} features for containing inf'.format(inf_list))
+	df_.drop(inf_list, axis=1)
+
 	# would it go faster if we can drop all the original columns?
 	df_ = df_.drop(['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
 					'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
@@ -82,6 +97,8 @@ for t_prim in trans_primitive_list:
 
 	df_ = df_.dropna(how='any', axis=1)
 	X = df_ # and another copy. Might not need this
+
+
 
 	print()
 	print('Starting Boruta')
@@ -159,4 +176,7 @@ print()
 print('Final list of primitives to use:')
 print(useful_prim_list)
 
+'''
+['add_numeric', 'less_than_scalar', 'less_than_equal_to', 'greater_than_equal_to_scalar', 'multiply_numeric', 'greater_than_scalar', 'subtract_numeric_scalar', 'divide_numeric_scalar', 'add_numeric_scalar', 'divide_by_feature', 'subtract_numeric', 'divide_numeric', 'less_than_equal_to_scalar', 'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 'greater_than_equal_to', 'modulo_by_feature', 'scalar_subtract_numeric_feature', 'absolute', 'modulo_numeric']
+'''
 
