@@ -43,10 +43,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 y = df.pop('Class')
 
 # these are the trans primitives we're going to test
-trans_primitive_list = ['absolute', 'cum_mean', 'less_than_equal_to_scalar']
-
-'''
-['add_numeric', 'cum_mean', 'not_equal', 
+trans_primitive_list = ['add_numeric', 'cum_mean', 'not_equal', 
 	'cum_sum', 'equal', 'less_than_scalar', 'less_than_equal_to', 
 	'multiply_boolean', 'greater_than_equal_to_scalar', 
 	'multiply_numeric', 'diff', 'greater_than_scalar', 
@@ -57,7 +54,7 @@ trans_primitive_list = ['absolute', 'cum_mean', 'less_than_equal_to_scalar']
 	'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 
 	'greater_than_equal_to', 'modulo_by_feature', 'scalar_subtract_numeric_feature', 
 	'isin', 'absolute', 'modulo_numeric']
-'''
+
 
 
 # empty dictionary to store all the features and their importances
@@ -162,19 +159,4 @@ print()
 print('Final list of primitives to use:')
 print(useful_prim_list)
 
-
-
-'''
-V10 ltes 0,16.957908729723226
-ABSOLUTE(V12),16.48162091751667
-V17 ltes 0,11.13301608010133
-V16 ltes 0,5.2122250440307765
-'''
-
-'''
-V10 ltes 0,22.47867243059
-ABSOLUTE(V12),16.478108277286672
-V17 ltes 0,8.898512383713841
-ABSOLUTE(V2),5.795537273
-'''
 
