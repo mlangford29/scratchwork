@@ -82,7 +82,7 @@ for t_prim in trans_primitive_list:
 	print()
 	print('Starting Boruta')
 
-	br = BoostARoota(metric='logloss', cutoff=16, silent=True)
+	br = BoostARoota(metric='logloss', cutoff=100, silent=True)
 	br.fit(X, y)
 	chosen_features = br.keep_vars_
 	ind = range(len(chosen_features))
