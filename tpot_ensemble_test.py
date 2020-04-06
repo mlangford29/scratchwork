@@ -254,6 +254,27 @@ def train_pred_model_list(layer_list, X, y, test_set):
 	else:
 		return layer_list, overall_preds, overall_preds_test
 
+# function to read the csv and extract a list of only the feature names
+def fetch_feature_list():
+
+	# open the file
+	f = open('feature_search.csv', 'r')
+
+	# list to store the features. Start it with some of the better base features
+	feature_list = ['V28','V27','V26','V25','V24','V23','V22','V20','V15','V13','V8']
+
+	# go through the file
+	for line in f:
+
+		linelist = line.split(',')
+
+		feat_name = linelist[0]
+
+		if feat_name != '':
+			feature_list.append(feat_name)
+
+	f.close()
+	return feature_list
 
 # finally let's import the data
 df = pd.read_csv("creditcard.csv")
@@ -313,14 +334,30 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 '''
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
-										agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['absolute', 'greater_than_equal_to', 'diff'],
+										#agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
+										trans_primitives = ['add_numeric', 'less_than_scalar', 'less_than_equal_to', 
+															'greater_than_equal_to_scalar', 'multiply_numeric', 
+															'greater_than_scalar', 'subtract_numeric_scalar', 
+															'divide_numeric_scalar', 'add_numeric_scalar', 
+															'divide_by_feature', 'subtract_numeric', 'divide_numeric', 
+															'less_than_equal_to_scalar', 'percentile', 'greater_than', 
+															'less_than', 'multiply_numeric_scalar', 'greater_than_equal_to', 
+															'modulo_by_feature', 'scalar_subtract_numeric_feature', 'absolute', 
+															'modulo_numeric'],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
 
-#feature_matrix = feature_matrix.dropna()
+# alright here is where we're going to want to cut down all the variables
+feature_list = fetch_feature_list()
 
+# now filter out only the feature list
+X = feature_matrix[feature_list]
+del feature_matrix
+y = df.pop('Class')
+del df
+
+'''
 # eliminate features if they're too correlated before we get into boruta
 if config.config['correlation_feature_elimination']:
 	feature_matrix = feature_selection(feature_matrix, correlation_threshold = 0.7)
@@ -348,12 +385,6 @@ ind = range(len(br.keep_vars_))
 xgb_for_feat_imp = xgb.train(dtrain = xgb.DMatrix(X[chosen_features], label=y), params={})
 ft_imps = pd.DataFrame.from_dict(xgb_for_feat_imp.get_score(importance_type='gain'), orient='index', columns=['importance']).sort_values('importance', ascending=True)
 
-'''
-print()
-print(' Final chosen features:')
-print(' {}'.format(chosen_features))
-'''
-
 print()
 print('Chosen features and importances:')
 print(ft_imps)
@@ -362,10 +393,12 @@ print(ft_imps)
 ### you should be able to just output the dataframe to a csv?
 ### try that out and see what happens
 ft_imps.to_csv('test_csv.csv')
+'''
 
 # split these out
 # this isn't going to be shuffled because that's a mess.
-X_train, X_test, y_train, y_test = train_test_split(X[chosen_features].to_numpy(), y.to_numpy(), test_size=0.2)
+#X_train, X_test, y_train, y_test = train_test_split(X[chosen_features].to_numpy(), y.to_numpy(), test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X.to_numpy(), y.to_numpy(), test_size=0.2)
 
 # now let's make a bunch of lists of tpots
 # hold all the base trained pipelines
