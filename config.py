@@ -6,13 +6,13 @@ config = {
 	
 	# number of 'hidden' layers. Probably not the right term
 	# but these are the layers that are in between the base and the meta-learner
-	'num_hidden_layers':(1, 1),
+	'num_hidden_layers':(2, 2),
 
 	# number of models in the base. This is a range
-	'num_base':(7, 7),
+	'num_base':(50, 50),
 
 	# number of models in hidden layers. This is a range
-	'num_hidden':(7, 7),
+	'num_hidden':(50, 50),
 
 	# number of voters. For now we'll have this as just an int
 	'num_voters':3,
@@ -41,8 +41,8 @@ config = {
 	'hidden_cv':2,
 
 	# voting TPOT parameters
-	'voting_num_gens':5,
-	'voting_pop_size':5,
+	'voting_num_gens':20,
+	'voting_pop_size':10,
 	'voting_cv':3,
 
 	# number of cv folds we use while training the whole ensemble
