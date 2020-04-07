@@ -353,10 +353,10 @@ temp_dict = {}
 for feature in feature_list:
 	temp_dict[feature] = np.max(abs(X[feature]))
 print(temp_dict)
-quit()
+#quit()
 
-print('np.max=', np.max(abs(X)))
-X.to_csv('X.csv')
+#print('np.max=', np.max(abs(X)))
+#X.to_csv('X.csv')
 
 y = df.pop('Class')
 del df
