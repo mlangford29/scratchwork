@@ -335,15 +335,7 @@ es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
 
 feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
 										#agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
-										trans_primitives = ['add_numeric', 'less_than_scalar', 'less_than_equal_to', 
-															'greater_than_equal_to_scalar', 'multiply_numeric', 
-															'greater_than_scalar', 'subtract_numeric_scalar', 
-															'divide_numeric_scalar', 'add_numeric_scalar', 
-															'divide_by_feature', 'subtract_numeric', 'divide_numeric', 
-															'less_than_equal_to_scalar', 'percentile', 'greater_than', 
-															'less_than', 'multiply_numeric_scalar', 'greater_than_equal_to', 
-															'modulo_by_feature', 'scalar_subtract_numeric_feature', 'absolute', 
-															'modulo_numeric'],
+										trans_primitives = ['divide_by_feature', 'add_numeric', 'less_than_equal_to', 'greater_than_equal_to_scalar', 'multiply_numeric', 'subtract_numeric_scalar', 'divide_numeric_scalar', 'add_numeric_scalar', 'subtract_numeric', 'divide_numeric', 'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 'greater_than_equal_to', 'modulo_by_feature', 'scalar_subtract_numeric_feature', 'absolute', 'modulo_numeric'],
 										max_depth=1,
 										n_jobs=1,
 										verbose=1)
@@ -357,6 +349,7 @@ del feature_matrix
 X = X.fillna(X.mean())
 X = X*1.0 # convert all to float hopefully
 
+'''
 temp_dict = {}
 for feature in feature_list:
 	temp_dict[feature] = np.max(abs(X[feature]))
@@ -365,6 +358,7 @@ quit()
 
 print('np.max=', np.max(abs(X)))
 X.to_csv('X.csv')
+'''
 y = df.pop('Class')
 del df
 
