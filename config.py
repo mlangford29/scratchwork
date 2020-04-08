@@ -19,7 +19,7 @@ config = {
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':False,
-	'correlation_model_elimination':False,
+	'correlation_model_elimination':True,
 
 	# how many iterations for Boruta to run
 	'max_iter_boruta':200,
@@ -41,7 +41,7 @@ config = {
 	'hidden_cv':2,
 
 	# voting TPOT parameters
-	'voting_num_gens':20,
+	'voting_num_gens':10,
 	'voting_pop_size':10,
 	'voting_cv':3,
 
