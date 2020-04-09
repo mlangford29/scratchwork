@@ -9,13 +9,13 @@ config = {
 	'num_hidden_layers':(1, 1),
 
 	# number of models in the base. This is a range
-	'num_base':(100, 100),
+	'num_base':(200, 200),
 
 	# number of models in hidden layers. This is a range
 	'num_hidden':(50, 50),
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':5,
+	'num_voters':10,
 
 	# are we going to do feature elimination based on correlation?
 	'correlation_feature_elimination':False,
@@ -42,8 +42,8 @@ config = {
 
 	# voting TPOT parameters
 	'voting_num_gens':10,
-	'voting_pop_size':10,
-	'voting_cv':3,
+	'voting_pop_size':5,
+	'voting_cv':5,
 
 	# number of cv folds we use while training the whole ensemble
 	'num_folds':5
