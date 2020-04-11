@@ -164,7 +164,7 @@ config_dict = {
     	'grow_policy': ['SymmetricTree', 'Depthwise', 'Lossguide'],
     	'max_leaves': range(1, 50),
     	'task_type': ['GPU']
-    }
+    },
 
     # 'sklearn.linear_model.SGDClassifier': {
     #     'loss': ['log', 'hinge', 'modified_huber', 'squared_hinge', 'perceptron'],
