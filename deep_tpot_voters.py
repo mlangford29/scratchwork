@@ -153,7 +153,7 @@ config_dict = {
     },
 
     'catboost.CatBoostClassifier': {
-    	'iterations': range(1, 10000)
+    	'iterations': range(1, 10000),
     	'learning_rate': np.arange(1e-3, 1.001, 1e-3),
     	'reg_lambda': np.arange(0, 0.99, 1e-3),
     	'bootstrap_type': ['Bayesian', 'Bernoulli', 'MVS', 'Poisson', 'No'],
