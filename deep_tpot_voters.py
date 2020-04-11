@@ -261,7 +261,7 @@ warnings.filterwarnings('ignore')
 # generic error function
 def error(preds, y_test):
     
-    error_name = config.config['metric']
+    error_name = config['metric']
     
     if error_name == 'roc_auc':
         return roc_auc_score(preds, y_test)
