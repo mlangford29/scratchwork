@@ -47,8 +47,8 @@ config = {
 	'metric':'f1',
 
 	# voting TPOT parameters
-	'voting_num_gens':2,
-	'voting_pop_size':2,
+	'voting_num_gens':5,
+	'voting_pop_size':5,
 	'voting_cv':5,
 
 }
@@ -150,7 +150,7 @@ config_dict = {
     	'subsample': np.arange(0.05, 1.01, 0.05),
     	'reg_alpha': np.arange(0, 0.99, 1e-3),
     	'reg_lambda': np.arange(0, 0.99, 1e-3),
-    }
+    },
 
     'catboost.CatBoostClassifier': {
     	'iterations': range(1, 10000)
