@@ -145,7 +145,7 @@ config_dict = {
     	'max_depth': range(1, 50),
     	'learning_rate': np.arange(1e-3, 1.001, 1e-3),
     	'n_estimators': range(2, 500),
-    	'subsample_for_bin' range(1000, 500000),
+    	'subsample_for_bin': range(1000, 500000),
     	'min_child_samples': range(1, 100),
     	'subsample': np.arange(0.05, 1.01, 0.05),
     	'reg_alpha': np.arange(0, 0.99, 1e-3),
