@@ -38,17 +38,17 @@ from boostaroota import BoostARoota
 config = {
 
 	# number of voters. For now we'll have this as just an int
-	'num_voters':20,
+	'num_voters':50,
 
 	# number of bayesian opt iterations we'll optimize voting weights for
-	'meta_learner_its':100,
+	'meta_learner_its':1000,
 
 	# what metric will we be using to evaluate?
 	'metric':'f1',
 
 	# voting TPOT parameters
-	'voting_num_gens':20,
-	'voting_pop_size':10,
+	'voting_num_gens':5,
+	'voting_pop_size':5,
 	'voting_cv':5,
 
 }
