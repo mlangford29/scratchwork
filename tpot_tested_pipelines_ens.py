@@ -336,6 +336,82 @@ X_train, X_test, y_train, y_test = train_test_split(X.to_numpy(), y.to_numpy(), 
 highest_score = 0
 winning_model = None
 
+# new idea
+# what if we just specify the number of layers 
+# and weight for number of models in each layer
+num_layers = 3
+layer_weights = [5, 3, 2]
+
+# they should probably all have the same meta model. Let's do LGBM
+from lightgbm import LGBMClassifier as lgbm
+
+for its in range(5):
+    
+    pipe_opt = TPOTClassifier(generations=10, 
+                            population_size=10, 
+                            cv=2, 
+                            scoring='f1', 
+                            n_jobs=-1,
+                            config_dict=base_models,
+                            verbosity=1)
+
+    x_dummy, y_dummy = make_classification(n_features = len(X_train[0]))
+    pipe_opt = pipe_opt.fit(x_dummy, y_dummy)
+    val_ind_not = pipe_opt.eval_ind.copy()
+    temp = [pipe_opt._toolbox.compile(expr=eval_ind_not[i]) for i in range(len(eval_ind_not))]
+    
+
+    # trying out 10 different random configs
+    for i in range(10):
+        
+        ens = SuperLearner(verbose=1)
+
+        eval_ind = temp.copy()
+        random.shuffle(eval_ind)
+        num_to_slot = len(pipe_opt.eval_ind)
+
+        # now we need to find the num in each layer
+        weights_total = sum(layer_weights)
+
+        for j in range(len(layer_weights)):
+
+            if j == len(layer_weights) - 1:
+
+                # this means we're at the last layer! Put everything else in
+                ens.add(eval_ind)
+                continue
+
+            num_in_layer = int(layer_weights[j]/weights_total*num_to_slot)
+
+            layerlist = []
+
+            for k in range(num_in_layer):
+                layerlist.append(eval_ind.pop())
+
+            ens.add(layerlist)
+
+        # then add the meta model
+        ens.add_meta(lgbm(n_estimators=1000, verbose=-1, learning_rate=.005))
+
+        try: 
+            ens.fit(X_train, y_train)
+            train_score = f1_score(ens.predict(X_train), y_train)
+            test_score = f1_score(ens.predict(X_test), y_test)
+            real_score = train_score * test_score
+            print(' Training score is {}'.format(train_score))
+            print(' Testing score is {}'.format(test_score))
+            print(' Real score is {}'.format(real_score))
+        except:
+            print(' There was an error with this one. Throwing it out')
+            continue
+
+        if real_score > highest_score:
+            print(' New highest score found!')
+            highest_score = real_score
+            winning_model = ens
+
+
+'''
 for its in range(5):
     pipe_opt = TPOTClassifier(generations=10, 
             				population_size=10, 
@@ -415,7 +491,7 @@ for its in range(5):
             print(' New highest score found!')
             highest_score = real_score
             winning_model = ens
-
+'''
 
 real_temp = int(highest_score * 100)
 dump(winning_model, 'testedpipes_{}_f1_traintest.joblib'.format(highest_score))
