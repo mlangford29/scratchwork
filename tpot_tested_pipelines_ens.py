@@ -347,8 +347,8 @@ from lightgbm import LGBMClassifier as lgbm
 
 for its in range(5):
     
-    pipe_opt = TPOTClassifier(generations=10, 
-                            population_size=10, 
+    pipe_opt = TPOTClassifier(generations=5, 
+                            population_size=5, 
                             cv=2, 
                             scoring='f1', 
                             n_jobs=-1,
