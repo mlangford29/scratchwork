@@ -357,7 +357,7 @@ for its in range(5):
 
     x_dummy, y_dummy = make_classification(n_features = len(X_train[0]))
     pipe_opt = pipe_opt.fit(x_dummy, y_dummy)
-    val_ind_not = pipe_opt.eval_ind.copy()
+    eval_ind_not = pipe_opt.eval_ind.copy()
     temp = [pipe_opt._toolbox.compile(expr=eval_ind_not[i]) for i in range(len(eval_ind_not))]
     
 
