@@ -339,8 +339,8 @@ winning_model = None
 # new idea
 # what if we just specify the number of layers 
 # and weight for number of models in each layer
-num_layers = 3
-layer_weights = [5, 3, 2]
+num_layers = 2
+layer_weights = [5, 3]
 
 # they should probably all have the same meta model. Let's do LGBM
 from lightgbm import LGBMClassifier as lgbm
