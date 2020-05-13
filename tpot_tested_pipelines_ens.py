@@ -63,8 +63,8 @@ base_models = {
     'sklearn.tree.DecisionTreeClassifier': {
         'criterion': ["gini", "entropy"],
         'max_depth': range(1, 100),
-        'min_samples_split': range(2, 10000),
-        'min_samples_leaf': range(1, 100000)
+        'min_samples_split': range(2, 100),
+        'min_samples_leaf': range(1, 100)
     },
 
     # 'sklearn.ensemble.ExtraTreesClassifier': {
@@ -166,39 +166,39 @@ base_models = {
     # },
 
     # Preprocesssors
-    'sklearn.preprocessing.Binarizer': {
-        'threshold': np.arange(0.1, 1.01, 0.05)
-    },
+    # 'sklearn.preprocessing.Binarizer': {
+    #     'threshold': np.arange(0.1, 1.01, 0.05)
+    # },
 
-    'sklearn.decomposition.FastICA': {
-        'tol': np.arange(0.0, 1.01, 0.05)
-    },
+    # 'sklearn.decomposition.FastICA': {
+    #     'tol': np.arange(0.0, 1.01, 0.05)
+    # },
 
-    'sklearn.cluster.FeatureAgglomeration': {
-        'linkage': ['ward', 'complete', 'average'],
-        'affinity': ['euclidean', 'l1', 'l2', 'manhattan', 'cosine']
-    },
+    # 'sklearn.cluster.FeatureAgglomeration': {
+    #     'linkage': ['ward', 'complete', 'average'],
+    #     'affinity': ['euclidean', 'l1', 'l2', 'manhattan', 'cosine']
+    # },
 
-    'sklearn.preprocessing.MaxAbsScaler': {
-    },
+    # 'sklearn.preprocessing.MaxAbsScaler': {
+    # },
 
-    'sklearn.preprocessing.MinMaxScaler': {
-    },
+    # 'sklearn.preprocessing.MinMaxScaler': {
+    # },
 
-    'sklearn.preprocessing.Normalizer': {
-        'norm': ['l1', 'l2', 'max']
-    },
+    # 'sklearn.preprocessing.Normalizer': {
+    #     'norm': ['l1', 'l2', 'max']
+    # },
 
-    'sklearn.kernel_approximation.Nystroem': {
-        'kernel': ['rbf', 'cosine', 'chi2', 'laplacian', 'polynomial', 'poly', 'linear', 'additive_chi2', 'sigmoid'],
-        'gamma': np.arange(0.0, 1.01, 0.05),
-        'n_components': range(1, 11)
-    },
+    # 'sklearn.kernel_approximation.Nystroem': {
+    #     'kernel': ['rbf', 'cosine', 'chi2', 'laplacian', 'polynomial', 'poly', 'linear', 'additive_chi2', 'sigmoid'],
+    #     'gamma': np.arange(0.0, 1.01, 0.05),
+    #     'n_components': range(1, 11)
+    # },
 
-    'sklearn.decomposition.PCA': {
-        'svd_solver': ['randomized'],
-        'iterated_power': range(1, 11)
-    },
+    # 'sklearn.decomposition.PCA': {
+    #     'svd_solver': ['randomized'],
+    #     'iterated_power': range(1, 11)
+    # },
 
     # 'sklearn.preprocessing.PolynomialFeatures': {
     #     'degree': [2],
@@ -206,18 +206,18 @@ base_models = {
     #     'interaction_only': [False]
     # },
 
-    'sklearn.kernel_approximation.RBFSampler': {
-        'gamma': np.arange(0.0, 1.01, 0.05)
-    },
+    # 'sklearn.kernel_approximation.RBFSampler': {
+    #     'gamma': np.arange(0.0, 1.01, 0.05)
+    # },
 
-    'sklearn.preprocessing.RobustScaler': {
-    },
+    # 'sklearn.preprocessing.RobustScaler': {
+    # },
 
-    'sklearn.preprocessing.StandardScaler': {
-    },
+    # 'sklearn.preprocessing.StandardScaler': {
+    # },
 
-    'tpot.builtins.ZeroCount': {
-    },
+    # 'tpot.builtins.ZeroCount': {
+    # },
 
     # 'tpot.builtins.OneHotEncoder': {
     #     'minimum_fraction': [0.05, 0.1, 0.15, 0.2, 0.25],
@@ -391,7 +391,7 @@ for its in range(5):
             ens.add(layerlist)
 
         # then add the meta model
-        ens.add_meta(lgbm(n_estimators=1000, verbose=-1, learning_rate=.005))
+        ens.add_meta(lgbm(n_estimators=500, verbose=-1))
 
         try: 
             ens.fit(X_train, y_train)
