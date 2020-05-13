@@ -339,16 +339,16 @@ winning_model = None
 # new idea
 # what if we just specify the number of layers 
 # and weight for number of models in each layer
-num_layers = 4
-layer_weights = [5, 4, 3, 2]
+num_layers = 2
+layer_weights = [5, 3]
 
 # they should probably all have the same meta model. Let's do LGBM
 from lightgbm import LGBMClassifier as lgbm
 
 for its in range(5):
     
-    pipe_opt = TPOTClassifier(generations=5, 
-                            population_size=5, 
+    pipe_opt = TPOTClassifier(generations=10, 
+                            population_size=10, 
                             cv=2, 
                             scoring='f1', 
                             n_jobs=-1,
