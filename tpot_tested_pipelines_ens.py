@@ -62,7 +62,7 @@ base_models = {
 
     'sklearn.tree.DecisionTreeClassifier': {
         'criterion': ["gini", "entropy"],
-        'max_depth': range(1, 100),
+        'max_depth': range(1, 10),
         'min_samples_split': range(2, 100),
         'min_samples_leaf': range(1, 100)
     },
