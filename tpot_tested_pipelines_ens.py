@@ -37,133 +37,133 @@ from boostaroota import BoostARoota
 base_models = {
 
     # Classifiers
-    'sklearn.naive_bayes.GaussianNB': {
-    },
+    # 'sklearn.naive_bayes.GaussianNB': {
+    # },
 
-    'sklearn.dummy.DummyClassifier': {
-        'strategy': ['stratified', 'prior']
-    },
+    # 'sklearn.dummy.DummyClassifier': {
+    #     'strategy': ['stratified', 'prior']
+    # },
 
-    'sklearn.naive_bayes.BernoulliNB': {
-        'alpha': np.arange(1e-3, 1.001, 1e-3),
-        'fit_prior': [True, False]
-    },
+    # 'sklearn.naive_bayes.BernoulliNB': {
+    #     'alpha': np.arange(1e-3, 1.001, 1e-3),
+    #     'fit_prior': [True, False]
+    # },
 
-    'sklearn.naive_bayes.ComplementNB': {
-        'alpha': np.arange(1e-3, 1.001, 1e-3),
-        'fit_prior': [True, False],
-        'norm': [True, False]
-    },
+    # 'sklearn.naive_bayes.ComplementNB': {
+    #     'alpha': np.arange(1e-3, 1.001, 1e-3),
+    #     'fit_prior': [True, False],
+    #     'norm': [True, False]
+    # },
 
-    'sklearn.naive_bayes.MultinomialNB': {
-        'alpha': np.arange(1e-3, 1.001, 1e-3),
-        'fit_prior': [True, False]
-    },
+    # 'sklearn.naive_bayes.MultinomialNB': {
+    #     'alpha': np.arange(1e-3, 1.001, 1e-3),
+    #     'fit_prior': [True, False]
+    # },
 
     'sklearn.tree.DecisionTreeClassifier': {
         'criterion': ["gini", "entropy"],
-        'max_depth': range(1, 11),
-        'min_samples_split': range(2, 21),
-        'min_samples_leaf': range(1, 21)
+        'max_depth': range(1, 100),
+        'min_samples_split': range(2, 10000),
+        'min_samples_leaf': range(1, 100000)
     },
 
-    'sklearn.ensemble.ExtraTreesClassifier': {
-        'n_estimators': range(2, 25),
-        'criterion': ["gini", "entropy"],
-        #'max_features': np.arange(0.2, 1.01, 0.05),
-        'min_samples_split': range(2, 21),
-        'min_samples_leaf': range(1, 21),
-        'bootstrap': [True, False]
-    },
+    # 'sklearn.ensemble.ExtraTreesClassifier': {
+    #     'n_estimators': range(2, 25),
+    #     'criterion': ["gini", "entropy"],
+    #     #'max_features': np.arange(0.2, 1.01, 0.05),
+    #     'min_samples_split': range(2, 21),
+    #     'min_samples_leaf': range(1, 21),
+    #     'bootstrap': [True, False]
+    # },
 
-    'sklearn.ensemble.RandomForestClassifier': {
-        'n_estimators': range(2, 25),
-        'criterion': ["gini", "entropy"],
-        #'max_features': np.arange(0.2, 1.01, 0.05),
-        'min_samples_split': range(2, 21),
-        'min_samples_leaf':  range(1, 21),
-        'bootstrap': [True, False]
-    },
+    # 'sklearn.ensemble.RandomForestClassifier': {
+    #     'n_estimators': range(2, 25),
+    #     'criterion': ["gini", "entropy"],
+    #     #'max_features': np.arange(0.2, 1.01, 0.05),
+    #     'min_samples_split': range(2, 21),
+    #     'min_samples_leaf':  range(1, 21),
+    #     'bootstrap': [True, False]
+    # },
 
-    'sklearn.ensemble.GradientBoostingClassifier': {
-        'n_estimators': range(2,10),
-        'learning_rate': np.arange(1e-3, 1.001, 1e-3),
-        'max_depth': range(1, 11),
-        'min_samples_split': range(2, 21),
-        'min_samples_leaf': range(1, 21),
-        'subsample': np.arange(0.05, 1.01, 0.05),
-        #'max_features': np.arange(0.2, 1.01, 0.05)
-    },
+    # 'sklearn.ensemble.GradientBoostingClassifier': {
+    #     'n_estimators': range(2,10),
+    #     'learning_rate': np.arange(1e-3, 1.001, 1e-3),
+    #     'max_depth': range(1, 11),
+    #     'min_samples_split': range(2, 21),
+    #     'min_samples_leaf': range(1, 21),
+    #     'subsample': np.arange(0.05, 1.01, 0.05),
+    #     #'max_features': np.arange(0.2, 1.01, 0.05)
+    # },
 
-    'sklearn.ensemble.AdaBoostClassifier': {
-        'n_estimators': range(2,10),
-        'learning_rate': np.arange(1e-3, 1.001, 1e-3),
-    },    
+    # 'sklearn.ensemble.AdaBoostClassifier': {
+    #     'n_estimators': range(2,10),
+    #     'learning_rate': np.arange(1e-3, 1.001, 1e-3),
+    # },    
 
-    'lightgbm.LGBMClassifier': {
-        'boosting_type': ['gbdt', 'dart', 'goss', 'rf'],
-        'num_leaves': range(1, 50),
-        'max_depth': range(1, 50),
-        'learning_rate': np.arange(1e-3, 1.001, 1e-3),
-        'n_estimators': range(2, 500),
-        'subsample_for_bin': range(1000, 500000),
-        'min_child_samples': range(1, 100),
-        'subsample': np.arange(0.05, 1.01, 0.05),
-        'reg_alpha': np.arange(0, 0.99, 1e-3),
-        'reg_lambda': np.arange(0, 0.99, 1e-3),
-        'verbose': [-1]
-    },
+    # 'lightgbm.LGBMClassifier': {
+    #     'boosting_type': ['gbdt', 'dart', 'goss', 'rf'],
+    #     'num_leaves': range(1, 50),
+    #     'max_depth': range(1, 50),
+    #     'learning_rate': np.arange(1e-3, 1.001, 1e-3),
+    #     'n_estimators': range(2, 500),
+    #     'subsample_for_bin': range(1000, 500000),
+    #     'min_child_samples': range(1, 100),
+    #     'subsample': np.arange(0.05, 1.01, 0.05),
+    #     'reg_alpha': np.arange(0, 0.99, 1e-3),
+    #     'reg_lambda': np.arange(0, 0.99, 1e-3),
+    #     'verbose': [-1]
+    # },
 
-    'catboost.CatBoostClassifier': {
-        'iterations': range(1, 10000),
-        'learning_rate': np.arange(1e-3, 1.001, 1e-3),
-        'reg_lambda': np.arange(0, 0.99, 1e-3),
-        'bootstrap_type': ['Bayesian', 'Bernoulli', 'MVS', 'Poisson', 'No'],
-        'bagging_temperature': np.arange(0, 10, 1e-3),
-        'use_best_model': [True, False],
-        'best_model_min_trees': range(1, 500),
-        'depth': range(1, 50),
-        'grow_policy': ['SymmetricTree', 'Depthwise', 'Lossguide'],
-        'max_leaves': range(1, 50),
-        'task_type': ['GPU']
-    },
+    # 'catboost.CatBoostClassifier': {
+    #     'iterations': range(1, 10000),
+    #     'learning_rate': np.arange(1e-3, 1.001, 1e-3),
+    #     'reg_lambda': np.arange(0, 0.99, 1e-3),
+    #     'bootstrap_type': ['Bayesian', 'Bernoulli', 'MVS', 'Poisson', 'No'],
+    #     'bagging_temperature': np.arange(0, 10, 1e-3),
+    #     'use_best_model': [True, False],
+    #     'best_model_min_trees': range(1, 500),
+    #     'depth': range(1, 50),
+    #     'grow_policy': ['SymmetricTree', 'Depthwise', 'Lossguide'],
+    #     'max_leaves': range(1, 50),
+    #     'task_type': ['GPU']
+    # },
 
-    'sklearn.svm.SVC': {
-        'tol': np.arange(1e-5, 1e-1, 1e-4),
-        'C': np.arange(1e-3, 1.001, 1e-3),
-        'max_iter': range(1, 1000),
-        'probability': [True]
-    },
+    # 'sklearn.svm.SVC': {
+    #     'tol': np.arange(1e-5, 1e-1, 1e-4),
+    #     'C': np.arange(1e-3, 1.001, 1e-3),
+    #     'max_iter': range(1, 1000),
+    #     'probability': [True]
+    # },
 
-    'sklearn.linear_model.LogisticRegression': {
-        'penalty': ["l1", "l2"],
-        'C': np.arange(1e-5, 1, 1e-4),
-        'dual': [True, False]
-    },
+    # 'sklearn.linear_model.LogisticRegression': {
+    #     'penalty': ["l1", "l2"],
+    #     'C': np.arange(1e-5, 1, 1e-4),
+    #     'dual': [True, False]
+    # },
 
-    'sklearn.linear_model.LogisticRegressionCV': {
-        'penalty': ["l1", "l2"],
-        'Cs': np.arange(1e-5, 10, 1e-4),
-    },
+    # 'sklearn.linear_model.LogisticRegressionCV': {
+    #     'penalty': ["l1", "l2"],
+    #     'Cs': np.arange(1e-5, 10, 1e-4),
+    # },
 
-    'xgboost.XGBClassifier': {
-        'n_estimators': range(2,10),
-        'max_depth': range(1, 11),
-        'learning_rate': np.arange(1e-3, 1.001, 1e-3),
-        'subsample': np.arange(0.05, 1.01, 0.05),
-        'min_child_weight': range(1, 21),
-        'nthread': [1]
-    },
+    # 'xgboost.XGBClassifier': {
+    #     'n_estimators': range(2,10),
+    #     'max_depth': range(1, 11),
+    #     'learning_rate': np.arange(1e-3, 1.001, 1e-3),
+    #     'subsample': np.arange(0.05, 1.01, 0.05),
+    #     'min_child_weight': range(1, 21),
+    #     'nthread': [1]
+    # },
 
-    'sklearn.neural_network.MLPClassifier': {
-        'hidden_layer_sizes':[(10,), (20,), (30,), (40,), (50,), (60,), (70,), (80,), (90,), (100,), 
-                            (10,5), (20,10), (30,15), (40,20), (50,25), (60,30), (70,35), (80,40), (90,45), (100,50)],
-        'activation': ['identity', 'logistic', 'tanh', 'relu'],
-        'solver': ['lbfgs', 'sgd', 'adam'],
-        'alpha': [0.0, 0.0001, 0.001, 0.01, 0.1],
-        'learning_rate': ['constant', 'invscaling', 'adaptive'],
-        'max_iter': range(10, 100)
-    },
+    # 'sklearn.neural_network.MLPClassifier': {
+    #     'hidden_layer_sizes':[(10,), (20,), (30,), (40,), (50,), (60,), (70,), (80,), (90,), (100,), 
+    #                         (10,5), (20,10), (30,15), (40,20), (50,25), (60,30), (70,35), (80,40), (90,45), (100,50)],
+    #     'activation': ['identity', 'logistic', 'tanh', 'relu'],
+    #     'solver': ['lbfgs', 'sgd', 'adam'],
+    #     'alpha': [0.0, 0.0001, 0.001, 0.01, 0.1],
+    #     'learning_rate': ['constant', 'invscaling', 'adaptive'],
+    #     'max_iter': range(10, 100)
+    # },
 
     # Preprocesssors
     'sklearn.preprocessing.Binarizer': {
@@ -226,45 +226,45 @@ base_models = {
     # },
 
     # Selectors
-    'sklearn.feature_selection.SelectFwe': {
-        'alpha': np.arange(0, 0.05, 0.001),
-        'score_func': {
-            'sklearn.feature_selection.f_classif': None
-        }
-    },
+    # 'sklearn.feature_selection.SelectFwe': {
+    #     'alpha': np.arange(0, 0.05, 0.001),
+    #     'score_func': {
+    #         'sklearn.feature_selection.f_classif': None
+    #     }
+    # },
 
-    'sklearn.feature_selection.SelectPercentile': {
-        'percentile': range(20, 100),
-        'score_func': {
-            'sklearn.feature_selection.f_classif': None
-        }
-    },
+    # 'sklearn.feature_selection.SelectPercentile': {
+    #     'percentile': range(20, 100),
+    #     'score_func': {
+    #         'sklearn.feature_selection.f_classif': None
+    #     }
+    # },
 
-    'sklearn.feature_selection.VarianceThreshold': {
-        'threshold': np.arange(1e-4, .05, 1e-4)
-    },
+    # 'sklearn.feature_selection.VarianceThreshold': {
+    #     'threshold': np.arange(1e-4, .05, 1e-4)
+    # },
 
-    'sklearn.feature_selection.RFE': {
-        'step': np.arange(0.05, .5, 0.05),
-        'estimator': {
-            'sklearn.ensemble.ExtraTreesClassifier': {
-                'n_estimators': range(2,100),
-                'criterion': ['gini', 'entropy'],
-                #'max_features': np.arange(0.2, 1.01, 0.05)
-            }
-        }
-    },
+    # 'sklearn.feature_selection.RFE': {
+    #     'step': np.arange(0.05, .5, 0.05),
+    #     'estimator': {
+    #         'sklearn.ensemble.ExtraTreesClassifier': {
+    #             'n_estimators': range(2,100),
+    #             'criterion': ['gini', 'entropy'],
+    #             #'max_features': np.arange(0.2, 1.01, 0.05)
+    #         }
+    #     }
+    # },
 
-    'sklearn.feature_selection.SelectFromModel': {
-        #'threshold': np.arange(0, 1.01, 0.05),
-        'estimator': {
-            'sklearn.ensemble.ExtraTreesClassifier': {
-                'n_estimators': range(2,100),
-                'criterion': ['gini', 'entropy'],
-                #'max_features': np.arange(0.2, 1.01, 0.05)
-            }
-        }
-    }
+    # 'sklearn.feature_selection.SelectFromModel': {
+    #     #'threshold': np.arange(0, 1.01, 0.05),
+    #     'estimator': {
+    #         'sklearn.ensemble.ExtraTreesClassifier': {
+    #             'n_estimators': range(2,100),
+    #             'criterion': ['gini', 'entropy'],
+    #             #'max_features': np.arange(0.2, 1.01, 0.05)
+    #         }
+    #     }
+    # }
 }
 
 # can we axe the warnings?
@@ -339,8 +339,8 @@ winning_model = None
 # new idea
 # what if we just specify the number of layers 
 # and weight for number of models in each layer
-num_layers = 2
-layer_weights = [5, 3]
+num_layers = 4
+layer_weights = [5, 4, 3, 2]
 
 # they should probably all have the same meta model. Let's do LGBM
 from lightgbm import LGBMClassifier as lgbm
