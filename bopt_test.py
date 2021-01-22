@@ -17,7 +17,12 @@ from sklearn.utils import shuffle
 from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import StandardScaler
 from mlens.ensemble import SuperLearner
+import featuretools as ft 
+import featuretools.variable_types as vtypes 
+from featuretools.primitives import make_agg_primitive, make_trans_primitive
+from featuretools.variable_types import Numeric
 
+'''
 df = pd.read_csv("creditcard.csv")
 df = df.drop(['Time','V28','V27','V26','V25','V24','V23','V22','V20','V15','V13','V8'], axis =1)
 df = df.dropna()
@@ -29,8 +34,61 @@ y_train = train_df.pop('Class').as_matrix()
 y_test = test_df.pop('Class').as_matrix()
 X_train = train_df.as_matrix()
 X_test = test_df.as_matrix()
+'''
+# finally let's import the data
+df = pd.read_csv("creditcard.csv")
+df = df.drop(['Time'], axis=1)
+df = df.dropna()
 
-from config import *
+# ok and then we'll do all the featuretools things that need to happen
+es = ft.EntitySet(id = 'card') # no clue what this means but whatever
+
+# make an entity from the observations data
+es = es.entity_from_dataframe(dataframe = df.drop('Class', axis=1),
+                                entity_id = 'obs',
+                                index = 'index')
+
+feature_matrix, feature_names = ft.dfs(entityset=es, target_entity='obs',
+                                        #agg_primitives = ['min', 'max', 'mean', 'count', 'sum', 'std', 'trend'],
+                                        trans_primitives = ['divide_by_feature', 'add_numeric', 'less_than_equal_to', 'greater_than_equal_to_scalar', 'multiply_numeric', 'subtract_numeric_scalar', 'divide_numeric_scalar', 'add_numeric_scalar', 'subtract_numeric', 'divide_numeric', 'percentile', 'greater_than', 'less_than', 'multiply_numeric_scalar', 'greater_than_equal_to', 'modulo_by_feature', 'scalar_subtract_numeric_feature', 'absolute', 'modulo_numeric'],
+                                        max_depth=1,
+                                        n_jobs=1,
+                                        verbose=1)
+
+# function to read the csv and extract a list of only the feature names
+def fetch_feature_list():
+
+    # open the file
+    f = open('feature_search.csv', 'r')
+
+    # list to store the features. Start it with some of the better base features
+    feature_list = ['V28','V27','V26','V25','V24','V23','V22','V20','V15','V13','V8']
+
+    # go through the file
+    for line in f:
+
+        linelist = line.split(',')
+
+        feat_name = linelist[0]
+
+        if feat_name != '':
+            feature_list.append(feat_name)
+
+    f.close()
+    return feature_list
+
+# alright here is where we're going to want to cut down all the variables
+feature_list = fetch_feature_list()
+
+# now filter out only the feature list
+X = feature_matrix[feature_list]
+del feature_matrix
+X = X.fillna(X.mean())
+X = X*1.0 # convert all to float hopefully
+y = df.pop('Class')
+del df
+
+from cfig_older import *
 from sklearn.utils.testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
 
